@@ -1,3 +1,4 @@
+import { ChakraProvider } from "@chakra-ui/react";
 import React from "react";
 import {
   BrowserRouter,
@@ -21,9 +22,9 @@ function Routes() {
 
 function App() {
   return (
-    <>
+    <ChakraProvider>
       <Routes />
-    </>
+    </ChakraProvider>
   );
 }
 

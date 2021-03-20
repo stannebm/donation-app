@@ -1,14 +1,14 @@
-import React from "react";
 import { Flex } from "@chakra-ui/react";
-import Header from "../sections/header";
+import React from "react";
 import Footer from "../sections/footer"; // will add this in the part 2
+import Header from "../sections/header";
 
 export type MainLayoutProps = {
   children: React.ReactNode;
   [rest: string]: any;
-}
+};
 
-export default function MainLayout({children, ...rest}: MainLayoutProps) {
+export default function MainLayout({ children, ...rest }: MainLayoutProps) {
   return (
     <Flex
       direction="column"

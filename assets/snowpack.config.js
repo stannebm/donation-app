@@ -4,13 +4,11 @@
 /** @type {import("snowpack").SnowpackUserConfig } */
 module.exports = {
   mount: {
-    css: { url: '/css' },
-    js: { url: '/js' },
-    public: { url: '/', static: true },
+    css: { url: "/css" },
+    js: { url: "/js" },
+    public: { url: "/", static: true },
   },
-  plugins: [
-    '@snowpack/plugin-typescript',
-  ],
+  plugins: ["@snowpack/plugin-typescript"],
   packageOptions: {
     /* ... */
   },
@@ -18,6 +16,6 @@ module.exports = {
     /* ... */
   },
   buildOptions: {
-    out: '../priv/static/',
+    out: "../priv/static/",
   },
 };

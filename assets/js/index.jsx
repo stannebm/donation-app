@@ -1,3 +1,6 @@
+// This file is the main entry point of phoenix
+
+// I am not sure whether it it still needed in SPA context
 // import "phoenix_html"
 
 import React from 'react';

@@ -4,12 +4,12 @@
 /** @type {import("snowpack").SnowpackUserConfig } */
 module.exports = {
   mount: {
-    js: { url: '/js' },
     css: { url: '/css' },
-    static: { url: '/', static: true, resolve: false },
+    js: { url: '/js' },
+    public: { url: '/', static: true },
   },
   plugins: [
-    '@snowpack/plugin-react-refresh', // keep react state after HMR reload
+    '@snowpack/plugin-typescript',
   ],
   packageOptions: {
     /* ... */

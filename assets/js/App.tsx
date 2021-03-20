@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import Home from "./pages/home";
 
-
+interface AppProps {}
 
 function Routes() {
   return (

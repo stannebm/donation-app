@@ -1,5 +1,10 @@
 # Snowpack React
 
+## Getting Started
+
+This folder can be compiled separately from Phoenix, if you are a frontend developer
+Otherwise, running `mix phx.server` will call the "watchers" function `node`, that in turn compiles this
+
 ## FAQ
 
 #### What is the mount option in `snowpack.config.js`?

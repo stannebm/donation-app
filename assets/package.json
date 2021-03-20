@@ -3,7 +3,8 @@
   "description": " ",
   "license": "MIT",
   "scripts": {
-    "deploy": "snowpack build",
+    "clear": "rm -rf ../priv/static",
+    "make": "snowpack build",
     "watch": "snowpack build --no-bundle --watch"
   },
   "dependencies": {

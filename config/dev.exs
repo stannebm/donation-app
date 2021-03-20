@@ -22,6 +22,7 @@ config :donation, DonationWeb.Endpoint,
   check_origin: false,
   watchers: [
     node: [
+      # this should match the "watch" function in package.json
       "node_modules/snowpack/index.bin.js",
       "build",
       "--watch",

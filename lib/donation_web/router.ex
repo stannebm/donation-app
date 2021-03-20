@@ -13,12 +13,6 @@ defmodule DonationWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", DonationWeb do
-    pipe_through :browser
-
-    get "/*path", PageController, :index
-  end
-
   # Other scopes may use custom stacks.
   # scope "/api", DonationWeb do
   #   pipe_through :api
@@ -38,5 +32,11 @@ defmodule DonationWeb.Router do
       pipe_through :browser
       live_dashboard "/dashboard", metrics: DonationWeb.Telemetry
     end
+  end
+
+  scope "/", DonationWeb do
+    pipe_through :browser
+
+    get "/*path", PageController, :index
   end
 end

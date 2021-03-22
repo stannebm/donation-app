@@ -2,6 +2,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Home from "./pages/home";
+import theme from "./theme";
 
 function Routes() {
   return (
@@ -17,7 +18,7 @@ function Routes() {
 
 function App() {
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <Routes />
     </ChakraProvider>
   );

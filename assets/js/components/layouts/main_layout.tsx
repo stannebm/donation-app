@@ -1,4 +1,4 @@
-import { Flex } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import React from "react";
 import Footer from "../sections/footer"; // will add this in the part 2
 import Header from "../sections/header";
@@ -10,16 +10,12 @@ export type MainLayoutProps = {
 
 export default function MainLayout({ children, ...rest }: MainLayoutProps) {
   return (
-    <Flex
-      direction="column"
-      align="center"
-      maxW={{ xl: "800px" }}
-      m="0 auto"
-      {...rest}
-    >
-      <Header />
-      {children}
-      <Footer />
-    </Flex>
+    <Box bgColor="orange.50">
+      <Box maxW={{ xl: "620px" }} h={"100vh"} m="0 auto" py={10} {...rest}>
+        <Header />
+        <Box w="100%">{children}</Box>
+        <Footer />
+      </Box>
+    </Box>
   );
 }

@@ -10,8 +10,8 @@ export type MainLayoutProps = {
 
 export default function MainLayout({ children, ...rest }: MainLayoutProps) {
   return (
-    <Box bgColor="orange.50">
-      <Box maxW={{ xl: "620px" }} h={"100vh"} m="0 auto" py={10} {...rest}>
+    <Box background="linear-gradient(to bottom, #2D3748 0%, #2C7A7B 100%)">
+      <Box maxW={"620px"} h={"100vh"} m="0 auto" py={10} px={3} {...rest}>
         <Header />
         <Box w="100%">{children}</Box>
         <Footer />

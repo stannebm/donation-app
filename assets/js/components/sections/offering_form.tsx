@@ -1,14 +1,6 @@
-import {
-  Box,
-  Button,
-  Divider,
-  Heading,
-  HStack,
-  Image,
-  Stack,
-} from "@chakra-ui/react";
+import { Button, Divider, HStack, Stack } from "@chakra-ui/react";
 import React from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import FormInput from "../elements/form_input";
 import FormSelect from "../elements/form_select";
 import type { MainForm } from "./offering_form.types";
@@ -79,15 +71,20 @@ export default function OfferingForm() {
         />
       </HStack>
       <Divider py={2} my={3} />
-      <Stack mb={3}>
-        <FormSelect
-          name="typeOfMass"
-          label="Mass Offering/Intention"
-          options={["Special Intention", "Thanksgiving", "Departed Soul"]}
-          errors={errors}
-          ref={register({ required: true })}
-        />
-      </Stack>
+      {fields.map((item, index) => {
+        return (
+          <Stack mb={3} key={item.id}>
+            <FormSelect
+              name="typeOfMass"
+              label="Mass Offering/Intention"
+              options={["Special Intention", "Thanksgiving", "Departed Soul"]}
+              errors={errors}
+              ref={register({ required: true })}
+              defaultValue={item.typeOfMass}
+            />
+          </Stack>
+        );
+      })}
       <Button
         mt={4}
         colorScheme="teal"

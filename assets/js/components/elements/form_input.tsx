@@ -7,16 +7,24 @@ export type FormInputType = {
   name: string;
   label: string;
   errors: FieldErrors;
+  styles?: {
+    [k: string]: any;
+  };
   [rest: string]: any;
 };
 
 const FormInput = React.forwardRef<any, FormInputType>((props, ref) => {
-  const { name, label, errors, ...rest } = props;
-  console.log(props)
+  const { name, label, errors, styles, ...rest } = props;
   return (
-    <FormControl isInvalid={errors[name]} {...rest}>
-      <Input bgColor="white" name={name} placeholder={label} ref={ref} />
-      <FormErrorMessage>{errors[name] && errors[name].message}</FormErrorMessage>
+    <FormControl isInvalid={errors?.[name]} {...styles}>
+      <Input
+        bgColor="white"
+        name={name}
+        placeholder={label}
+        ref={ref}
+        {...rest}
+      />
+      <FormErrorMessage>{errors?.[name]?.message}</FormErrorMessage>
     </FormControl>
   );
 });

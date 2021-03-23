@@ -40,7 +40,6 @@ function App() {
                 defaultValue={`${item.firstName}`} // make sure to set up defaultValue
                 ref={register()}
               />
-
               <Controller
                 as={<input />}
                 name={`test[${index}].lastName`}

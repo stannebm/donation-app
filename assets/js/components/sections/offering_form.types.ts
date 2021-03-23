@@ -13,9 +13,9 @@ export type RequestForm =
   | DepartedSoulForm;
 
 export type BaseRequestForm = {
-  typeOfMass: string; // auto infer
+  typeOfMass: "Special Intention" | "Thanksgiving" | "Departed Soul";
   numberOfMass: number;
-  extraDates?: Date[];
+  remark: string;
 };
 
 // make a wish

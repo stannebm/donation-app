@@ -7,32 +7,10 @@ export type MandatoryForm = {
   offerings: OfferingForm[];
 };
 
-export type OfferingForm =
-  | SpecialIntentionForm
-  | ThanksgivingForm
-  | DepartedSoulForm;
-
-export type BaseOfferingForm = {
+export type OfferingForm = {
+  typeOfMass: "Special Intention" | "Thanksgiving" | "Departed Soul";
   numberOfMass: number;
   specificDates?: string;
-};
-
-// make a wish
-export type SpecialIntentionForm = BaseOfferingForm & {
-  typeOfMass: "Special Intention";
   toWhom: string;
   intention: string;
-};
-
-// wish granted
-export type ThanksgivingForm = BaseOfferingForm & {
-  typeOfMass: "Thanksgiving";
-  toWhom: string;
-  intention: string;
-};
-
-// pray for souls
-export type DepartedSoulForm = BaseOfferingForm & {
-  typeOfMass: "Departed Soul";
-  toWhom: string;
 };

@@ -1,8 +1,8 @@
 import { FormControl } from "@chakra-ui/form-control";
-import { FormErrorMessage, Input } from "@chakra-ui/react";
+import { FormErrorMessage, Input, Tooltip } from "@chakra-ui/react";
+import * as R from "ramda";
 import React from "react";
 import type { FieldErrors } from "react-hook-form/dist/types";
-import * as R from "ramda";
 
 export type FormInputType = {
   name: string;
@@ -24,16 +24,18 @@ const FormInput = React.forwardRef<any, FormInputType>((props, ref) => {
   }
 
   return (
-    <FormControl isInvalid={!!errorPath!(errors)} {...styles}>
-      <Input
-        bgColor="white"
-        name={name}
-        placeholder={label}
-        ref={ref}
-        {...rest}
-      />
-      <FormErrorMessage>{errorPath!(errors)?.message}</FormErrorMessage>
-    </FormControl>
+    <Tooltip label={label} placement="top-start">
+      <FormControl isInvalid={!!errorPath!(errors)} {...styles}>
+        <Input
+          bgColor="white"
+          name={name}
+          placeholder={label}
+          ref={ref}
+          {...rest}
+        />
+        <FormErrorMessage>{errorPath!(errors)?.message}</FormErrorMessage>
+      </FormControl>
+    </Tooltip>
   );
 });
 

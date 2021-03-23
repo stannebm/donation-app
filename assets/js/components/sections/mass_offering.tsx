@@ -5,12 +5,7 @@ import React from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import FormInput from "../elements/form_input";
 import FormSelect from "../elements/form_select";
-import type {
-  DepartedSoulForm,
-  MandatoryForm,
-  SpecialIntentionForm,
-  ThanksgivingForm,
-} from "./mass_offering.types";
+import type { MandatoryForm } from "./mass_offering.types";
 
 export default function MassOffering() {
   const {
@@ -26,7 +21,7 @@ export default function MassOffering() {
   });
 
   const onSubmit = (data: MandatoryForm) => {
-    console.log(data);
+    console.log("SUBMIT:", data);
   };
 
   const { fields, append, remove } = useFieldArray({
@@ -35,8 +30,6 @@ export default function MassOffering() {
   });
 
   const offerings = watch("offerings");
-  console.log("offerings", offerings);
-
   console.log("errors", errors);
 
   return (
@@ -106,11 +99,11 @@ export default function MassOffering() {
                     valueAsNumber: true,
                     min: {
                       value: 1,
-                      message: "Please enter at least 1",
+                      message: "At least 1 mass",
                     },
                   })}
                   type="number"
-                  defaultValue={item.numberOfMass}
+                  // defaultValue={item.numberOfMass}
                 />
               </HStack>
               <VStack>
@@ -126,7 +119,7 @@ export default function MassOffering() {
                       label="To Whom (eg. Saint/Church)"
                       errors={errors}
                       errorPath={R.path(["offerings", index, "toWhom"])}
-                      defaultValue={(item as SpecialIntentionForm).toWhom}
+                      defaultValue={item.toWhom}
                       {...register(`offerings.${index}.toWhom` as const, {
                         required: true,
                       })}
@@ -135,7 +128,7 @@ export default function MassOffering() {
                       label="Intention"
                       errors={errors}
                       errorPath={R.path(["offerings", index, "intention"])}
-                      defaultValue={(item as SpecialIntentionForm).intention}
+                      defaultValue={item.intention}
                       {...register(`offerings.${index}.intention` as const, {
                         required: true,
                       })}
@@ -148,7 +141,7 @@ export default function MassOffering() {
                       label="To Whom (eg. Saint/Church)"
                       errors={errors}
                       errorPath={R.path(["offerings", index, "toWhom"])}
-                      defaultValue={(item as ThanksgivingForm).toWhom}
+                      defaultValue={item.toWhom}
                       {...register(`offerings.${index}.toWhom` as const, {
                         required: true,
                       })}
@@ -157,7 +150,7 @@ export default function MassOffering() {
                       label="Intention"
                       errors={errors}
                       errorPath={R.path(["offerings", index, "intention"])}
-                      defaultValue={(item as ThanksgivingForm).intention}
+                      defaultValue={item.intention}
                       {...register(`offerings.${index}.intention` as const, {
                         required: true,
                       })}
@@ -170,9 +163,19 @@ export default function MassOffering() {
                       label="Name of Departed Soul"
                       errors={errors}
                       errorPath={R.path(["offerings", index, "toWhom"])}
-                      defaultValue={(item as DepartedSoulForm).toWhom}
+                      defaultValue={item.toWhom}
                       {...register(`offerings.${index}.toWhom` as const, {
                         required: true,
+                      })}
+                    />
+                    <FormInput
+                      d="none"
+                      label="Intention"
+                      errors={errors}
+                      errorPath={R.path(["offerings", index, "intention"])}
+                      defaultValue={item.intention}
+                      {...register(`offerings.${index}.intention` as const, {
+                        required: false,
                       })}
                     />
                   </>

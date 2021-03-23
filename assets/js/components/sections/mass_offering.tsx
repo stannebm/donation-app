@@ -30,6 +30,10 @@ export default function MassOffering() {
   });
 
   const offerings = watch("offerings");
+  const totalMasses = offerings.reduce(
+    (acc, curr) => acc + curr.numberOfMass,
+    0,
+  );
   console.log("errors", errors);
 
   return (
@@ -206,7 +210,7 @@ export default function MassOffering() {
           Love offering : RM10 per Mass
         </Text>
         <Text fontSize="xl" fontWeight={800} as="h3" color="gray.600">
-          Total: RM300
+          {`Total Offering: RM ${totalMasses ? totalMasses * 10 : 0}`}
         </Text>
       </Box>
 

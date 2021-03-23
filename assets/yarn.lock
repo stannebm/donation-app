@@ -2305,11 +2305,10 @@ path-type@^4.0.0:
   resolved "https://registry.yarnpkg.com/path-type/-/path-type-4.0.0.tgz#84ed01c0a7ba380afe09d90a8c180dcd9d03043b"
   integrity sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==
 
-"phoenix@file:../deps/phoenix":
+phoenix@^1.5.8:
   version "1.5.8"
-
-"phoenix_html@file:../deps/phoenix_html":
-  version "2.14.3"
+  resolved "https://registry.yarnpkg.com/phoenix/-/phoenix-1.5.8.tgz#b411a19e69e21fa45b8c0de8a7a9b1819aff8a2f"
+  integrity sha512-oyWPdegBD8KU7zAs1+P3PRqCEchm973yqoUkdMtU9UhMnB0+PY6diofGOPwkxHrUjw6Whi5GqJMv/3Px2JTlkw==
 
 picomatch@^2.0.5, picomatch@^2.2.1, picomatch@^2.2.2:
   version "2.2.2"
@@ -3034,6 +3033,11 @@ typedarray-to-buffer@^3.1.5:
   integrity sha512-zdu8XMNEDepKKR+XYOXAVPtWui0ly0NtohUscw+UmaHiAWT8hrV1rr//H6V+0DvJ3OQ19S979M0laLfX8rm82Q==
   dependencies:
     is-typedarray "^1.0.0"
+
+typescript@^4.2.3:
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.2.3.tgz#39062d8019912d43726298f09493d598048c1ce3"
+  integrity sha512-qOcYwxaByStAWrBf4x0fibwZvMRG+r4cQoTjbPtUlrWjBHbmCAww1i448U0GJ+3cNNEtebDteo/cHOR3xJ4wEw==
 
 unified@^9.1.0:
   version "9.2.1"

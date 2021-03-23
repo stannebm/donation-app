@@ -1,3 +1,4 @@
+import { AddIcon, PlusSquareIcon } from "@chakra-ui/icons";
 import { Box, Button, Divider, HStack, VStack } from "@chakra-ui/react";
 import * as R from "ramda";
 import React from "react";
@@ -16,8 +17,7 @@ export default function MassOffering() {
   const {
     register,
     handleSubmit,
-    errors,
-    formState,
+    formState: { errors, isSubmitting },
     control,
     watch,
   } = useForm<MandatoryForm>({
@@ -30,7 +30,7 @@ export default function MassOffering() {
     console.log(data);
   };
 
-  const { fields, append, remove } = useFieldArray<OfferingForm>({
+  const { fields, append, remove } = useFieldArray({
     control,
     name: "offerings",
   });
@@ -44,22 +44,19 @@ export default function MassOffering() {
     <form onSubmit={handleSubmit(onSubmit)}>
       <HStack mb={3} align="flex-start">
         <FormInput
-          name="contactName"
           label="Name"
           errors={errors}
-          ref={register({ required: true })}
+          {...register("contactName", { required: true })}
         />
         <FormInput
-          name="contactNumber"
           label="Contact H/P"
           errors={errors}
-          ref={register({ required: true })}
+          {...register("contactNumber", { required: true })}
         />
         <FormInput
-          name="emailAddress"
           label="Email"
           errors={errors}
-          ref={register({
+          {...register("emailAddress", {
             required: true,
             pattern: {
               value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
@@ -70,133 +67,140 @@ export default function MassOffering() {
       </HStack>
       <HStack mb={3} align="flex-start">
         <FormInput
-          name="fromWhom"
           label="From Whom"
           errors={errors}
-          ref={register({ required: true })}
+          {...register("fromWhom", { required: true })}
         />
         <FormSelect
-          name="massLanguage"
           label="Mass Language"
           options={["English", "Mandarin", "Tamil"]}
           errors={errors}
-          ref={register({ required: true })}
+          {...register("massLanguage", { required: true })}
         />
       </HStack>
-      <Divider py={2} my={3} />
       {fields.map((item, index) => {
         return (
-          <Box>
-            <HStack mb={3} key={item.id}>
-              <FormSelect
-                name={`offerings[${index}].typeOfMass`}
-                label="Mass Offering/Intention"
-                options={["Special Intention", "Thanksgiving", "Departed Soul"]}
-                errors={errors}
-                errorPath={R.path(["offerings", index, "typeOfMass"])}
-                ref={register({ required: true })}
-                defaultValue={item.typeOfMass}
-              />
-              <FormInput
-                name={`offerings[${index}].numberOfMass`}
-                label="Number of Mass"
-                errors={errors}
-                errorPath={R.path(["offerings", index, "numberOfMass"])}
-                ref={register({
-                  required: true,
-                  valueAsNumber: true,
-                  min: {
-                    value: 1,
-                    message: "Please enter at least 1",
-                  },
-                })}
-                type="number"
-                defaultValue={item.numberOfMass}
-              />
-            </HStack>
-            <VStack>
-              <FormInput
-                name={`offerings[${index}].specificDates`}
-                label="Specific Date(s)"
-                errors={errors}
-                errorPath={R.path(["offerings", index, "specificDates"])}
-                ref={register()}
-                defaultValue={item.specificDates}
-              />
-              {offerings[index].typeOfMass === "Special Intention" && (
-                <>
-                  <FormInput
-                    name={`offerings[${index}].toWhom`}
-                    label="To Whom (eg. Saint/Church)"
-                    errors={errors}
-                    errorPath={R.path(["offerings", index, "toWhom"])}
-                    ref={register({
-                      required: true,
-                    })}
-                    defaultValue={(item as SpecialIntentionForm).toWhom}
-                  />
-                  <FormInput
-                    name={`offerings[${index}].intention`}
-                    label="Intention"
-                    errors={errors}
-                    errorPath={R.path(["offerings", index, "intention"])}
-                    ref={register({
-                      required: true,
-                    })}
-                    defaultValue={(item as SpecialIntentionForm).intention}
-                  />
-                </>
-              )}
-              {offerings[index].typeOfMass === "Thanksgiving" && (
-                <>
-                  <FormInput
-                    name={`offerings[${index}].toWhom`}
-                    label="To Whom (eg. Saint/Church)"
-                    errors={errors}
-                    errorPath={R.path(["offerings", index, "toWhom"])}
-                    ref={register({
-                      required: true,
-                    })}
-                    defaultValue={(item as ThanksgivingForm).toWhom}
-                  />
-                  <FormInput
-                    name={`offerings[${index}].intention`}
-                    label="Intention"
-                    errors={errors}
-                    errorPath={R.path(["offerings", index, "intention"])}
-                    ref={register({
-                      required: true,
-                    })}
-                    defaultValue={(item as ThanksgivingForm).intention}
-                  />
-                </>
-              )}
-              {offerings[index].typeOfMass === "Departed Soul" && (
-                <>
-                  <FormInput
-                    name={`offerings[${index}].toWhom`}
-                    label="Name of Departed Soul"
-                    errors={errors}
-                    errorPath={R.path(["offerings", index, "toWhom"])}
-                    ref={register({
-                      required: true,
-                    })}
-                    defaultValue={(item as DepartedSoulForm).toWhom}
-                  />
-                </>
-              )}
-            </VStack>
-          </Box>
+          <>
+            <Divider py={2} my={3} />
+            <Box mb={5}>
+              <HStack mb={3} key={item.id}>
+                <FormSelect
+                  label="Mass Offering/Intention"
+                  options={[
+                    "Special Intention",
+                    "Thanksgiving",
+                    "Departed Soul",
+                  ]}
+                  errors={errors}
+                  errorPath={R.path(["offerings", index, "typeOfMass"])}
+                  defaultValue={item.typeOfMass}
+                  {...register(`offerings.${index}.typeOfMass` as const, {
+                    required: true,
+                  })}
+                />
+                <FormInput
+                  label="Number of Mass"
+                  errors={errors}
+                  errorPath={R.path(["offerings", index, "numberOfMass"])}
+                  {...register(`offerings.${index}.numberOfMass` as const, {
+                    required: true,
+                    valueAsNumber: true,
+                    min: {
+                      value: 1,
+                      message: "Please enter at least 1",
+                    },
+                  })}
+                  type="number"
+                  defaultValue={item.numberOfMass}
+                />
+              </HStack>
+              <VStack>
+                <FormInput
+                  label="Specific Date(s)"
+                  errors={errors}
+                  errorPath={R.path(["offerings", index, "specificDates"])}
+                  {...register(`offerings.${index}.specificDates` as const)}
+                />
+                {offerings[index].typeOfMass === "Special Intention" && (
+                  <>
+                    <FormInput
+                      label="To Whom (eg. Saint/Church)"
+                      errors={errors}
+                      errorPath={R.path(["offerings", index, "toWhom"])}
+                      defaultValue={(item as SpecialIntentionForm).toWhom}
+                      {...register(`offerings.${index}.toWhom` as const, {
+                        required: true,
+                      })}
+                    />
+                    <FormInput
+                      label="Intention"
+                      errors={errors}
+                      errorPath={R.path(["offerings", index, "intention"])}
+                      defaultValue={(item as SpecialIntentionForm).intention}
+                      {...register(`offerings.${index}.intention` as const, {
+                        required: true,
+                      })}
+                    />
+                  </>
+                )}
+                {offerings[index].typeOfMass === "Thanksgiving" && (
+                  <>
+                    <FormInput
+                      label="To Whom (eg. Saint/Church)"
+                      errors={errors}
+                      errorPath={R.path(["offerings", index, "toWhom"])}
+                      defaultValue={(item as ThanksgivingForm).toWhom}
+                      {...register(`offerings.${index}.toWhom` as const, {
+                        required: true,
+                      })}
+                    />
+                    <FormInput
+                      label="Intention"
+                      errors={errors}
+                      errorPath={R.path(["offerings", index, "intention"])}
+                      defaultValue={(item as ThanksgivingForm).intention}
+                      {...register(`offerings.${index}.intention` as const, {
+                        required: true,
+                      })}
+                    />
+                  </>
+                )}
+                {offerings[index].typeOfMass === "Departed Soul" && (
+                  <>
+                    <FormInput
+                      label="Name of Departed Soul"
+                      errors={errors}
+                      errorPath={R.path(["offerings", index, "toWhom"])}
+                      defaultValue={(item as DepartedSoulForm).toWhom}
+                      {...register(`offerings.${index}.toWhom` as const, {
+                        required: true,
+                      })}
+                    />
+                  </>
+                )}
+              </VStack>
+            </Box>
+          </>
         );
       })}
-      <Button
-        mt={4}
-        colorScheme="teal"
-        isLoading={formState.isSubmitting}
-        type="submit"
-      >
-        Submit
-      </Button>
+      <HStack>
+        <Button colorScheme="teal" isLoading={isSubmitting} type="submit">
+          Submit
+        </Button>
+        <Button
+          fontWeight={400}
+          type="button"
+          variant="outline"
+          leftIcon={<PlusSquareIcon />}
+          onClick={() => {
+            append({
+              typeOfMass: "Special Intention",
+            });
+          }}
+        >
+          More Offerings
+        </Button>
+      </HStack>
     </form>
   );
 }

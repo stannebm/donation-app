@@ -21,7 +21,7 @@ const FormSelect = React.forwardRef<any, FormSelectType>((props, ref) => {
   } = props
   return (
     <FormControl isInvalid={errors[name]} {...rest}>
-      <Select name={name} placeholder={label} ref={ref}>
+      <Select name={name} placeholder={`- ${label} -`} ref={ref}>
         {options.map((option) => (
           <option value={option} key={option}>
             {option}

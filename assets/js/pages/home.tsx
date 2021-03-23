@@ -1,7 +1,7 @@
 import { Box, Heading, Image } from "@chakra-ui/react";
 import React from "react";
 import MainLayout from "../components/layouts/main_layout";
-import OfferingForm from "../components/sections/offering_form";
+import MassOffering from "../components/sections/mass_offering";
 
 export default function Home(): JSX.Element {
   return (
@@ -19,7 +19,7 @@ export default function Home(): JSX.Element {
         <Box p={3}>Mass intentions will be offered by our priests daily.</Box>
 
         <Box p={5}>
-          <OfferingForm></OfferingForm>
+          <MassOffering></MassOffering>
         </Box>
       </Box>
     </MainLayout>

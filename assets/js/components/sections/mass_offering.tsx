@@ -3,29 +3,33 @@ import React from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import FormInput from "../elements/form_input";
 import FormSelect from "../elements/form_select";
-import type { MainForm } from "./offering_form.types";
+import type { MandatoryForm } from "./mass_offering.types";
 
-export default function OfferingForm() {
+export default function MassOffering() {
   const {
     register,
     handleSubmit,
     errors,
     formState,
     control,
-  } = useForm<MainForm>({
+    watch,
+  } = useForm<MandatoryForm>({
     defaultValues: {
-      requests: [{ typeOfMass: "Special Intention" }],
+      offerings: [{ typeOfMass: "Special Intention", numberOfMass: 1 }],
     },
   });
 
-  const onSubmit = (data: MainForm) => {
+  const onSubmit = (data: MandatoryForm) => {
     console.log(data);
   };
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "requests",
+    name: "offerings",
   });
+
+  const offerings = watch("offerings");
+  console.log("offerings", offerings);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -75,7 +79,7 @@ export default function OfferingForm() {
         return (
           <Stack mb={3} key={item.id}>
             <FormSelect
-              name="typeOfMass"
+              name={`offerings[${index}].typeOfMass`}
               label="Mass Offering/Intention"
               options={["Special Intention", "Thanksgiving", "Departed Soul"]}
               errors={errors}

@@ -1,4 +1,4 @@
-import { AddIcon, PlusSquareIcon } from "@chakra-ui/icons";
+import { PlusSquareIcon } from "@chakra-ui/icons";
 import { Box, Button, Divider, HStack, VStack } from "@chakra-ui/react";
 import * as R from "ramda";
 import React from "react";
@@ -8,7 +8,6 @@ import FormSelect from "../elements/form_select";
 import type {
   DepartedSoulForm,
   MandatoryForm,
-  OfferingForm,
   SpecialIntentionForm,
   ThanksgivingForm,
 } from "./mass_offering.types";

@@ -1,5 +1,5 @@
 import { MinusIcon, PlusSquareIcon } from "@chakra-ui/icons";
-import { Box, Button, Divider, HStack, Spacer, VStack } from "@chakra-ui/react";
+import { Box, Button, Divider, HStack, Text, VStack } from "@chakra-ui/react";
 import * as R from "ramda";
 import React from "react";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -200,9 +200,19 @@ export default function MassOffering() {
           </>
         );
       })}
+
+      <Box mb={5}>
+        <Text color="gray.500" fontWeight={500} align="left">
+          Love offering : RM10 per Mass
+        </Text>
+        <Text fontSize="xl" fontWeight={800} as="h3" color="gray.600">
+          Total: RM300
+        </Text>
+      </Box>
+
       <HStack>
         <Button colorScheme="teal" isLoading={isSubmitting} type="submit">
-          Submit
+          Transfer
         </Button>
         <Button
           fontWeight={400}

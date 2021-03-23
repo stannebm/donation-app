@@ -1,5 +1,5 @@
-import { PlusSquareIcon } from "@chakra-ui/icons";
-import { Box, Button, Divider, HStack, VStack } from "@chakra-ui/react";
+import { MinusIcon, PlusSquareIcon } from "@chakra-ui/icons";
+import { Box, Button, Divider, HStack, Spacer, VStack } from "@chakra-ui/react";
 import * as R from "ramda";
 import React from "react";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -138,7 +138,7 @@ export default function MassOffering() {
                 {offerings[index].typeOfMass === "Thanksgiving" && (
                   <>
                     <FormInput
-                      label="To Whom (eg. Saint/Church)"
+                      label="Thanksgiving To"
                       errors={errors}
                       errorPath={R.path(["offerings", index, "toWhom"])}
                       defaultValue={item.toWhom}
@@ -182,6 +182,21 @@ export default function MassOffering() {
                 )}
               </VStack>
             </Box>
+            {index >= 1 && (
+              <Box my={5}>
+                <Button
+                  size="sm"
+                  colorScheme="red"
+                  fontWeight={400}
+                  type="button"
+                  variant="outline"
+                  leftIcon={<MinusIcon />}
+                  onClick={() => remove(index)}
+                >
+                  Remove Mass Offering
+                </Button>
+              </Box>
+            )}
           </>
         );
       })}

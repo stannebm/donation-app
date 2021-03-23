@@ -80,7 +80,7 @@ export default function MassOffering() {
       <Divider py={2} my={3} />
       {fields.map((item, index) => {
         return (
-          <Stack mb={3} key={item.id}>
+          <HStack mb={3} key={item.id}>
             <FormSelect
               name={`offerings[${index}].typeOfMass`}
               label="Mass Offering/Intention"
@@ -106,7 +106,7 @@ export default function MassOffering() {
               type="number"
               defaultValue={item.numberOfMass}
             ></FormInput>
-          </Stack>
+          </HStack>
         );
       })}
       <Button

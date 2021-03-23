@@ -17,8 +17,8 @@ export type FormInputType = {
 
 const FormInput = React.forwardRef<any, FormInputType>((props, ref) => {
   const { name, label, errors, styles, ...rest } = props;
+  let { errorPath } = props;
 
-  let errorPath = props.errorPath;
   if (errorPath === undefined) {
     errorPath = R.path([name]);
   }

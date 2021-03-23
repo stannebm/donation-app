@@ -206,11 +206,14 @@ export default function MassOffering() {
       })}
 
       <Box mb={5}>
-        <Text color="gray.500" fontWeight={500} align="left">
+        <Text color="gray.500" fontWeight={500} align="left" mb={2}>
           Love offering : RM10 per Mass
         </Text>
-        <Text fontSize="xl" fontWeight={800} as="h3" color="gray.600">
-          {`Total Offering: RM ${totalMasses ? totalMasses * 10 : 0}`}
+        <Text color="gray.600" fontWeight={800} align="left" mb={-1}>
+          Total:
+        </Text>
+        <Text fontSize="2xl" fontWeight={800} as="h3" color="gray.600">
+          {`RM ${totalMasses ? totalMasses * 10 : 0}`}
         </Text>
       </Box>
 

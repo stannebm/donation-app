@@ -13,23 +13,26 @@ export type OfferingForm =
   | DepartedSoulForm;
 
 export type BaseOfferingForm = {
-  typeOfMass: "Special Intention" | "Thanksgiving" | "Departed Soul";
   numberOfMass: number;
-  remark: string;
+  specificDates?: string;
 };
 
 // make a wish
 export type SpecialIntentionForm = BaseOfferingForm & {
+  typeOfMass: "Special Intention";
   toWhom: string;
   intention: string;
 };
 
 // wish granted
 export type ThanksgivingForm = BaseOfferingForm & {
-  thanksgivingTo: string;
+  typeOfMass: "Thanksgiving";
+  toWhom: string;
+  intention: string;
 };
 
 // pray for souls
 export type DepartedSoulForm = BaseOfferingForm & {
-  nameOfDepartedSoul: string;
+  typeOfMass: "Departed Soul";
+  toWhom: string;
 };

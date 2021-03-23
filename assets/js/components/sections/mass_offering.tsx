@@ -3,7 +3,8 @@ import React from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import FormInput from "../elements/form_input";
 import FormSelect from "../elements/form_select";
-import type { MandatoryForm } from "./mass_offering.types";
+import type { MandatoryForm, OfferingForm } from "./mass_offering.types";
+import * as R from "ramda";
 
 export default function MassOffering() {
   const {
@@ -15,7 +16,7 @@ export default function MassOffering() {
     watch,
   } = useForm<MandatoryForm>({
     defaultValues: {
-      offerings: [{ typeOfMass: "Special Intention", numberOfMass: 1 }],
+      offerings: [{ typeOfMass: "Special Intention" }],
     },
   });
 
@@ -23,13 +24,15 @@ export default function MassOffering() {
     console.log(data);
   };
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove } = useFieldArray<OfferingForm>({
     control,
     name: "offerings",
   });
 
   const offerings = watch("offerings");
   console.log("offerings", offerings);
+
+  console.log("errors", errors);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -83,9 +86,26 @@ export default function MassOffering() {
               label="Mass Offering/Intention"
               options={["Special Intention", "Thanksgiving", "Departed Soul"]}
               errors={errors}
+              errorPath={R.path(["offerings", index, "typeOfMass"])}
               ref={register({ required: true })}
               defaultValue={item.typeOfMass}
             />
+            <FormInput
+              name={`offerings[${index}].numberOfMass`}
+              label="Number of Mass"
+              errors={errors}
+              errorPath={R.path(["offerings", index, "numberOfMass"])}
+              ref={register({
+                required: true,
+                valueAsNumber: true,
+                min: {
+                  value: 1,
+                  message: "Please enter at least 1",
+                },
+              })}
+              type="number"
+              defaultValue={item.numberOfMass}
+            ></FormInput>
           </Stack>
         );
       })}

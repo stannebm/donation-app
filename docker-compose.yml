@@ -32,6 +32,8 @@ services:
     restart: always
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - donation
 
 # make docker stack composable
 networks:

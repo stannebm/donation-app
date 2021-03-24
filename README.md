@@ -16,6 +16,7 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
 Ensure docker and docker-compose is in the environment/path.
 
 ```sh
+docker network create donation_net
 docker-compose up
 
 # or in daemon mode

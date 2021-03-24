@@ -1,0 +1,22 @@
+version: "3.8"
+
+volumes:
+  caddy_data:
+  caddy_config:
+
+services:
+  caddy:
+    image: caddy:2.3.0
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+    ports:
+      - 443:443
+    command: caddy reverse-proxy --from xxx.DOMAIN.com --to phoenix:4000
+    networks:
+      - donation
+
+networks:
+  donation:
+    external: true
+    name: donation_net

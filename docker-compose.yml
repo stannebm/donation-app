@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+  phoenix:
+    build:
+      context: .
+    environment:
+      # refer config/releases.ex
+      DATABASE_URL: ecto://postgres:postgres@db/donation_db
+      SECRET_KEY_BASE: WWiD+NkQseOZU45FLC+PgtvWGCNklocj4Pe2RSp/OxdlbcSeNF4OnSLUbL5O5mj4
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db
+    networks:
+      - donation
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: donation_db
+      # This optional variable can be used to define another location -
+      # like a subdirectory - for the database files.
+      # The default is /var/lib/postgresql/data. #
+      # If the data volume you're using is a filesystem mountpoint
+      # (like with GCE persistent disks) or remote folder that cannot be
+      # chowned to the postgres user (like some NFS mounts),
+      # Postgres initdb recommends a subdirectory be created to contain
+      # the data.
+      PGDATA: /var/lib/postgresql/data/pgdata
+    restart: always
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+# make docker stack composable
+networks:
+  donation:
+    external: true
+    name: donation_net
+
+volumes:
+  pgdata:

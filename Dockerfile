@@ -51,12 +51,11 @@ RUN apk add --no-cache openssl ncurses-libs
 
 WORKDIR /app
 
+# https://unix.stackexchange.com/questions/186568/what-is-nobody-user-and-group#:~:text=The%20nobody%20user%20is%20a,least%20permissions%20on%20the%20system.
+# a user with no login permission (least permission)
 RUN chown nobody:nobody /app
-
 USER nobody:nobody
 
 COPY --from=build --chown=nobody:nobody /app/_build/prod/rel/donation ./
-
 ENV HOME=/app
-
 CMD ["bin/donation", "start"]

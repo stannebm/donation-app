@@ -13,10 +13,12 @@ defmodule DonationWeb.Router do
     plug :accepts, ["json"]
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", DonationWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", DonationWeb do
+    pipe_through :api
+    resources "/mass_offerings", MassOfferingController, except: [:new, :edit] do
+      resources "/mass_offering_items", MassOfferingItemController, except: [:new, :edit]
+    end
+  end
 
   # Enables LiveDashboard only for development
   #

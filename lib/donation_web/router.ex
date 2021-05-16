@@ -1,6 +1,9 @@
 defmodule DonationWeb.Router do
   use DonationWeb, :router
 
+  alias Donation
+  alias Donation.Guardian
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -13,11 +16,37 @@ defmodule DonationWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :jwt_authenticated do
+    plug Donation.AuthAccessPipeline
+  end
+
   scope "/api", DonationWeb do
     pipe_through :api
     resources "/mass_offerings", MassOfferingController, except: [:new, :edit] do
       resources "/mass_offering_items", MassOfferingItemController, except: [:new, :edit]
     end
+    post "/admins/login", UserController, :login
+  end
+
+  scope "/api", DonationWeb do
+    pipe_through [:api, :jwt_authenticated]
+    # resources "/users", UserController, only: [:create, :show]
+    get "/my_user", UserController, :show
+  end
+
+  scope "/api/swagger" do
+    forward "/", PhoenixSwagger.Plug.SwaggerUI, otp_app: :donation, swagger_file: "swagger.json"
+  end
+
+  def swagger_info do
+    %{
+      # basePath: "/api",
+      info: %{
+        version: "1.0",
+        title: "DonationApp"
+      }
+      # tags: [%{name: "Users", description: "Operations about Users"}]
+    }
   end
 
   # Enables LiveDashboard only for development

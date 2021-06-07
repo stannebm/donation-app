@@ -1,0 +1,98 @@
+<section class="is-card">
+  <div class="container">
+
+    <div class="card">
+
+      <header class="card-header">
+        <p class="card-header-title has-text-centered">
+          Official Receipt
+        </p>
+      </header>
+
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+
+            <div class="columns">
+              <div class="column is-6">
+                <ul class="no-bullets">
+                  <li>
+                    <strong>Date:</strong>
+                    <%= NaiveDateTime.to_date(@receipt.inserted_at) %>
+                  </li>
+                  <li>
+                    <strong>Donor name:</strong>
+                    <%= @receipt.donor_name %>
+                  </li>
+                  <li>
+                    <strong>Type of payment method:</strong>
+                    <%= @receipt.type_of_payment_method.name %>
+                  </li>
+                  <li>
+                    <strong>Cashier:</strong>
+                    <%= @receipt.user.name %>
+                  </li>
+                </ul>
+              </div>
+              <div class="column is-6 has-text-right">
+                <strong>Receipt number:</strong>
+                <%= @receipt.receipt_number %>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+
+            <table class="table is-striped is-hoverable is-fullwidth">
+              <thead>
+                <tr>
+                  <th>Contribution for</th>
+                  <th>Price</th>
+                  <th>Remark</th>
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <th>Amount Received</th>
+                  <th><%= @receipt.total_amount %></th>
+                  <th></th>
+                </tr>
+              </tfoot>
+              <tbody>
+                <%= for receipt_item <- @receipt.receipt_items do %>
+                  <tr>
+                    <td>
+                      <%= receipt_item.type_of_contribution.name %>
+                      <%= if receipt_item.type_of_contribution_id == 5 do %>
+                        : <%= receipt_item.others %>
+                      <% end %>
+                    </td>
+                    <td><%= receipt_item.price %></td>
+                    <td><%= receipt_item.remark %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+      </div>
+
+      <footer class="card-footer">
+        <p class="card-footer-item">
+          <span><%= link "Back", to: Routes.receipt_path(@conn, :index) %></span>
+        </p>
+        <p class="card-footer-item">
+          <span><%= link "Edit", to: Routes.receipt_path(@conn, :edit, @receipt) %></span>
+        </p>
+      </footer>
+    
+    </div>
+
+  </div>
+</section>

@@ -1,0 +1,108 @@
+<%# 
+  ADMIN HTML https://codepen.io/wikiki/pen/OjdNKM
+  ANOTHER ADMIN HTNL https://vikdiesel.github.io/admin-one-bulma-dashboard/forms.html
+  https://www.toptal.com/elixir/meet-ecto-database-wrapper-for-elixir
+%>
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Admin | Minor Basilica of St.Anne</title>
+    <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
+    <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app-admin.css") %>"/>
+    <script defer type="module" src="<%= Routes.static_path(@conn, "/js/app-admin.js") %>"></script>
+  </head>
+  <body>
+
+    <nav class="navbar">
+
+      <div class="navbar-brand">
+        <a class="navbar-item" href="http://bulma.io">
+          <img src="http://bulma.io/images/bulma-logo.png" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28">
+        </a>
+      </div>
+
+      <div id="navMenubd-example" class="navbar-menu">
+
+        <div class="navbar-start">
+        </div>
+
+        <div class="navbar-end">
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">
+              Hi, <%= @conn.assigns.current_admin.name %>
+            </a>
+            <div class="navbar-dropdown">
+              <a class="navbar-item" href="/documentation/overview/start/">
+                Settings **
+              </a>
+
+              <hr class="navbar-divider">
+
+              <form action="/admins/sign-out" class="navbar-item" method="post">
+                <input name="_method" type="hidden" value="delete">
+                <input name="_csrf_token" type="hidden" value="<%= Plug.CSRFProtection.get_csrf_token() %>">
+                <button class="button is-white destructive-index-action" data-confirm="Are you sure?" type="submit">Logout</button>
+              </form>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </nav>
+
+    <div class="columns is-fullheight">
+      
+      <div class="column is-2 is-sidebar-menu is-hidden-mobile">
+        <aside class="menu">
+
+          <p class="menu-label">
+            General
+            <ul class="menu-list">
+              <li><a>Dashboard **</a></li>
+            </ul>
+          </p>
+
+          <p class="menu-label">
+            Administration
+            <ul class="menu-list">
+              <li><a>Members **</a></li>
+              <li><%= link("Contributions", to: '/admins/type_of_contributions' ) %></li>
+              <li><%= link("Payment Methods", to: '/admins/type_of_payment_methods' ) %></li>
+            </ul>
+          </p>
+
+          <p class="menu-label">
+            Transactions
+            <ul class="menu-list">
+              <li><%= link("Receipts", to: '/admins/receipts' ) %></li>
+              <li><%= link("Reports", to: '/admins/reports' ) %></li>
+            </ul>
+          </p>
+
+          <p class="menu-label"> ** UNDER CONSTRUCTION</p>
+
+        </aside>
+      </div>
+
+      <div class="column is-main-content">
+        <%= @inner_content %>
+      </div>
+
+    </div>
+
+    <%# <footer class="footer">
+      <div class="content has-text-centered">
+        <p>
+          <strong>Admin</strong> by <a href="https://jgthms.com">FJ Teams</a>.
+        </p>
+      </div>
+    </footer> %>
+
+  </body>
+</html>

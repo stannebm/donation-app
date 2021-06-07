@@ -1,0 +1,84 @@
+<section class="is-table">
+  <div class="container">
+
+    <div class="card">
+
+      <header class="card-header">
+        <p class="card-header-title">
+          Reports
+        </p>
+      </header>
+
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+
+            ** UNDER CONSTRUCTION: Search Engine, Print
+
+            <%#= form_for @conn, Routes.report_path(@conn, :index), [ method: :get, as: :search], fn f -> %>
+              <%#= search_input f, :receipt_number %>
+              <%#= submit "Search" %>
+            <%# end %>
+
+            <%# <nav class="level">
+              <div class="level-left">
+              </div>
+              <div class="level-right">
+
+                <p class="level-item">
+                  <div class="field has-addons">
+                    <div class="control">
+                      <input class="input is-small" type="text">
+                    </div>
+                    <div class="control">
+                      <a class="button is-info is-small">
+                        Search
+                      </a>
+                    </div>
+                  </div>
+                </p>
+
+              </div>
+            </nav> %>
+
+          </div>
+        </div>
+      </div>
+
+
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+            <table class="table is-striped is-hoverable is-fullwidth">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Receipt number</th>
+                  <th>Donor name</th>
+                  <th>Payment Method</th>
+                  <th>Total amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <%= for receipt <- @receipts do %>
+                  <tr>
+                    <td><%= NaiveDateTime.to_date(receipt.inserted_at) %></td>
+                    <td><%= receipt.receipt_number %></td>
+                    <td><%= receipt.donor_name %></td>
+                    <td>
+                      <%= receipt.type_of_payment_method.name %>
+                      <%#= receipt.type_of_payment_method_id %>
+                    </td>
+                    <td><%= receipt.total_amount %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>

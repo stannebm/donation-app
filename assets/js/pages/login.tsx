@@ -32,6 +32,7 @@ class Login extends React.Component {
         password: this.state.password
       }
     }).then( (response) => {
+      localStorage.setItem('donationJWT', response.data.jwt);
       console.log( response );
     });
   }

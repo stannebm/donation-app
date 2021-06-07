@@ -2,9 +2,8 @@ defmodule DonationWeb.Plugs.AuthenticateAdmin do
 
   import Plug.Conn
   import Phoenix.Controller
-  import DonationWeb.Router.Helpers
-
-  alias Donation.Admins
+  
+  alias DonationWeb.Router.Helpers, as: Routes
 
   def init(opts), do: opts
 
@@ -14,7 +13,7 @@ defmodule DonationWeb.Plugs.AuthenticateAdmin do
     else
       conn
         |> put_flash(:error, 'You need to be signed in to access this page')
-        |> redirect(to: session_path(conn, :new))
+        |> redirect(to: Routes.session_path(conn, :new))
         |> halt()
     end
   end

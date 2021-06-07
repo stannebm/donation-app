@@ -1,18 +1,41 @@
-<h1>Show Type of contribution</h1>
+<section class="is-card">
+  <div class="container">
 
-<ul>
+    <div class="card">
 
-  <li>
-    <strong>Name:</strong>
-    <%= @type_of_contribution.name %>
-  </li>
+      <header class="card-header">
+        <p class="card-header-title has-text-centered">
+          Contribution Details
+        </p>
+      </header>
 
-  <li>
-    <strong>Price:</strong>
-    <%= @type_of_contribution.price %>
-  </li>
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+            <ul class="no-bullets">
+              <li>
+                <strong>Name:</strong>
+                <%= @type_of_contribution.name %>
+              </li>
+              <li>
+                <strong>Price:</strong>
+                <%= @type_of_contribution.price %>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
 
-</ul>
+      <footer class="card-footer">
+        <p class="card-footer-item">
+          <span><%= link "Edit", to: Routes.type_of_contribution_path(@conn, :edit, @type_of_contribution) %></span>
+        </p>
+        <p class="card-footer-item">
+          <span><%= link "Back", to: Routes.type_of_contribution_path(@conn, :index) %></span>
+        </p>
+      </footer>
 
-<span><%= link "Edit", to: Routes.type_of_contribution_path(@conn, :edit, @type_of_contribution) %></span>
-<span><%= link "Back", to: Routes.type_of_contribution_path(@conn, :index) %></span>
+    </div>
+
+  </div>
+</section>

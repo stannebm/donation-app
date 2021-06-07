@@ -1,13 +1,38 @@
-<h1>Show Type of payment method</h1>
+<section class="is-card">
+  <div class="container">
 
-<ul>
+    <div class="card">
 
-  <li>
-    <strong>Name:</strong>
-    <%= @type_of_payment_method.name %>
-  </li>
+      <header class="card-header">
+        <p class="card-header-title has-text-centered">
+          Payment Method Details
+        </p>
+      </header>
 
-</ul>
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
 
-<span><%= link "Edit", to: Routes.type_of_payment_method_path(@conn, :edit, @type_of_payment_method) %></span>
-<span><%= link "Back", to: Routes.type_of_payment_method_path(@conn, :index) %></span>
+            <ul class="no-bullets">
+              <li>
+                <strong>Name:</strong>
+                <%= @type_of_payment_method.name %>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <footer class="card-footer">
+        <p class="card-footer-item">
+          <span><%= link "Edit", to: Routes.type_of_payment_method_path(@conn, :edit, @type_of_payment_method) %></span>
+        </p>
+        <p class="card-footer-item">
+          <span><%= link "Back", to: Routes.type_of_payment_method_path(@conn, :index) %></span>
+        </p>
+      </footer>
+
+    </div>
+
+  </div>
+</section>

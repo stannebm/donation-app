@@ -232,7 +232,7 @@ defmodule Donation.Admins do
     |> Repo.preload([ :type_of_payment_method, receipt_items: :type_of_contribution ])
   end
 
-  def search_receipts( search_params ) do
+  def search_receipts( _search_params ) do
     Receipt
     |> Repo.all()
     |> Repo.preload([ :type_of_payment_method, receipt_items: :type_of_contribution ])

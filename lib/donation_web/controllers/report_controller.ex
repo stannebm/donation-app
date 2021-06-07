@@ -2,7 +2,7 @@ defmodule DonationWeb.ReportController do
   use DonationWeb, :controller
 
   alias Donation.Admins
-  alias Donation.Admins.Receipt
+  # alias Donation.Admins.Receipt
 
   action_fallback DonationWeb.FallbackController
 

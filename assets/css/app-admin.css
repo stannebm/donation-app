@@ -1,0 +1,58 @@
+/* global CSS here, managed by snowpack */
+
+/* STYLE */
+body {
+  font-family: 'Roboto', sans-serif;
+  /*font-size: 13px;*/
+}
+
+ul.no-bullets {
+  list-style-type: none; /* Remove bullets */
+  padding: 0; /* Remove padding */
+  margin: 0; /* Remove margins */
+}
+
+.margin-right-10 {
+  margin-right: 10px;
+}
+ 
+.is-sidebar-menu {
+  padding: 2rem;
+  background: #4a4a4a;
+}
+.is-sidebar-menu li a {
+  color: white;
+}
+
+.columns.is-fullheight {
+  min-height: calc(100vh - ( 3.25rem - .75rem ) );
+  max-height: calc(100vh - ( 3.25rem - .75rem ) );
+  height: calc(100vh - ( 3.25rem - .75rem ) );
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+}
+
+.columns.is-fullheight .column {
+  overflow-y: auto;
+}
+
+.is-main-content {
+  background: #dbdbdb;
+}
+
+.is-title {
+  padding: 20px 0px;
+  font-weight: bold;
+}
+
+/* CRUD Template */
+
+section.is-card, section.is-table {
+  padding: 30px 20px;
+}
+
+.is-card .container,
+.is-table .container {
+  max-width: 100%;
+}

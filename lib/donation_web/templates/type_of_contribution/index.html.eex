@@ -1,0 +1,76 @@
+<section class="is-table">
+  <div class="container">
+
+    <%= if info = get_flash(@conn, :info) do %>
+      <div class="notification is-info is-light">
+        <button class="delete"></button>
+        <%= info %>
+      </div>
+    <% end %>
+
+    <%= if error = get_flash(@conn, :error) do %>
+      <div class="notification is-danger is-light">
+        <button class="delete"></button>
+        <%= error %>
+      </div>
+    <% end %>
+
+    <div class="card">
+
+      <header class="card-header">
+        <p class="card-header-title">
+          Listing Type of Contribution
+        </p>
+        <p class="level-item margin-right-10">
+          <%= link "New Contribution", to: Routes.type_of_contribution_path(@conn, :new), class: "button is-primary is-small" %>
+        </p>
+      </header>
+
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+
+            <table class="table is-striped is-hoverable is-fullwidth">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <%= for type_of_contribution <- @type_of_contributions do %>
+                  <tr>
+                    <td><%= type_of_contribution.name %></td>
+                    <td>
+                      <div class="field is-grouped">
+                        <p class="control">
+                          <%= link "Show", to: Routes.type_of_contribution_path(@conn, :show, type_of_contribution), class: "button is-primary is-small" %>
+                        </p>
+                        <p class="control">
+                          <%= link "Edit", to: Routes.type_of_contribution_path(@conn, :edit, type_of_contribution), class: "button is-info is-small" %>
+                        </p>
+                        <%= if @conn.assigns.current_admin.is_admin do %>
+                          <p class="control">
+                            <form action="/admins/type_of_contributions/<%= type_of_contribution.id %>" method="post">
+                              <input name="_method" type="hidden" value="delete">
+                              <input name="_csrf_token" type="hidden" value="<%= Plug.CSRFProtection.get_csrf_token() %>">
+                              <button class="button is-danger is-small destructive-index-action" data-confirm="Are you sure?" type="submit">Delete</button>
+                            </form>
+                          </p>
+                        <% end %>
+                      </div>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+

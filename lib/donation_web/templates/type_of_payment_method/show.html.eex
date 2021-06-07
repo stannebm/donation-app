@@ -1,0 +1,13 @@
+<h1>Show Type of payment method</h1>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @type_of_payment_method.name %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.type_of_payment_method_path(@conn, :edit, @type_of_payment_method) %></span>
+<span><%= link "Back", to: Routes.type_of_payment_method_path(@conn, :index) %></span>

@@ -1,0 +1,18 @@
+<h1>Show Type of contribution</h1>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @type_of_contribution.name %>
+  </li>
+
+  <li>
+    <strong>Price:</strong>
+    <%= @type_of_contribution.price %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.type_of_contribution_path(@conn, :edit, @type_of_contribution) %></span>
+<span><%= link "Back", to: Routes.type_of_contribution_path(@conn, :index) %></span>

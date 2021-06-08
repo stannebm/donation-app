@@ -12,7 +12,7 @@ services:
       - caddy_config:/config
     ports:
       - 443:443
-    command: caddy reverse-proxy --from xxx.DOMAIN.com --to phoenix:4000
+    command: caddy reverse-proxy --from admin.minorbasilicastannebm.com --to phoenix:4000
     networks:
       - donation
 

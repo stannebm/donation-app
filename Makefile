@@ -2,9 +2,13 @@
 default:
 	docker-compose up -d --build
 
-# create an external network that can be shared later
+# create an external network that can be shared later. (one time)
 network:
 	docker network create donation_net
+
+# # Setup reverse proxy with SSL
+# caddy:
+# 	docker-compose -f docker-compose.caddy.yml up -d --build
 
 # run migration
 migrate:

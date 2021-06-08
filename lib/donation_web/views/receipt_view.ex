@@ -9,7 +9,7 @@ defmodule DonationWeb.ReceiptView do
     changeset = Admins.change_receipt(%Receipt{ receipt_items: [%ReceiptItem{}] })
     form = Phoenix.HTML.FormData.to_form(changeset, [])
     fields = render_to_string(__MODULE__, "receipt_item_fields.html", f: form, type_of_contributions: type_of_contributions)
-    link "Add Receipt Item", to: "#", "data-template": fields, id: "add_receipt_item"
+    link "Add Receipt Item", to: "#", "data-template": fields, id: "add_receipt_item", class: "button is-primary"
   end
 
   # def render("new.html", assigns) do

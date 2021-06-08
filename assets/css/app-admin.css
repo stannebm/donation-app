@@ -46,6 +46,9 @@ ul.no-bullets {
   font-weight: bold;
 }
 
+/* FORM */
+#add_receipt_item {  margin-top: 20px; margin-left: 25px; }
+
 /* CRUD Template */
 
 section.is-card, section.is-table {

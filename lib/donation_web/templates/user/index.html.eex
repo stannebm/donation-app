@@ -19,10 +19,10 @@
 
       <header class="card-header">
         <p class="card-header-title">
-          Listing Type of Payment Methods
+          Listing members
         </p>
         <p class="level-item margin-right-10">
-          <%= link "New Payment Method", to: Routes.type_of_payment_method_path(@conn, :new), class: "button is-primary" %>
+          <%= link "New Member", to: Routes.user_path(@conn, :new), class: "button is-primary" %>
         </p>
       </header>
 
@@ -33,25 +33,29 @@
             <table class="table is-striped is-hoverable is-fullwidth">
               <thead>
                 <tr>
+                  <th>Username</th>
                   <th>Name</th>
+                  <th>Admin?</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
-                <%= for type_of_payment_method <- @type_of_payment_methods do %>
+                <%= for user <- @users do %>
                     <tr>
-                      <td><%= type_of_payment_method.name %></td>
+                      <td><%= user.username %></td>
+                      <td><%= user.name %></td>
+                      <td><%= user.is_admin %></td>
                       <td>
                         <div class="field is-grouped">
                           <p class="control">
-                            <%= link "Show", to: Routes.type_of_payment_method_path(@conn, :show, type_of_payment_method), class: "button is-primary is-small" %>
+                            <%= link "Show", to: Routes.user_path(@conn, :show, user), class: "button is-primary is-small" %>
                           </p>
                           <p class="control">
-                            <%= link "Edit", to: Routes.type_of_payment_method_path(@conn, :edit, type_of_payment_method), class: "button is-info is-small" %>
+                            <%= link "Edit", to: Routes.user_path(@conn, :edit, user), class: "button is-info is-small" %>
                           </p>
                           <%= if @conn.assigns.current_admin.is_admin do %>
                             <p class="control">
-                              <form action="/admins/type_of_payment_methods/<%= type_of_payment_method.id %>" method="post">
+                              <form action="/admins/users/<%= user.id %>" method="post">
                                 <input name="_method" type="hidden" value="delete">
                                 <input name="_csrf_token" type="hidden" value="<%= Plug.CSRFProtection.get_csrf_token() %>">
                                 <button class="button is-danger is-small destructive-index-action" data-confirm="Are you sure?" type="submit">Delete</button>

@@ -22,7 +22,7 @@
           Listing Type of Contribution
         </p>
         <p class="level-item margin-right-10">
-          <%= link "New Contribution", to: Routes.type_of_contribution_path(@conn, :new), class: "button is-primary is-small" %>
+          <%= link "New Contribution", to: Routes.type_of_contribution_path(@conn, :new), class: "button is-primary" %>
         </p>
       </header>
 

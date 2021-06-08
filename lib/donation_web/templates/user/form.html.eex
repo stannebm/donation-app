@@ -1,27 +1,71 @@
-<%= form_for @changeset, @action, fn f -> %>
-  <%= if @changeset.action do %>
-    <div class="alert alert-danger">
-      <p>Oops, something went wrong! Please check the errors below.</p>
-    </div>
-  <% end %>
+<section class="is-card">
+  <div class="container">
 
-  <%= label f, :username %>
-  <%= text_input f, :username %>
-  <%= error_tag f, :username %>
+    <%= form_for @changeset, @action, fn f -> %>
+      <div class="columns">
 
-  <%= label f, :encrypted_password %>
-  <%= text_input f, :encrypted_password %>
-  <%= error_tag f, :encrypted_password %>
+        <%= if @changeset.action do %>
+          <div class="alert alert-danger">
+            <p>Oops, something went wrong! Please check the errors below.</p>
+          </div>
+        <% end %>
 
-  <%= label f, :is_admin %>
-  <%= checkbox f, :is_admin %>
-  <%= error_tag f, :is_admin %>
+        <div class="column is-two-thirds">
+          <div class="card">
 
-  <%= label f, :name %>
-  <%= text_input f, :name %>
-  <%= error_tag f, :name %>
+            <header class="card-header">
+              <p class="card-header-title">
+                Member
+              </p>
+            </header>
 
-  <div>
-    <%= submit "Save" %>
+            <div class="card-content">
+              <div class="content">
+
+                <div class="field">
+                  <%= label f, :username, class: "label" %>
+                  <div class="control">
+                    <%= text_input f, :username, class: "input" %>
+                    <p class="help"><%= error_tag f, :username %></p>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <%= label f, :name, class: "label" %>
+                  <div class="control">
+                    <%= text_input f, :name, class: "input" %>
+                    <p class="help"><%= error_tag f, :name %></p>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <%= label f, :password, class: "label" %>
+                  <div class="control">
+                    <%= password_input f, :password, class: "input" %>
+                    <p class="help"><%= error_tag f, :password %></p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="card">
+            <div class="card-content">
+              <%= submit "Save", class: "button is-primary is-large is-fullwidth" %>
+            </div>
+            <footer class="card-footer">
+              <%= link "Back", to: Routes.user_path(@conn, :index), class: "card-footer-item" %>
+              <a class="card-footer-item"></a>
+            </footer>
+          </div>
+        </div>
+
+      </div>
+    <% end %>
+
   </div>
-<% end %>
+</section>

@@ -68,14 +68,16 @@
             </ul>
           </p>
 
-          <p class="menu-label">
-            Administration
-            <ul class="menu-list">
-              <li><a>Members **</a></li>
-              <li><%= link("Contributions", to: '/admins/type_of_contributions' ) %></li>
-              <li><%= link("Payment Methods", to: '/admins/type_of_payment_methods' ) %></li>
-            </ul>
-          </p>
+          <%= if @conn.assigns.current_admin.is_admin do %>
+            <p class="menu-label">
+              Administration
+              <ul class="menu-list">
+                <li><%= link("Members", to: '/admins/users' ) %></li>
+                <li><%= link("Contributions", to: '/admins/type_of_contributions' ) %></li>
+                <li><%= link("Payment Methods", to: '/admins/type_of_payment_methods' ) %></li>
+              </ul>
+            </p>
+          <% end %>
 
           <p class="menu-label">
             Transactions

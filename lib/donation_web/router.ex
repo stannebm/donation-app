@@ -42,8 +42,6 @@ defmodule DonationWeb.Router do
 
   scope "/api", DonationWeb do
     pipe_through [:api, :authenticated_jwt]
-    # resources "/users", UserController, only: [:create, :show]
-    get "/my_user", UserController, :show
   end
 
   scope "/api/swagger" do
@@ -90,7 +88,7 @@ defmodule DonationWeb.Router do
     resources "/reports", ReportController, only: [:index]
     resources "/type_of_contributions", TypeOfContributionController
     resources "/type_of_payment_methods", TypeOfPaymentMethodController
-    # resources "/users", UserController, only: [:create, :new]
+    resources "/users", UserController
   end
 
   scope "/", DonationWeb do

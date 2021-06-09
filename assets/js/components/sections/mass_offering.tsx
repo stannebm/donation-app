@@ -77,7 +77,6 @@ export default function MassOffering() {
       {fields.map((item, index) => {
         return (
           <>
-            <Divider py={2} my={3} />
             <Box mb={5}>
               <HStack mb={3} key={item.id}>
                 <FormSelect
@@ -107,7 +106,7 @@ export default function MassOffering() {
                     },
                   })}
                   type="number"
-                  // defaultValue={item.numberOfMass}
+                // defaultValue={item.numberOfMass}
                 />
               </HStack>
               <VStack>

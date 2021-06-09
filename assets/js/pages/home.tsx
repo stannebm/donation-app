@@ -13,9 +13,9 @@ export default function Home(): JSX.Element {
           borderTopRadius="xl"
         />
 
-        <Heading p={3} as="h2" fontWeight={300}>
+        {/* <Heading p={3} as="h2" fontWeight={300}>
           Mass Offering
-        </Heading>
+        </Heading> */}
         <Box p={3}>Mass intentions will be offered by our priests daily.</Box>
 
         <Box p={5}>

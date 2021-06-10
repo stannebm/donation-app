@@ -75,7 +75,7 @@ export default function MassOffering() {
       {fields.map((item, index) => {
         return (
           <>
-            <Box mb={5}>
+            <Box mb={5} p={3} bg="gray.100">
               <HStack mb={3} key={item.id}>
                 <FormSelect
                   label="Mass Offering/Intention"
@@ -84,6 +84,7 @@ export default function MassOffering() {
                     "Thanksgiving",
                     "Departed Soul",
                   ]}
+                  bg="white"
                   errors={errors}
                   errorPath={R.path(["offerings", index, "typeOfMass"])}
                   defaultValue={item.typeOfMass}
@@ -142,22 +143,22 @@ export default function MassOffering() {
                   {...register(`offerings.${index}.specificDates` as const)}
                 /> */}
               </VStack>
-            </Box>
-            {index >= 1 && (
-              <Box my={5}>
-                <Button
-                  size="sm"
-                  colorScheme="red"
-                  fontWeight={400}
-                  type="button"
-                  variant="outline"
-                  leftIcon={<MinusIcon />}
-                  onClick={() => remove(index)}
-                >
-                  Remove Mass Offering
+              {index >= 1 && (
+                <Box mt={2}>
+                  <Button
+                    size="sm"
+                    colorScheme="red"
+                    fontWeight={400}
+                    type="button"
+                    variant="link"
+                    leftIcon={<MinusIcon />}
+                    onClick={() => remove(index)}
+                  >
+                    Remove
                 </Button>
-              </Box>
-            )}
+                </Box>
+              )}
+            </Box>
           </>
         );
       })}
@@ -168,7 +169,7 @@ export default function MassOffering() {
           fontWeight={400}
           colorScheme="teal"
           type="button"
-          variant="outline"
+          variant="link"
           leftIcon={<PlusSquareIcon />}
           onClick={() => {
             append({

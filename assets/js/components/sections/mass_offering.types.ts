@@ -1,5 +1,4 @@
 export type MandatoryForm = {
-  contactName: string;
   contactNumber: string;
   emailAddress: string;
   fromWhom: string;
@@ -9,8 +8,6 @@ export type MandatoryForm = {
 
 export type OfferingForm = {
   typeOfMass: "Special Intention" | "Thanksgiving" | "Departed Soul";
-  numberOfMass: number;
-  specificDates?: string;
-  toWhom: string;
-  intention: string;
+  dates?: string;
+  intention?: string;
 };

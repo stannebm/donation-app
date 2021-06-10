@@ -1,5 +1,5 @@
 import { MinusIcon, PlusSquareIcon } from "@chakra-ui/icons";
-import { Box, Button, Divider, HStack, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, HStack, Text, VStack } from "@chakra-ui/react";
 import * as R from "ramda";
 import React from "react";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -16,12 +16,13 @@ export default function MassOffering() {
     watch,
   } = useForm<MandatoryForm>({
     defaultValues: {
-      offerings: [{ typeOfMass: "Special Intention" }],
+      offerings: [{ typeOfMass: undefined }],
     },
   });
 
   const onSubmit = (data: MandatoryForm) => {
     console.log("SUBMIT:", data);
+    console.log(JSON.stringify(data))
   };
 
   const { fields, append, remove } = useFieldArray({
@@ -30,20 +31,17 @@ export default function MassOffering() {
   });
 
   const offerings = watch("offerings");
-  const totalMasses = offerings.reduce(
-    (acc, curr) => acc + curr.numberOfMass,
-    0,
-  );
+  /* const totalMasses = offerings.reduce(
+*   (acc, curr) => acc + curr.numberOfMass,
+*   0,
+* ); */
+  // FIXME use real data
+  const totalMasses = 1;
   console.log("errors", errors);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <HStack mb={3} align="flex-start">
-        <FormInput
-          label="Name"
-          errors={errors}
-          {...register("contactName", { required: true })}
-        />
         <FormInput
           label="Contact H/P"
           errors={errors}
@@ -63,13 +61,13 @@ export default function MassOffering() {
       </HStack>
       <HStack mb={3} align="flex-start">
         <FormInput
-          label="From Whom"
+          label="Offer by Whom"
           errors={errors}
           {...register("fromWhom", { required: true })}
         />
         <FormSelect
           label="Mass Language"
-          options={["English", "Mandarin", "Tamil"]}
+          options={["English", "Mandarin", "Tamil", "Bahasa"]}
           errors={errors}
           {...register("massLanguage", { required: true })}
         />
@@ -93,40 +91,10 @@ export default function MassOffering() {
                     required: true,
                   })}
                 />
-                <FormInput
-                  label="Number of Mass"
-                  errors={errors}
-                  errorPath={R.path(["offerings", index, "numberOfMass"])}
-                  {...register(`offerings.${index}.numberOfMass` as const, {
-                    required: true,
-                    valueAsNumber: true,
-                    min: {
-                      value: 1,
-                      message: "At least 1 mass",
-                    },
-                  })}
-                  type="number"
-                // defaultValue={item.numberOfMass}
-                />
               </HStack>
               <VStack>
-                <FormInput
-                  label="Specific Date(s)"
-                  errors={errors}
-                  errorPath={R.path(["offerings", index, "specificDates"])}
-                  {...register(`offerings.${index}.specificDates` as const)}
-                />
                 {offerings[index].typeOfMass === "Special Intention" && (
                   <>
-                    <FormInput
-                      label="To Whom (eg. Saint/Church)"
-                      errors={errors}
-                      errorPath={R.path(["offerings", index, "toWhom"])}
-                      defaultValue={item.toWhom}
-                      {...register(`offerings.${index}.toWhom` as const, {
-                        required: true,
-                      })}
-                    />
                     <FormInput
                       label="Intention"
                       errors={errors}
@@ -140,15 +108,6 @@ export default function MassOffering() {
                 )}
                 {offerings[index].typeOfMass === "Thanksgiving" && (
                   <>
-                    <FormInput
-                      label="Thanksgiving To"
-                      errors={errors}
-                      errorPath={R.path(["offerings", index, "toWhom"])}
-                      defaultValue={item.toWhom}
-                      {...register(`offerings.${index}.toWhom` as const, {
-                        required: true,
-                      })}
-                    />
                     <FormInput
                       label="Intention"
                       errors={errors}
@@ -165,24 +124,23 @@ export default function MassOffering() {
                     <FormInput
                       label="Name of Departed Soul"
                       errors={errors}
-                      errorPath={R.path(["offerings", index, "toWhom"])}
-                      defaultValue={item.toWhom}
-                      {...register(`offerings.${index}.toWhom` as const, {
-                        required: true,
-                      })}
-                    />
-                    <FormInput
-                      d="none"
-                      label="Intention"
-                      errors={errors}
                       errorPath={R.path(["offerings", index, "intention"])}
                       defaultValue={item.intention}
                       {...register(`offerings.${index}.intention` as const, {
-                        required: false,
+                        required: true,
                       })}
                     />
                   </>
                 )}
+
+                {/*
+                    FIXME multiple dates
+                    <FormInput
+                  label="Specific Date(s)"
+                  errors={errors}
+                  errorPath={R.path(["offerings", index, "specificDates"])}
+                  {...register(`offerings.${index}.specificDates` as const)}
+                /> */}
               </VStack>
             </Box>
             {index >= 1 && (
@@ -204,6 +162,25 @@ export default function MassOffering() {
         );
       })}
 
+      <Box my={3}>
+        <Button
+          size="sm"
+          fontWeight={400}
+          colorScheme="teal"
+          type="button"
+          variant="outline"
+          leftIcon={<PlusSquareIcon />}
+          onClick={() => {
+            append({
+              typeOfMass: "Special Intention",
+            });
+          }}
+        >
+          More Offerings
+        </Button>
+      </Box>
+
+
       <Box mb={5}>
         <Text color="gray.500" fontWeight={500} align="left" mb={2}>
           Love offering : RM10 per Mass
@@ -219,19 +196,6 @@ export default function MassOffering() {
       <HStack>
         <Button colorScheme="teal" isLoading={isSubmitting} type="submit">
           Transfer
-        </Button>
-        <Button
-          fontWeight={400}
-          type="button"
-          variant="outline"
-          leftIcon={<PlusSquareIcon />}
-          onClick={() => {
-            append({
-              typeOfMass: "Special Intention",
-            });
-          }}
-        >
-          More Offerings
         </Button>
       </HStack>
     </form>

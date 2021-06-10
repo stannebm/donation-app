@@ -16,7 +16,11 @@ export default function Home(): JSX.Element {
         {/* <Heading p={3} as="h2" fontWeight={300}>
           Mass Offering
         </Heading> */}
-        <Box p={3}>Mass intentions will be offered by our priests daily.</Box>
+        <Box p={3}>
+          <Text fontSize="sm" color="gray.600">
+            Mass intentions will be offered by our priests daily.
+          </Text>
+        </Box>
 
         <Box p={5}>
           <MassOffering></MassOffering>

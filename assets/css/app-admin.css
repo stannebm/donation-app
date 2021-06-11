@@ -2,7 +2,7 @@
 
 /* STYLE */
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   /*font-size: 13px;*/
 }
 
@@ -15,7 +15,7 @@ ul.no-bullets {
 .margin-right-10 {
   margin-right: 10px;
 }
- 
+
 .is-sidebar-menu {
   padding: 2rem;
   background: #4a4a4a;
@@ -25,9 +25,9 @@ ul.no-bullets {
 }
 
 .columns.is-fullheight {
-  min-height: calc(100vh - ( 3.25rem - .75rem ) );
-  max-height: calc(100vh - ( 3.25rem - .75rem ) );
-  height: calc(100vh - ( 3.25rem - .75rem ) );
+  min-height: calc(100vh - (3.25rem - 0.75rem));
+  max-height: calc(100vh - (3.25rem - 0.75rem));
+  height: calc(100vh - (3.25rem - 0.75rem));
   display: flex;
   flex-direction: row;
   justify-content: stretch;
@@ -47,11 +47,15 @@ ul.no-bullets {
 }
 
 /* FORM */
-#add_receipt_item {  margin-top: 20px; margin-left: 25px; }
+#add_receipt_item {
+  margin-top: 20px;
+  margin-left: 25px;
+}
 
 /* CRUD Template */
 
-section.is-card, section.is-table {
+section.is-card,
+section.is-table {
   padding: 30px 20px;
 }
 

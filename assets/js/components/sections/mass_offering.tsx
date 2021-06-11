@@ -1,10 +1,21 @@
-import { MinusIcon, PlusSquareIcon } from "@chakra-ui/icons";
-import { Box, Button, HStack, Text, VStack } from "@chakra-ui/react";
+import { CalendarIcon, MinusIcon, PlusSquareIcon } from "@chakra-ui/icons";
+import {
+  Box,
+  Button,
+  HStack,
+  Popover,
+  PopoverBody,
+  PopoverContent,
+  PopoverTrigger,
+  Text,
+  VStack
+} from "@chakra-ui/react";
 import * as R from "ramda";
 import React from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import FormInput from "../elements/form_input";
 import FormSelect from "../elements/form_select";
+import DatePicker from "../elements/datepicker";
 import type { MandatoryForm } from "./mass_offering.types";
 
 export default function MassOffering() {
@@ -22,7 +33,7 @@ export default function MassOffering() {
 
   const onSubmit = (data: MandatoryForm) => {
     console.log("SUBMIT:", data);
-    console.log(JSON.stringify(data))
+    console.log(JSON.stringify(data));
   };
 
   const { fields, append, remove } = useFieldArray({
@@ -32,9 +43,9 @@ export default function MassOffering() {
 
   const offerings = watch("offerings");
   /* const totalMasses = offerings.reduce(
-*   (acc, curr) => acc + curr.numberOfMass,
-*   0,
-* ); */
+   *   (acc, curr) => acc + curr.numberOfMass,
+   *   0,
+   * ); */
   // FIXME use real data
   const totalMasses = 1;
   console.log("errors", errors);
@@ -72,7 +83,7 @@ export default function MassOffering() {
           {...register("massLanguage", { required: true })}
         />
       </HStack>
-      {fields.map((item, index) => {
+      {fields.map((item, index): JSX.Element => {
         return (
           <>
             <Box mb={5} p={3} bg="gray.100">
@@ -143,6 +154,32 @@ export default function MassOffering() {
                   {...register(`offerings.${index}.specificDates` as const)}
                 /> */}
               </VStack>
+
+              {offerings[index].typeOfMass?.length > 0 && (
+                <Popover>
+                  <PopoverTrigger>
+                    <Box mt={2}>
+                      <Button
+                        size="sm"
+                        fontWeight={400}
+                        colorScheme="teal"
+                        type="button"
+                        variant="link"
+                        leftIcon={<CalendarIcon />}
+                      >
+                        Select Dates
+                      </Button>
+                    </Box>
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <PopoverBody>
+                      <DatePicker />
+                      Are you sure you want to have that milkshake?
+                    </PopoverBody>
+                  </PopoverContent>
+                </Popover>
+              )}
+
               {index >= 1 && (
                 <Box mt={2}>
                   <Button
@@ -155,7 +192,7 @@ export default function MassOffering() {
                     onClick={() => remove(index)}
                   >
                     Remove
-                </Button>
+                  </Button>
                 </Box>
               )}
             </Box>
@@ -173,14 +210,13 @@ export default function MassOffering() {
           leftIcon={<PlusSquareIcon />}
           onClick={() => {
             append({
-              typeOfMass: "Special Intention",
+              typeOfMass: undefined,
             });
           }}
         >
           More Offerings
         </Button>
       </Box>
-
 
       <Box mb={5}>
         <Text color="gray.500" fontWeight={500} align="left" mb={2}>

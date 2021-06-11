@@ -4,7 +4,10 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Donation · Phoenix Framework</title>
+    <title>Minor Basilica of St. Anne, Bukit Mertajam</title>
+    <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/250689_6e0202cd5a014517a148a8f18f4187a8%7Emv2.png/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/250689_6e0202cd5a014517a148a8f18f4187a8%7Emv2.png">
+    <link rel="shortcut icon" href="https://static.wixstatic.com/media/250689_6e0202cd5a014517a148a8f18f4187a8%7Emv2.png/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/250689_6e0202cd5a014517a148a8f18f4187a8%7Emv2.png" type="image/png">
+    <link rel="apple-touch-icon" href="https://static.wixstatic.com/media/250689_6e0202cd5a014517a148a8f18f4187a8%7Emv2.png/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/250689_6e0202cd5a014517a148a8f18f4187a8%7Emv2.png" type="image/png">
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
     <script defer type="module" src="<%= Routes.static_path(@conn, "/js/index.js") %>"></script>
   </head>

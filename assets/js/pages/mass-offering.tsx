@@ -3,7 +3,7 @@ import React from "react";
 import MainLayout from "../components/layouts/main_layout";
 import MassOffering from "../components/sections/mass_offering";
 
-export default function Home(): JSX.Element {
+export default function MassOfferingPage(): JSX.Element {
   return (
     <MainLayout>
       <Box borderRadius="xl" bgColor="#f9f9f9" my={10}>

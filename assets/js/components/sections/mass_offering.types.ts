@@ -3,11 +3,13 @@ export type MandatoryForm = {
   emailAddress: string;
   fromWhom: string;
   massLanguage: string;
+  amount: number;
   offerings: OfferingForm[];
 };
 
 export type OfferingForm = {
-  typeOfMass: "Special Intention" | "Thanksgiving" | "Departed Soul";
+  typeOfMass: "Special Intention" | "Thanksgiving" | "Departed Soul" | "Donation";
   dates?: string[];
   intention?: string;
+  otherIntention?: string;
 };

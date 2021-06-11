@@ -8,6 +8,6 @@ export type MandatoryForm = {
 
 export type OfferingForm = {
   typeOfMass: "Special Intention" | "Thanksgiving" | "Departed Soul";
-  dates?: string;
+  dates?: string[];
   intention?: string;
 };

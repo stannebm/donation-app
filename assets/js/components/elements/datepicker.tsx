@@ -11,9 +11,7 @@ export type DatePickerProps = {
 };
 
 function isSameDay(d1: Date, d2: Date): boolean {
-  return (
-    d1.toLocaleDateString() === d2.toLocaleDateString()
-  );
+  return d1.toLocaleDateString() === d2.toLocaleDateString();
 }
 
 const mergeDays = (prev: Days, index: number, day: any, selected: boolean) => {
@@ -21,12 +19,15 @@ const mergeDays = (prev: Days, index: number, day: any, selected: boolean) => {
   if (selected) {
     // toggle unselect
     const existing = prev[index];
-    const updated = existing.filter((d) => !isSameDay(day, d))
+    const updated = existing.filter((d) => !isSameDay(day, d));
     newDates = { ...prev, ...{ [index]: updated } };
   } else {
     // toggle select
     if (index in prev) {
-      newDates = { ...prev, ...{ [index]: [...prev[index], day].sort((a, b) => a - b) } };
+      newDates = {
+        ...prev,
+        ...{ [index]: [...prev[index], day].sort((a, b) => a - b) },
+      };
     } else {
       newDates = { ...prev, ...{ [index]: [day] } };
     }

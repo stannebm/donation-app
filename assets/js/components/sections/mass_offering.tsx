@@ -33,8 +33,13 @@ export default function MassOffering() {
   });
 
   const onSubmit = (data: MandatoryForm) => {
-    console.log("SUBMIT:", data);
-    console.log(JSON.stringify(data));
+    console.log("SUBMIT:", data, selectedDates);
+    const submission = { ...data };
+    submission.offerings = submission.offerings.map((o, index) => ({
+      ...o,
+      ...{ dates: selectedDates[index].map((d) => d.toLocaleDateString()) },
+    }));
+    console.log(JSON.stringify(submission));
   };
 
   const { fields, append, remove } = useFieldArray({
@@ -48,8 +53,6 @@ export default function MassOffering() {
   const offerings = watch("offerings");
 
   const totalMasses = 1; // FIXME
-  /* console.log("errors", errors);
-* console.log("selectedDates", selectedDates); */
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -151,7 +154,9 @@ export default function MassOffering() {
                 {offerings[index].typeOfMass?.length > 0 && (
                   <>
                     <Box mt={2}>
-                      <Text color="gray.600" fontSize="sm">Selected dates:</Text>
+                      <Text color="gray.600" fontSize="sm">
+                        Selected dates:
+                      </Text>
                       {selectedDates[index]?.map((d: Date) => (
                         <Text fontSize="md">{d.toLocaleDateString()}</Text>
                       ))}
@@ -169,7 +174,7 @@ export default function MassOffering() {
                             leftIcon={<CalendarIcon />}
                           >
                             Select Dates
-                        </Button>
+                          </Button>
                         </Box>
                       </PopoverTrigger>
                       <PopoverContent>

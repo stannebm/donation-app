@@ -52,7 +52,7 @@ export default function MassOffering() {
   }>({});
   const offerings = watch("offerings");
 
-  const totalMasses = 1; // FIXME
+  const totalMasses = Object.values(selectedDates).reduce(((acc, list) => acc + list.length), 0);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -200,7 +200,17 @@ export default function MassOffering() {
                       type="button"
                       variant="link"
                       leftIcon={<MinusIcon />}
-                      onClick={() => remove(index)}
+                      onClick={() => {
+                        remove(index);
+                        setSelectedDates((prev) => Object.keys(prev)
+                          .filter(key => parseInt(key) !== index)
+                          .reduce((obj: any, key) => {
+                            const intkey = parseInt(key)
+                            obj[intkey] = prev[intkey];
+                            return obj;
+                          }, {})
+                        )
+                      }}
                     >
                       Remove
                     </Button>
@@ -247,6 +257,6 @@ export default function MassOffering() {
           Transfer
         </Button>
       </HStack>
-    </form>
+    </form >
   );
 }

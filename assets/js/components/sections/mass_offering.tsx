@@ -167,8 +167,8 @@ export default function MassOffering() {
                         <Box mt={2}>
                           <Button
                             size="md"
-                            fontWeight={400}
-                            colorScheme="teal"
+                            fontWeight={600}
+                            colorScheme="blue"
                             type="button"
                             variant="link"
                             leftIcon={<CalendarIcon />}
@@ -222,13 +222,13 @@ export default function MassOffering() {
         },
       )}
 
-      <Box my={3}>
+      <Box my={3} p={2}>
         <Button
           size="md"
-          fontWeight={400}
-          colorScheme="teal"
+          fontWeight={600}
+          colorScheme="blue"
           type="button"
-          variant="link"
+          variant="outline"
           leftIcon={<PlusSquareIcon />}
           onClick={() => {
             append({

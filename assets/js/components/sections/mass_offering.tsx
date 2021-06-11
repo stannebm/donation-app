@@ -5,13 +5,14 @@ import {
   HStack,
   Popover,
   PopoverBody,
+  PopoverCloseButton,
   PopoverContent,
   PopoverTrigger,
   Text,
-  VStack
+  VStack,
 } from "@chakra-ui/react";
 import * as R from "ramda";
-import React from "react";
+import React, { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import FormInput from "../elements/form_input";
 import FormSelect from "../elements/form_select";
@@ -41,14 +42,14 @@ export default function MassOffering() {
     name: "offerings",
   });
 
+  const [selectedDates, setSelectedDates] = useState<{
+    [index: number]: Date[];
+  }>({});
   const offerings = watch("offerings");
-  /* const totalMasses = offerings.reduce(
-   *   (acc, curr) => acc + curr.numberOfMass,
-   *   0,
-   * ); */
-  // FIXME use real data
-  const totalMasses = 1;
-  console.log("errors", errors);
+
+  const totalMasses = 1; // FIXME
+  /* console.log("errors", errors);
+* console.log("selectedDates", selectedDates); */
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -83,126 +84,132 @@ export default function MassOffering() {
           {...register("massLanguage", { required: true })}
         />
       </HStack>
-      {fields.map((item, index): JSX.Element => {
-        return (
-          <>
-            <Box mb={5} p={3} bg="gray.100">
-              <HStack mb={3} key={item.id}>
-                <FormSelect
-                  label="Mass Offering/Intention"
-                  options={[
-                    "Special Intention",
-                    "Thanksgiving",
-                    "Departed Soul",
-                  ]}
-                  bg="white"
-                  errors={errors}
-                  errorPath={R.path(["offerings", index, "typeOfMass"])}
-                  defaultValue={item.typeOfMass}
-                  {...register(`offerings.${index}.typeOfMass` as const, {
-                    required: true,
-                  })}
-                />
-              </HStack>
-              <VStack>
-                {offerings[index].typeOfMass === "Special Intention" && (
-                  <>
-                    <FormInput
-                      label="Intention"
-                      errors={errors}
-                      errorPath={R.path(["offerings", index, "intention"])}
-                      defaultValue={item.intention}
-                      {...register(`offerings.${index}.intention` as const, {
-                        required: true,
-                      })}
-                    />
-                  </>
-                )}
-                {offerings[index].typeOfMass === "Thanksgiving" && (
-                  <>
-                    <FormInput
-                      label="Intention"
-                      errors={errors}
-                      errorPath={R.path(["offerings", index, "intention"])}
-                      defaultValue={item.intention}
-                      {...register(`offerings.${index}.intention` as const, {
-                        required: true,
-                      })}
-                    />
-                  </>
-                )}
-                {offerings[index].typeOfMass === "Departed Soul" && (
-                  <>
-                    <FormInput
-                      label="Name of Departed Soul"
-                      errors={errors}
-                      errorPath={R.path(["offerings", index, "intention"])}
-                      defaultValue={item.intention}
-                      {...register(`offerings.${index}.intention` as const, {
-                        required: true,
-                      })}
-                    />
-                  </>
-                )}
+      {fields.map(
+        (item, index): JSX.Element => {
+          return (
+            <>
+              <Box mb={5} p={3} bg="gray.100">
+                <HStack mb={3} key={item.id}>
+                  <FormSelect
+                    label="Mass Offering/Intention"
+                    options={[
+                      "Special Intention",
+                      "Thanksgiving",
+                      "Departed Soul",
+                    ]}
+                    bg="white"
+                    errors={errors}
+                    errorPath={R.path(["offerings", index, "typeOfMass"])}
+                    defaultValue={item.typeOfMass}
+                    {...register(`offerings.${index}.typeOfMass` as const, {
+                      required: true,
+                    })}
+                  />
+                </HStack>
+                <VStack>
+                  {offerings[index].typeOfMass === "Special Intention" && (
+                    <>
+                      <FormInput
+                        label="Intention"
+                        errors={errors}
+                        errorPath={R.path(["offerings", index, "intention"])}
+                        defaultValue={item.intention}
+                        {...register(`offerings.${index}.intention` as const, {
+                          required: true,
+                        })}
+                      />
+                    </>
+                  )}
+                  {offerings[index].typeOfMass === "Thanksgiving" && (
+                    <>
+                      <FormInput
+                        label="Intention"
+                        errors={errors}
+                        errorPath={R.path(["offerings", index, "intention"])}
+                        defaultValue={item.intention}
+                        {...register(`offerings.${index}.intention` as const, {
+                          required: true,
+                        })}
+                      />
+                    </>
+                  )}
+                  {offerings[index].typeOfMass === "Departed Soul" && (
+                    <>
+                      <FormInput
+                        label="Name of Departed Soul"
+                        errors={errors}
+                        errorPath={R.path(["offerings", index, "intention"])}
+                        defaultValue={item.intention}
+                        {...register(`offerings.${index}.intention` as const, {
+                          required: true,
+                        })}
+                      />
+                    </>
+                  )}
+                </VStack>
 
-                {/*
-                    FIXME multiple dates
-                    <FormInput
-                  label="Specific Date(s)"
-                  errors={errors}
-                  errorPath={R.path(["offerings", index, "specificDates"])}
-                  {...register(`offerings.${index}.specificDates` as const)}
-                /> */}
-              </VStack>
-
-              {offerings[index].typeOfMass?.length > 0 && (
-                <Popover>
-                  <PopoverTrigger>
+                {offerings[index].typeOfMass?.length > 0 && (
+                  <>
                     <Box mt={2}>
-                      <Button
-                        size="sm"
-                        fontWeight={400}
-                        colorScheme="teal"
-                        type="button"
-                        variant="link"
-                        leftIcon={<CalendarIcon />}
-                      >
-                        Select Dates
-                      </Button>
+                      <Text color="gray.600" fontSize="sm">Selected dates:</Text>
+                      {selectedDates[index]?.map((d: Date) => (
+                        <Text fontSize="md">{d.toLocaleDateString()}</Text>
+                      ))}
                     </Box>
-                  </PopoverTrigger>
-                  <PopoverContent>
-                    <PopoverBody>
-                      <DatePicker />
-                      Are you sure you want to have that milkshake?
-                    </PopoverBody>
-                  </PopoverContent>
-                </Popover>
-              )}
 
-              {index >= 1 && (
-                <Box mt={2}>
-                  <Button
-                    size="sm"
-                    colorScheme="red"
-                    fontWeight={400}
-                    type="button"
-                    variant="link"
-                    leftIcon={<MinusIcon />}
-                    onClick={() => remove(index)}
-                  >
-                    Remove
-                  </Button>
-                </Box>
-              )}
-            </Box>
-          </>
-        );
-      })}
+                    <Popover>
+                      <PopoverTrigger>
+                        <Box mt={2}>
+                          <Button
+                            size="md"
+                            fontWeight={400}
+                            colorScheme="teal"
+                            type="button"
+                            variant="link"
+                            leftIcon={<CalendarIcon />}
+                          >
+                            Select Dates
+                        </Button>
+                        </Box>
+                      </PopoverTrigger>
+                      <PopoverContent>
+                        <PopoverCloseButton />
+                        <PopoverBody>
+                          <DatePicker
+                            index={index}
+                            selectedDays={selectedDates}
+                            setSelectedDays={setSelectedDates}
+                          />
+                        </PopoverBody>
+                      </PopoverContent>
+                    </Popover>
+                  </>
+                )}
+
+                {index >= 1 && (
+                  <Box mt={2}>
+                    <Button
+                      size="md"
+                      colorScheme="red"
+                      fontWeight={400}
+                      type="button"
+                      variant="link"
+                      leftIcon={<MinusIcon />}
+                      onClick={() => remove(index)}
+                    >
+                      Remove
+                    </Button>
+                  </Box>
+                )}
+              </Box>
+            </>
+          );
+        },
+      )}
 
       <Box my={3}>
         <Button
-          size="sm"
+          size="md"
           fontWeight={400}
           colorScheme="teal"
           type="button"

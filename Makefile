@@ -17,3 +17,7 @@ migrate:
 # starts an IEX shell attached to current system
 iex:
 	docker-compose exec phoenix bin/donation remote
+
+dev:
+	mix phx.server
+

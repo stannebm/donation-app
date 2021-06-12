@@ -1,7 +1,8 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import Home from "./pages/home";
+import MassOffering from "./pages/mass-offering";
+import Donation from "./pages/donation";
 // import Login from "./pages/login";
 import theme from "./theme";
 
@@ -10,7 +11,11 @@ function Routes() {
     <BrowserRouter>
       <Switch>
         <Route exact path="/">
-          <Home />
+          <MassOffering />
+        </Route>
+
+        <Route exact path="/donation">
+          <Donation />
         </Route>
         {/* <Route path="/admins/login"> */}
         {/*   <Login /> */}

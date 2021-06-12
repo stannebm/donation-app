@@ -53,7 +53,9 @@ defmodule Donation.MixProject do
       {:poison, "~> 3.1"},
       {:comeonin, "~> 5.0"},
       {:bcrypt_elixir, "~> 2.0"},
-      {:guardian, "~> 2.0"}
+      {:guardian, "~> 2.0"},
+      {:timex, "~> 3.7"},
+      {:faker, "~> 0.16", only: :test}
     ]
   end
 

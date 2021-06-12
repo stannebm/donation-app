@@ -2,7 +2,7 @@ defmodule DonationWeb.MassOfferingItemController do
   use DonationWeb, :controller
 
   alias Donation.MassOfferings
-  alias Donation.MassOfferings.MassOfferingItem
+  alias Donation.MassOfferings.Offering
 
   action_fallback DonationWeb.FallbackController
 
@@ -13,7 +13,7 @@ defmodule DonationWeb.MassOfferingItemController do
 
   def index( conn, %{ "mass_offering_id" => mass_offering_id } ) do
     mass_offering = MassOfferings.get_mass_offering!( mass_offering_id )
-    render( conn, "index.json", mass_offering_items: mass_offering.mass_offering_items )
+    render( conn, "index.json", offerings: mass_offering.offerings )
   end
 
   # def create(conn, %{"mass_offering_item" => mass_offering_item_params}) do
@@ -25,9 +25,9 @@ defmodule DonationWeb.MassOfferingItemController do
   #   end
   # end
 
-  def create( conn, %{ "mass_offering_id" => mass_offering_id, "mass_offering_item" => mass_offering_item_params } ) do
+  def create( conn, %{ "mass_offering_id" => mass_offering_id, "offering" => offering_params } ) do
     mass_offering = MassOfferings.get_mass_offering!( mass_offering_id )
-    with { :ok, %MassOfferingItem{} = mass_offering_item } <- MassOfferings.create_mass_offering_item( mass_offering, mass_offering_item_params ) do
+    with { :ok, %Offering{} = mass_offering_item } <- MassOfferings.create_offering( mass_offering, offering_params ) do
       conn
       |> put_status(:created)
       # |> put_resp_header("location", Routes.mass_offering_item_path(conn, :show, mass_offering_item))
@@ -36,23 +36,23 @@ defmodule DonationWeb.MassOfferingItemController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    mass_offering_item = MassOfferings.get_mass_offering_item!(id)
-    render(conn, "show.json", mass_offering_item: mass_offering_item)
-  end
+  # def show(conn, %{"id" => id}) do
+  #   mass_offering_item = MassOfferings.get_offering!(id)
+  #   render(conn, "show.json", mass_offering_item: mass_offering_item)
+  # end
 
-  def update(conn, %{"id" => id, "mass_offering_item" => mass_offering_item_params}) do
-    mass_offering_item = MassOfferings.get_mass_offering_item!(id)
+  def update(conn, %{"id" => id, "offering" => offering_params}) do
+    offering = MassOfferings.get_offering!(id)
 
-    with {:ok, %MassOfferingItem{} = mass_offering_item} <- MassOfferings.update_mass_offering_item(mass_offering_item, mass_offering_item_params) do
-      render(conn, "show.json", mass_offering_item: mass_offering_item)
+    with {:ok, %Offering{} = offering} <- MassOfferings.update_offering(offering, offering_params) do
+      render(conn, "show.json", offering: offering)
     end
   end
 
   def delete(conn, %{"id" => id}) do
-    mass_offering_item = MassOfferings.get_mass_offering_item!(id)
+    offering = MassOfferings.get_offering!(id)
 
-    with {:ok, %MassOfferingItem{}} <- MassOfferings.delete_mass_offering_item(mass_offering_item) do
+    with {:ok, %Offering{}} <- MassOfferings.delete_offering(offering) do
       send_resp(conn, :no_content, "")
     end
   end

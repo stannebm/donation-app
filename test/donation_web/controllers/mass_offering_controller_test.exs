@@ -5,10 +5,31 @@ defmodule DonationWeb.MassOfferingControllerTest do
   alias Donation.MassOfferings.MassOffering
 
   @create_attrs %{
-    contact_name: "some contact_name",
-    contact_number: "some contact_number",
-    email_address: "some email_address"
+    mass_offering: %{
+      fromWhom: "felix the cat", 
+      emailAddress: "felix.the.cat@cartoon.com",
+      contactNumber: "19192001",
+      massLanguage: "English", 
+      offerings: [
+        {
+          "typeOfMass": "Special Intention",
+          "intention": "this is a special intention",
+          "dates": ["2021-06-01", "2021-06-02"]
+        },
+        {
+          "typeOfMass": "Thanksgiving",
+          "intention": "this is thanksgiving",
+          "dates": ["2021-06-01", "2021-06-02"]
+        },
+        {
+          "typeOfMass": "Departed Soul",
+          "intention": "this is for departed soul",
+          "dates": ["2021-06-01", "2021-06-02"]
+        }
+      ]
+    }
   }
+
   @update_attrs %{
     contact_name: "some updated contact_name",
     contact_number: "some updated contact_number",

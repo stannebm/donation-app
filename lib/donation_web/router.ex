@@ -16,9 +16,9 @@ defmodule DonationWeb.Router do
     plug :accepts, ["json"]
   end
 
-  pipeline :authenticated_jwt do
-    plug Donation.AuthAccessPipeline
-  end
+  # pipeline :authenticated_jwt do
+  #   plug Donation.AuthAccessPipeline
+  # end
 
   # https://whatdidilearn.info/2018/02/25/phoenix-authentication-and-authorization-using-plugs.html
   pipeline :authenticate_admin do
@@ -33,30 +33,16 @@ defmodule DonationWeb.Router do
   scope "/api", DonationWeb do
     pipe_through :api
     resources "/mass_offerings", MassOfferingController, except: [:new, :edit] do
-      resources "/mass_offering_items", MassOfferingItemController, except: [:new, :edit]
+      resources "/offerings", MassOfferingItemController, except: [:new, :edit]
     end
-    # post "/admins/login", UserController, :login
-
-    ## public to receipt first then move to private page
   end
 
-  scope "/api", DonationWeb do
-    pipe_through [:api, :authenticated_jwt]
-  end
+  # scope "/api", DonationWeb do
+  #   pipe_through [:api, :authenticated_jwt]
+  # end
 
   scope "/api/swagger" do
     forward "/", PhoenixSwagger.Plug.SwaggerUI, otp_app: :donation, swagger_file: "swagger.json"
-  end
-
-  def swagger_info do
-    %{
-      # basePath: "/api",
-      info: %{
-        version: "1.0",
-        title: "DonationApp"
-      }
-      # tags: [%{name: "Users", description: "Operations about Users"}]
-    }
   end
 
   # Enables LiveDashboard only for development
@@ -95,6 +81,15 @@ defmodule DonationWeb.Router do
     pipe_through :browser
 
     get "/*path", PageController, :index
+  end
+
+  def swagger_info do
+    %{
+      info: %{
+        version: "1.0",
+        title: "Mass Offerings & Donations"
+      }
+    }
   end
 
 end

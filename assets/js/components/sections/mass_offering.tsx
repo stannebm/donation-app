@@ -37,9 +37,11 @@ export default function MassOffering() {
     const submission = { ...data };
     submission.offerings = submission.offerings.map((o, index) => ({
       ...o,
-      ...{ dates: selectedDates[index].map((d) => d.toISOString().substr(0, 10)) },
+      ...{
+        dates: selectedDates[index].map((d) => d.toISOString().substr(0, 10)),
+      },
     }));
-    console.log(JSON.stringify(submission));
+    console.log(JSON.stringify({ mass_offering: submission }));
   };
 
   const { fields, append, remove } = useFieldArray({
@@ -52,7 +54,10 @@ export default function MassOffering() {
   }>({});
   const offerings = watch("offerings");
 
-  const totalMasses = Object.values(selectedDates).reduce(((acc, list) => acc + list.length), 0);
+  const totalMasses = Object.values(selectedDates).reduce(
+    (acc, list) => acc + list.length,
+    0,
+  );
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -202,14 +207,15 @@ export default function MassOffering() {
                       leftIcon={<MinusIcon />}
                       onClick={() => {
                         remove(index);
-                        setSelectedDates((prev) => Object.keys(prev)
-                          .filter(key => parseInt(key) !== index)
-                          .reduce((obj: any, key) => {
-                            const intkey = parseInt(key)
-                            obj[intkey] = prev[intkey];
-                            return obj;
-                          }, {})
-                        )
+                        setSelectedDates((prev) =>
+                          Object.keys(prev)
+                            .filter((key) => parseInt(key) !== index)
+                            .reduce((obj: any, key) => {
+                              const intkey = parseInt(key);
+                              obj[intkey] = prev[intkey];
+                              return obj;
+                            }, {}),
+                        );
                       }}
                     >
                       Remove
@@ -257,6 +263,6 @@ export default function MassOffering() {
           Transfer
         </Button>
       </HStack>
-    </form >
+    </form>
   );
 }

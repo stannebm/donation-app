@@ -1,10 +1,4 @@
-import {
-  Box,
-  Button,
-  HStack,
-  Text,
-  VStack
-} from "@chakra-ui/react";
+import { Box, Button, HStack, Text, VStack } from "@chakra-ui/react";
 import * as R from "ramda";
 import React from "react";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -100,9 +94,12 @@ export default function Donation() {
                       errors={errors}
                       errorPath={R.path(["offerings", index, "otherIntention"])}
                       defaultValue={item.otherIntention}
-                      {...register(`offerings.${index}.otherIntention` as const, {
-                        required: false,
-                      })}
+                      {...register(
+                        `offerings.${index}.otherIntention` as const,
+                        {
+                          required: false,
+                        },
+                      )}
                     />
                   </>
                 </VStack>
@@ -117,6 +114,6 @@ export default function Donation() {
           Transfer
         </Button>
       </HStack>
-    </form >
+    </form>
   );
 }

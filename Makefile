@@ -21,3 +21,5 @@ iex:
 dev:
 	mix phx.server
 
+generate-swagger:
+	mix phx.swagger.generate

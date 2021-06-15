@@ -18,10 +18,11 @@ export default function DonationPage(): JSX.Element {
         </Heading> */}
         <Box p={3}>
           <Text fontSize="lg" fontWeight={600} color="gray.700">
-            Love  Offering &amp; Donation
+            Love Offering &amp; Donation
           </Text>
           <Text fontSize="md" color="gray.600">
-            Thank you for your kind support and generous contribution in making the world a better place.
+            Thank you for your kind support and generous contribution in making
+            the world a better place.
           </Text>
         </Box>
 

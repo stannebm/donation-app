@@ -2,39 +2,47 @@ defmodule Donation.MassOfferings.MassOffering do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Donation.MassOfferings.MassOfferingItem
+  alias Donation.MassOfferings.Offering
 
   schema "mass_offerings" do
-    field :contact_name, :string
-    field :contact_number, :string
-    field :email_address, :string
-    has_many( :mass_offering_items, MassOfferingItem, on_replace: :delete )
+    field :fromWhom,      :string
+    field :contactNumber, :string
+    field :emailAddress,  :string
+    field :massLanguage,  :string
+    has_many( :offerings, Offering, on_replace: :delete )
     timestamps()
   end
 
   @doc false
   def changeset(mass_offering, attrs) do
     mass_offering
-    |> cast(attrs, [:contact_name, :contact_number, :email_address])
-    |> cast_assoc( :mass_offering_items )
-    |> validate_required([ :contact_name, :contact_number, :email_address ])
+    |> cast(attrs, [:fromWhom, :contactNumber, :emailAddress, :massLanguage])
+    |> validate_required([:fromWhom, :contactNumber, :emailAddress, :massLanguage])
+    |> cast_assoc( :offerings )
   end
 end
 
 # API module
 # {
-#   "mass_offering": {
-#     "contact_name": "St Anne Office",
-#     "contact_number": "1234567890", 
-#     "email_address": "donation@app.com",
-#     "mass_offering_items": [
-#       {
-#         "intention": "Praise to our Lord",
-#         "number_of_mass": 1,
-#         "specific_dates": "2021-04-01",
-#         "to_whom": "Joseph",
-#         "type_of_mass": "Special Intention"
-#       }
-#     ]
-#   }
+#   "offerings": [
+#     {
+#       "typeOfMass": "Special Intention",
+#       "intention": "this is a special intention",
+#       "dates": ["01/06/2021", "02/06/2021"]
+#     },
+#     {
+#       "typeOfMass": "Thanksgiving",
+#       "intention": "this is thanksgiving",
+#       "dates": ["01/06/2021", "02/06/2021"]
+#     },
+#     {
+#       "typeOfMass": "Departed Soul",
+#       "intention": "this is for departed soul",
+#       "dates": ["01/06/2021", "02/06/2021"]
+#     }
+#   ],
+#   "contactNumber": "0102020333",
+#   "emailAddress": "zen9.felix@gmail.com",
+#   "fromWhom": "Felix",
+#   "massLanguage": "English"
 # }

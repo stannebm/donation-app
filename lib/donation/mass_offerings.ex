@@ -18,7 +18,7 @@ defmodule Donation.MassOfferings do
 
   """
   def list_mass_offerings do
-    Repo.all( MassOffering )
+    Repo.all(MassOffering)
   end
 
   @doc """
@@ -39,7 +39,7 @@ defmodule Donation.MassOfferings do
   def get_mass_offering!( id ) do
     MassOffering
     |> Repo.get!( id )
-    |> Repo.preload( :mass_offering_items )
+    |> Repo.preload( :offerings )
   end
 
   @doc """
@@ -59,7 +59,7 @@ defmodule Donation.MassOfferings do
     |> MassOffering.changeset( attrs )
     |> Repo.insert()
     |> case do
-      { :ok, %MassOffering{} = mass_offering } -> { :ok, Repo.preload( mass_offering, :mass_offering_items ) }
+      { :ok, %MassOffering{} = mass_offering } -> { :ok, Repo.preload( mass_offering, :offerings ) }
       error -> error
     end
   end
@@ -111,7 +111,7 @@ defmodule Donation.MassOfferings do
     MassOffering.changeset( mass_offering, attrs )
   end
 
-  alias Donation.MassOfferings.MassOfferingItem
+  alias Donation.MassOfferings.Offering
 
   @doc """
   Returns the list of mass_offering_items.
@@ -119,28 +119,14 @@ defmodule Donation.MassOfferings do
   ## Examples
 
       iex> list_mass_offering_items()
-      [%MassOfferingItem{}, ...]
+      [%Offering{}, ...]
 
   """
   # def list_mass_offering_items do
   #   Repo.all(MassOfferingItem)
   # end
 
-  @doc """
-  Gets a single mass_offering_item.
-
-  Raises `Ecto.NoResultsError` if the Mass offering item does not exist.
-
-  ## Examples
-
-      iex> get_mass_offering_item!(123)
-      %MassOfferingItem{}
-
-      iex> get_mass_offering_item!(456)
-      ** (Ecto.NoResultsError)
-
-  """
-  def get_mass_offering_item!(id), do: Repo.get!(MassOfferingItem, id)
+  def get_offering!(id), do: Repo.get!(Offering, id)
 
   @doc """
   Creates a mass_offering_item.
@@ -149,7 +135,7 @@ defmodule Donation.MassOfferings do
   ## Examples
 
       iex> create_mass_offering_item(%{field: value})
-      {:ok, %MassOfferingItem{}}
+      {:ok, %Offering{}}
 
       iex> create_mass_offering_item(%{field: bad_value})
       {:error, %Ecto.Changeset{}}
@@ -157,26 +143,26 @@ defmodule Donation.MassOfferings do
   """
   def create_mass_offering_item( %MassOffering{} = mass_offering, attrs \\ %{} ) do
     mass_offering
-    |> Ecto.build_assoc( :mass_offering_items )
-    |> MassOfferingItem.changeset( attrs )
+    |> Ecto.build_assoc( :offerings )
+    |> Offering.changeset( attrs )
     |> Repo.insert()
   end
 
   @doc """
-  Updates a mass_offering_item.
+  Updates a offering.
 
   ## Examples
 
-      iex> update_mass_offering_item(mass_offering_item, %{field: new_value})
-      {:ok, %MassOfferingItem{}}
+      iex> update_offering(offering, %{field: new_value})
+      {:ok, %Offering{}}
 
-      iex> update_mass_offering_item(mass_offering_item, %{field: bad_value})
+      iex> update_offering(offering, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_mass_offering_item( %MassOfferingItem{} = mass_offering_item, attrs ) do
-    mass_offering_item
-    |> MassOfferingItem.changeset( attrs )
+  def update_offering( %Offering{} = offering, attrs ) do
+    offering
+    |> Offering.changeset( attrs )
     |> Repo.update()
   end
 
@@ -186,14 +172,14 @@ defmodule Donation.MassOfferings do
   ## Examples
 
       iex> delete_mass_offering_item(mass_offering_item)
-      {:ok, %MassOfferingItem{}}
+      {:ok, %Offering{}}
 
       iex> delete_mass_offering_item(mass_offering_item)
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_mass_offering_item( %MassOfferingItem{} = mass_offering_item ) do
-    Repo.delete( mass_offering_item )
+  def delete_offering( %Offering{} = offering ) do
+    Repo.delete( offering )
   end
 
   @doc """
@@ -201,11 +187,11 @@ defmodule Donation.MassOfferings do
 
   ## Examples
 
-      iex> change_mass_offering_item(mass_offering_item)
-      %Ecto.Changeset{data: %MassOfferingItem{}}
+      iex> change_mass_offering_item(offering)
+      %Ecto.Changeset{data: %Offering{}}
 
   """
-  def change_mass_offering_item( %MassOfferingItem{} = mass_offering_item, attrs \\ %{} ) do
-    MassOfferingItem.changeset( mass_offering_item, attrs )
+  def change_mass_offering_item( %Offering{} = offering, attrs \\ %{} ) do
+    Offering.changeset( offering, attrs )
   end
 end

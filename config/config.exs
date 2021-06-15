@@ -23,24 +23,18 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
+# https://hexdocs.pm/phoenix_swagger/getting-started.html
 config :donation, :phoenix_swagger,
   swagger_files: %{
     "priv/static/swagger.json" => [
-      router: DonationWeb.Router,     # phoenix routes will be converted to swagger paths
-      endpoint: DonationWeb.Endpoint  # (optional) endpoint config used to set host, port and https schemes.
+      router: DonationWeb.Router,
+      endpoint: DonationWeb.Endpoint
     ]
   }
 
 config :donation, Donation.Guardian,
        issuer: "donation",
        secret_key: "dUNnKIAgp3HRXp4QPn3tzwlafdNWWns8e33zJYb0Q5+RxyWrqjiPTSJrxYphEU3A"
-
-# config :donation, :phoenix_swagger,
-#   swagger_files: %{
-#     "booking-api.json" => [router: MyApp.BookingRouter],
-#     "reports-api.json" => [router: MyApp.ReportsRouter],
-#     "admin-api.json" => [router: MyApp.AdminRouter]
-#   }
 
 # Use Jason for JSON parsing in Phoenix
 # config :phoenix, :json_library, Jason

@@ -37,7 +37,7 @@ export default function MassOffering() {
     const submission = { ...data };
     submission.offerings = submission.offerings.map((o, index) => ({
       ...o,
-      ...{ dates: selectedDates[index].map((d) => d.toLocaleDateString()) },
+      ...{ dates: selectedDates[index].map((d) => d.toISOString().substr(0, 10)) },
     }));
     console.log(JSON.stringify(submission));
   };

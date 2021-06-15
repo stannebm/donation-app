@@ -8,7 +8,7 @@ export default function DonationPage(): JSX.Element {
     <MainLayout>
       <Box borderRadius="xl" bgColor="#f9f9f9" my={10}>
         <Image
-          src="/images/mass-offering.png"
+          src="/images/donation.png"
           objectFit="cover"
           borderTopRadius="xl"
         />

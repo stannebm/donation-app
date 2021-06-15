@@ -18,7 +18,7 @@ migrate:
 iex:
 	docker-compose exec phoenix bin/donation remote
 
-dev:
+dev: generate-swagger
 	mix phx.server
 
 generate-swagger:

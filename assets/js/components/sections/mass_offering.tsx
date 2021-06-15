@@ -11,12 +11,14 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
+import axios from "axios";
 import * as R from "ramda";
 import React, { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
+import { v4 as uuidv4 } from "uuid";
+import DatePicker from "../elements/datepicker";
 import FormInput from "../elements/form_input";
 import FormSelect from "../elements/form_select";
-import DatePicker from "../elements/datepicker";
 import type { MandatoryForm } from "./mass_offering.types";
 
 export default function MassOffering() {
@@ -41,7 +43,18 @@ export default function MassOffering() {
         dates: selectedDates[index].map((d) => d.toISOString().substr(0, 10)),
       },
     }));
-    console.log(JSON.stringify({ mass_offering: submission }));
+    const submission_payload = {
+      mass_offering: { ...submission, uuid: uuidv4() },
+    };
+    console.log(submission_payload);
+    axios
+      .post("/api/mass_offerings", submission_payload)
+      .then(function ({ data }) {
+        console.log("POSTED", data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   const { fields, append, remove } = useFieldArray({

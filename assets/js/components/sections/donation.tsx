@@ -1,9 +1,11 @@
 import { Box, Button, HStack, Text, VStack } from "@chakra-ui/react";
+import axios from "axios";
 import * as R from "ramda";
 import React from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import FormInput from "../elements/form_input";
 import FormSelect from "../elements/form_select";
+import { v4 as uuidv4 } from "uuid";
 import type { MandatoryForm } from "./mass_offering.types";
 
 export default function Donation() {
@@ -21,7 +23,18 @@ export default function Donation() {
   const onSubmit = (data: MandatoryForm) => {
     console.log("SUBMIT:", data);
     const submission = { ...data };
-    console.log(JSON.stringify(submission));
+    const submission_payload = {
+      mass_offering: { ...submission, uuid: uuidv4() },
+    };
+    console.log(submission_payload);
+    axios
+      .post("/api/mass_offerings", submission_payload)
+      .then(function ({ data }) {
+        console.log("POSTED", data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   const { fields } = useFieldArray({

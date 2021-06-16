@@ -23,9 +23,12 @@ defmodule DonationWeb.MassOfferingView do
   def render("mass_offering_details.json", %{mass_offering: mass_offering}) do
     %{
       id: mass_offering.id,
+      uuid: mass_offering.uuid,
       fromWhom: mass_offering.fromWhom,
       contactNumber: mass_offering.contactNumber,
       emailAddress: mass_offering.emailAddress,
+      amount: mass_offering.amount,
+      fpx_callback: mass_offering.fpx_callback,
       offerings: render_many( mass_offering.offerings, OfferingView, "offering.json" )
     }
   end

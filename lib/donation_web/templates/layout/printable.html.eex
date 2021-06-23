@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Printable | Minor Basilica of St.Anne</title>
+    <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
+    <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app-admin.css") %>"/>
+  </head>
+  <body>
+
+    <div class="columns is-fullheight">
+
+      <%# HEADER LOGO %>
+
+      <div class="column is-main-content">
+        <%= @inner_content %>
+      </div>
+
+    </div>
+
+  </body>
+</html>

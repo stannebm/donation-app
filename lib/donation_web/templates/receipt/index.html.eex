@@ -35,18 +35,18 @@
                   <th>Date</th>
                   <th>Donor name</th>
                   <th>Receipt number</th>
-                  <th>Total amount</th>
+                  <th>Total amount (RM)</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
                 <%= for receipt <- @receipts do %>
                   <tr>
-                    <td><%= NaiveDateTime.to_date(receipt.inserted_at) %></td>
-                    <td><%= receipt.donor_name %></td>
-                    <td><%= receipt.receipt_number %></td>
-                    <td><%= receipt.total_amount %></td>
-                    <td>
+                    <td width="15%"><%= NaiveDateTime.to_date(receipt.inserted_at) %></td>
+                    <td width="30%" style="word-break:break-all;"><%= receipt.donor_name %></td>
+                    <td width="20%"><%= receipt.receipt_number %></td>
+                    <td width="15%" class="has-text-right"><%= receipt.total_amount %></td>
+                    <td width="20%">
                       <div class="field is-grouped">
                         <p class="control">
                           <%= link "Show", to: Routes.receipt_path(@conn, :show, receipt), class: "button is-primary is-small" %>

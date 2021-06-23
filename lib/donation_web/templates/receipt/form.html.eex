@@ -1,4 +1,4 @@
-<section class="is-card">
+<section id="receipt" class="is-card">
   <div class="container">
     <%= form_for @changeset, @action, fn f -> %>
       <div class="columns">
@@ -23,21 +23,33 @@
             <%= link_to_receipt_item_fields(@type_of_contributions) %>
 
             <div class="card-content">
-              <div class="box content">
+              <%= inputs_for f, :receipt_items, fn p -> %>
+                <div class="box content">
 
-                <%= inputs_for f, :receipt_items, fn p -> %>
-
-                  <div class="field">
-                    <%= label p, :type_of_contribution_id, class: "label" %>
-                    <div class="control">
-                      <div class="select is-normal">
-                        <%= select p, :type_of_contribution_id, @type_of_contributions %>
+                  <div class="columns">
+                    <div class="column">
+                      <div class="field">
+                        <%= label p, :type_of_contribution_id, class: "label" %>
+                        <div class="control">
+                          <div class="select is-fullwidth">
+                            <%= select p, :type_of_contribution_id, @type_of_contributions, class: "select-contribution" %>
+                          </div>
+                          <p class="help"><%= error_tag p, :type_of_contribution_id %></p>
+                        </div>
                       </div>
-                      <p class="help"><%= error_tag p, :type_of_contribution_id %></p>
+                    </div>
+                    <div class="column">
+                      <div class="field">
+                        <%= label p, :price, class: "label" %>
+                        <div class="control">
+                          <%= number_input p, :price, class: "input price-items", oninput: "calculate_subtotal()", step: "any" %>
+                          <p class="help"><%= error_tag p, :price %></p>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
-                  <div class="field">
+                  <div class="field node-other">
                     <%= label p, :others, class: "label" %>
                     <div class="control">
                       <%= text_input p, :others, class: "input" %>
@@ -48,22 +60,13 @@
                   <div class="field">
                     <%= label p, :remark, class: "label" %>
                     <div class="control">
-                      <%= text_input p, :remark, class: "input" %>
+                      <%= textarea p, :remark, class: "textarea", rows: "2" %>
                       <p class="help"><%= error_tag p, :remark %></p>
                     </div>
                   </div>
 
-                  <div class="field">
-                    <%= label p, :price, class: "label" %>
-                    <div class="control">
-                      <%= number_input p, :price, class: "input price-items", oninput: "calculate_subtotal()", step: "any" %>
-                      <p class="help"><%= error_tag p, :price %></p>
-                    </div>
-                  </div>
-
-                <% end %>
-
-              </div>
+                </div>
+              <% end %>
             </div>
 
           </div>
@@ -73,7 +76,7 @@
           <div class="card">
 
             <div class="card-content">
-              <%= submit "Save", class: "button is-primary is-large is-fullwidth" %>
+              <%= submit "SAVE", class: "button is-primary is-large is-fullwidth" %>
             </div>
             <footer class="card-footer">
               <%= link "Back", to: Routes.receipt_path(@conn, :index), class: "card-footer-item" %>
@@ -109,12 +112,36 @@
               <div class="field">
                 <%= label f, :type_of_payment_method_id, class: "label" %>
                 <div class="control">
-                  <div class="select is-normal">
+                  <div class="select is-fullwidth">
                     <%= select f, :type_of_payment_method_id, @type_of_payment_methods %>
                   </div>
                   <p class="help"><%= error_tag f, :type_of_payment_method_id %></p>
                 </div>
               </div>
+
+              <div class="field node-payment-method">
+                <%= label f, :cheque, "Cheque No.", class: "label" %>
+                <div class="control">
+                  <%= text_input f, :cheque, class: "input" %>
+                  <p class="help"><%= error_tag f, :cheque %></p>
+                </div>
+              </div>
+
+              <div class="field">
+                <%= label f, :status, class: "label" %>
+                <div class="control">
+                  <div class="select is-fullwidth">
+                    <%= select f, :status, [ "Done": 1, "Pending": 2, "Cancelled": 3 ] %>
+                  </div>
+                  <p class="help"><%= error_tag f, :status %></p>
+                </div>
+              </div>
+
+     <%# select(form, :manager_id, Enum.map(@managers, &{&1.name, &1.id}))
+      #=> <select id="manager_id" name="project[manager_id]">
+      #=>   <option value="1">Mary Jane</option>
+      #=>   <option value="2">John Doe</option>
+      #=> </select> %>
 
             </div>
 
@@ -149,8 +176,13 @@
       for ( var i = 0; i < priceItems.length; i++) {
         sum += parseFloat( priceItems[i].value );
       }
-      subtotal.textContent = sum.toFixed(2); 
-      receipt_total_amount.value = sum.toFixed(2); 
+      if (!isNaN(sum)) {
+        subtotal.textContent = sum.toFixed(2); 
+        receipt_total_amount.value = sum.toFixed(2); 
+      } else {
+        subtotal.textContent = 0;
+        receipt_total_amount.value = 0;
+      }
     }
   };
 

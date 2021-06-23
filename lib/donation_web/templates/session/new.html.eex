@@ -4,38 +4,40 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Admin | Minor Basilica of St.Anne</title>
+    <title>Login | Minor Basilica of St.Anne</title>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app-admin.css") %>"/>
   </head>
   <body>
 
-    <section class="hero is-fullheight">
+    <section class="hero is-primary is-fullheight">
       <div class="hero-body">
         <div class="container has-text-centered">
           <div class="column is-4 is-offset-4">
-            <h3 class="title has-text-black">Login</h3>
-            <%= form_for @conn, Routes.session_path(@conn, :create), [as: :session], fn f -> %>
+            <h3 class="title has-text-black"><strong>LOGIN</strong></h3>
+            <div class="box">
+              <%= form_for @conn, Routes.session_path(@conn, :create), [as: :session], fn f -> %>
 
-              <div class="field has-text-left">
-                <label class="label">Username</label>
-                <div class="control">
-                  <%= text_input f, :username, class: "input", required: "required" %>
+                <div class="field has-text-left">
+                  <label class="label">Username</label>
+                  <div class="control">
+                    <%= text_input f, :username, class: "input", required: "required" %>
+                  </div>
                 </div>
-              </div>
 
-              <div class="field has-text-left">
-                <label class="label">Password</label>
-                <div class="control">
-                  <%= password_input f, :password, class: "input", required: "required" %>
+                <div class="field has-text-left">
+                  <label class="label">Password</label>
+                  <div class="control">
+                    <%= password_input f, :password, class: "input", required: "required" %>
+                  </div>
                 </div>
-              </div>
 
-              <div class="field has-text-right">
-                <%= submit "Login", class: "button is-primary" %>
-              </div>
+                <div class="field has-text-right">
+                  <%= submit "Login", class: "button is-info" %>
+                </div>
 
-            <% end %>
+              <% end %>
+            </div>
           </div>
         </div>
       </div>

@@ -26,7 +26,11 @@
                   </li>
                   <li>
                     <strong>Type of payment method:</strong>
-                    <%= @receipt.type_of_payment_method.name %>
+                    <%= if @receipt.type_of_payment_method.name == "Cheque" do %>
+                      <%= @receipt.type_of_payment_method.name %> [<%= @receipt.cheque %>]
+                    <% else %>
+                      <%= @receipt.type_of_payment_method.name %>
+                    <% end %>
                   </li>
                   <li>
                     <strong>Cashier:</strong>
@@ -52,14 +56,14 @@
               <thead>
                 <tr>
                   <th>Contribution for</th>
-                  <th>Price</th>
+                  <th class="has-text-right">Amount (RM)</th>
                   <th>Remark</th>
                 </tr>
               </thead>
               <tfoot>
                 <tr>
                   <th>Amount Received</th>
-                  <th><%= @receipt.total_amount %></th>
+                  <th class="has-text-right"><%= @receipt.total_amount %></th>
                   <th></th>
                 </tr>
               </tfoot>
@@ -72,7 +76,7 @@
                         : <%= receipt_item.others %>
                       <% end %>
                     </td>
-                    <td><%= receipt_item.price %></td>
+                    <td class="has-text-right"><%= receipt_item.price %></td>
                     <td><%= receipt_item.remark %></td>
                   </tr>
                 <% end %>
@@ -89,6 +93,9 @@
         </p>
         <p class="card-footer-item">
           <span><%= link "Edit", to: Routes.receipt_path(@conn, :edit, @receipt) %></span>
+        </p>
+        <p class="card-footer-item">
+          <span><%= link "Save as PDF", to: Routes.receipt_path(@conn, :generate_pdf, @receipt) %></span>
         </p>
       </footer>
     

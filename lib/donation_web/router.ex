@@ -70,7 +70,8 @@ defmodule DonationWeb.Router do
 
   scope "/admins", DonationWeb do
     pipe_through [ :browser, :authenticate_admin, :layout_admin ]
-    resources "/receipts", ReceiptController
+    resources "/receipts", ReceiptController, except: [:delete]
+    get "/receipts/:id/generate_pdf", ReceiptController, :generate_pdf
     resources "/reports", ReportController, only: [:index]
     resources "/type_of_contributions", TypeOfContributionController
     resources "/type_of_payment_methods", TypeOfPaymentMethodController

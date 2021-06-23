@@ -13,15 +13,18 @@ defmodule Donation.Admins.Receipt do
     field :donor_name, :string
     field :receipt_number, :string, default: "MBSA"
     field :total_amount, :decimal, precision: 12, scale: 2
+    field :cheque, :string
+    field :status, :integer
+    # field :status, Ecto.Enum, values: [ done: 1, pending: 2, cancelled: 3]
     timestamps()
   end
 
   @doc false
   def changeset(receipt, attrs) do
     receipt
-    |> cast(attrs, [:user_id, :type_of_payment_method_id, :donor_name, :receipt_number, :total_amount])
+    |> cast(attrs, [:user_id, :type_of_payment_method_id, :donor_name, :receipt_number, :total_amount, :cheque, :status])
     |> cast_assoc(:receipt_items, required: true)
-    |> validate_required([:type_of_payment_method_id, :donor_name, :receipt_number, :total_amount])
+    |> validate_required([:type_of_payment_method_id, :donor_name, :receipt_number, :total_amount, :status])
     |> foreign_key_constraint(:user_id)
     |> foreign_key_constraint(:type_of_payment_method_id)
   end

@@ -1,11 +1,45 @@
-/* global CSS here, managed by snowpack */
+/* PRINT: OFFICAL RECEIPT */
 
-@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;1,100;1,300;1,400&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap');
 @import url("https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.4/css/bulma.css");
 
-/* STYLE */
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: 'Open Sans', sans-serif;
+}
+
+#header-container {
+  text-align: center;
+}
+
+#header-container div, 
+#content-container div {
+  display: inline-block;
+  vertical-align: top;
+}
+
+#content-container .receipt-number {
+  float: right;
+}
+
+.receipt-headline {
+  margin-bottom: 10px;
+}
+
+.computer-generated {
+  margin-top: 20px;
+}
+
+.has-text-centered {
+  text-align: center;
+}
+
+#header-container .title {
+  font-family: "Times New Roman", Times, serif;
+  color: red;
+}
+
+#header-container .logo {
+  height: 130px;
 }
 
 ul.no-bullets {
@@ -14,63 +48,11 @@ ul.no-bullets {
   margin: 0; /* Remove margins */
 }
 
-.margin-right-10 {
-  margin-right: 10px;
-}
-
-.is-sidebar-menu {
-  padding: 2rem;
-  background: #4a4a4a;
-}
-.is-sidebar-menu li a {
-  color: white;
-}
-
-.columns.is-fullheight {
-  min-height: calc(100vh - (3.25rem - 0.75rem));
-  max-height: calc(100vh - (3.25rem - 0.75rem));
-  height: calc(100vh - (3.25rem - 0.75rem));
-  display: flex;
-  flex-direction: row;
-  justify-content: stretch;
-}
-
-.columns.is-fullheight .column {
-  overflow-y: auto;
-}
-
-.is-main-content {
-  background: #dbdbdb;
-}
-
-.is-title {
-  padding: 20px 0px;
-  font-weight: bold;
-}
-
-/* FORM */
-#add_receipt_item {
-  margin-top: 20px;
-  margin-left: 25px;
-}
-
-/* CRUD Template */
-
-section.is-card,
-section.is-table {
-  padding: 30px 20px;
+section.is-card {
+  padding: 30px 10px;
 }
 
 .is-card .container,
 .is-table .container {
   max-width: 100%;
-}
-
-#receipt .node-other,
-#receipt .node-payment-method {
-  display: none;
-}
-
-.box {
-  background: #f2f2f2;
 }

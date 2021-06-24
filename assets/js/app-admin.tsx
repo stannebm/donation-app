@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // RECEIPT: SHOW/HIDE OTHERS
 
-function show_others(selectContribution){
+function show_others(selectContribution: any){
   const contributionName = selectContribution.options[selectContribution.selectedIndex].text;
   const nodeOther = selectContribution.closest(".box.content").querySelector('.node-other');
   if (contributionName == "Others"){
@@ -37,8 +37,8 @@ function show_others(selectContribution){
 }
 
 function init_select_contribution(){
-  const selectContributions = document.querySelectorAll(".select-contribution");
-  selectContributions.forEach( selectContribution => {
+  const selectContributions = document.querySelectorAll<HTMLElement>(".select-contribution");
+  selectContributions.forEach( (selectContribution) => {
     selectContribution.addEventListener('change', () => {
       show_others(selectContribution);
     });
@@ -50,9 +50,9 @@ init_select_contribution();
 
 // RECEIPT: SHOW/HIDE CHEQUE
 
-function show_cheque(selectPaymentMethod){
+function show_cheque(selectPaymentMethod: any){
   const paymentMethodName = selectPaymentMethod.options[selectPaymentMethod.selectedIndex].text;
-  const nodeCheque = document.querySelector(".node-payment-method");
+  const nodeCheque = document.querySelector<HTMLElement>(".node-payment-method")!;
   if (paymentMethodName == "Cheque"){
     nodeCheque.style.display = "block";
   } else {
@@ -61,7 +61,10 @@ function show_cheque(selectPaymentMethod){
 }
 
 const selectPaymentMethod = document.getElementById("receipt_type_of_payment_method_id");
-selectPaymentMethod.addEventListener('change', () => {
+if (selectPaymentMethod !== null) {
+  selectPaymentMethod.addEventListener('change', () => {
+    show_cheque(selectPaymentMethod);
+  });
   show_cheque(selectPaymentMethod);
-});
-show_cheque(selectPaymentMethod);
+}
+

@@ -1,6 +1,7 @@
 # `make`. This builds and run the system
 default:
-	docker-compose up -d --build
+	yarn --cwd ./assets make
+	docker-compose build --force-rm --no-cache && docker-compose up -d
 
 # create an external network that can be shared later. (one time)
 network:
@@ -23,3 +24,6 @@ dev: generate-swagger
 
 generate-swagger:
 	mix phx.swagger.generate
+
+shell:
+	docker-compose exec phoenix sh

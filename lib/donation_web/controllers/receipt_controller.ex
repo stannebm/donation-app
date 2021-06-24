@@ -73,4 +73,12 @@ defmodule DonationWeb.ReceiptController do
     |> redirect(to: Routes.receipt_path(conn, :index))
   end
 
+  def generate_pdf(conn, %{"id" => id}) do
+    receipt = Admins.get_receipt!(id)
+    html = Phoenix.View.render_to_string(DonationWeb.ReceiptView, "generate_pdf.html", layout: {DonationWeb.LayoutView, "printable.html"}, receipt: receipt, conn: conn)
+    {:ok, filename} = PdfGenerator.generate(html)
+    conn
+    |> send_download({:file, filename}, disposition: :inline, filename: "offical_receipt_#{receipt.receipt_number}.pdf")
+  end
+
 end

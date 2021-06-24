@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Offical Receipt | Minor Basilica of St.Anne</title>
+    <link rel="stylesheet" href="http://localhost:4000/css/printable.css"/>
+  </head>
+  <body>
+
+    <div id="header-container">
+
+      <div>
+        <img src="http://localhost:4000/images/Basilica_Logo_Crop.jpg" class="logo">
+      </div>
+
+      <div class="level-item">
+        <p class="title"><b>MINOR BASILICA OF ST. ANNE</b></p>
+        <p>Jalan Kulim, 14000 Bukit Mertajam, Pulau Pinang, Malaysia.</p>
+        <p>Tel: 604-5386405  Whatsapp: 016-4035588</p>
+        <p>Email: mbstanne@pgdiocese.org</p>
+        <p>Website: minorbasilicastannebm.com</p>
+      </div>
+
+      <div>
+        <img src="http://localhost:4000/images/Diocese_Logo.jpg" class="logo">
+      </div>
+
+    </div>
+
+    <%= @inner_content %>
+
+  </body>
+</html>

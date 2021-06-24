@@ -10,6 +10,7 @@ defmodule DonationWeb.OfferingView do
     %{
       typeOfMass: offering.typeOfMass,
       intention: offering.intention,
+      otherIntention: offering.otherIntention,
       dates: offering.dates
     }
   end

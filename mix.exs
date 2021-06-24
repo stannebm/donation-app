@@ -21,7 +21,7 @@ defmodule Donation.MixProject do
   def application do
     [
       mod: {Donation.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :pdf_generator]
     ]
   end
 
@@ -55,7 +55,8 @@ defmodule Donation.MixProject do
       {:bcrypt_elixir, "~> 2.0"},
       {:guardian, "~> 2.0"},
       {:timex, "~> 3.7"},
-      {:faker, "~> 0.16", only: :test}
+      {:faker, "~> 0.16", only: :test},
+      {:pdf_generator, "~> 0.6.2"} ## PDF OUTPUT
     ]
   end
 

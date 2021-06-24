@@ -1,0 +1,58 @@
+/* PRINT: OFFICAL RECEIPT */
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap');
+@import url("https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.4/css/bulma.css");
+
+body {
+  font-family: 'Open Sans', sans-serif;
+}
+
+#header-container {
+  text-align: center;
+}
+
+#header-container div, 
+#content-container div {
+  display: inline-block;
+  vertical-align: top;
+}
+
+#content-container .receipt-number {
+  float: right;
+}
+
+.receipt-headline {
+  margin-bottom: 10px;
+}
+
+.computer-generated {
+  margin-top: 20px;
+}
+
+.has-text-centered {
+  text-align: center;
+}
+
+#header-container .title {
+  font-family: "Times New Roman", Times, serif;
+  color: red;
+}
+
+#header-container .logo {
+  height: 130px;
+}
+
+ul.no-bullets {
+  list-style-type: none; /* Remove bullets */
+  padding: 0; /* Remove padding */
+  margin: 0; /* Remove margins */
+}
+
+section.is-card {
+  padding: 30px 10px;
+}
+
+.is-card .container,
+.is-table .container {
+  max-width: 100%;
+}

@@ -62,13 +62,10 @@
               <tbody>
                 <%= for receipt <- @receipts do %>
                   <tr>
-                    <td><%= NaiveDateTime.to_date(receipt.inserted_at) %></td>
-                    <td><%= receipt.receipt_number %></td>
-                    <td><%= receipt.donor_name %></td>
-                    <td>
-                      <%= receipt.type_of_payment_method.name %>
-                      <%#= receipt.type_of_payment_method_id %>
-                    </td>
+                    <td width="15%"><%= NaiveDateTime.to_date(receipt.inserted_at) %></td>
+                    <td width="15%"><%= receipt.receipt_number %></td>
+                    <td width="30%" style="word-break:break-all;"><%= receipt.donor_name %></td>
+                    <td><%= receipt.type_of_payment_method.name %></td>
                     <td><%= receipt.total_amount %></td>
                   </tr>
                 <% end %>

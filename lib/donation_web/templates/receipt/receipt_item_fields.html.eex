@@ -1,19 +1,31 @@
 <div class="card-content">
-  <div class="box content">
+  <%= inputs_for @f, :receipt_items, fn p -> %>
+    <div class="box content">
 
-    <%= inputs_for @f, :receipt_items, fn p -> %>
-
-      <div class="field">
-        <%= label p, :type_of_contribution_id, class: "label" %>
-        <div class="control">
-          <div class="select is-normal">
-            <%= select p, :type_of_contribution_id, @type_of_contributions %>
+      <div class="columns">
+        <div class="column">
+          <div class="field">
+            <%= label p, :type_of_contribution_id, class: "label" %>
+            <div class="control">
+              <div class="select is-fullwidth">
+                <%= select p, :type_of_contribution_id, @type_of_contributions, class: "select-contribution" %>
+              </div>
+              <p class="help"><%= error_tag p, :type_of_contribution_id %></p>
+            </div>
           </div>
-          <p class="help"><%= error_tag p, :type_of_contribution_id %></p>
+        </div>
+        <div class="column">
+          <div class="field">
+            <%= label p, :price, class: "label" %>
+            <div class="control">
+              <%= number_input p, :price, class: "input price-items", oninput: "calculate_subtotal()", step: "any" %>
+              <p class="help"><%= error_tag p, :price %></p>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="field">
+      <div class="field node-other">
         <%= label p, :others, class: "label" %>
         <div class="control">
           <%= text_input p, :others, class: "input" %>
@@ -24,20 +36,11 @@
       <div class="field">
         <%= label p, :remark, class: "label" %>
         <div class="control">
-          <%= text_input p, :remark, class: "input" %>
+          <%= textarea p, :remark, class: "textarea", rows: "2" %>
           <p class="help"><%= error_tag p, :remark %></p>
         </div>
       </div>
 
-      <div class="field">
-        <%= label p, :price, class: "label" %>
-        <div class="control">
-          <%= number_input p, :price, class: "input price-items", oninput: "calculate_subtotal()", step: "any" %>
-          <p class="help"><%= error_tag p, :price %></p>
-        </div>
-      </div>
-
-    <% end %>
-
-  </div>
+    </div>
+  <% end %>
 </div>

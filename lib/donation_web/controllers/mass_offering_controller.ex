@@ -95,10 +95,14 @@ defmodule DonationWeb.MassOfferingController do
           emailAddress :string, "Email Address", required: true
           fromWhom :string, "Offer by", required: true
           massLanguage :string, "Mass Language", required: true
+          uuid :string, "UUID", required: true
+          amount :decimal, "Amount", required: true
+          fpx_callback :map
           offerings (Schema.new do
             properties do
               typeOfMass :string, "Type of Mass"
               intention :string, "Intention"
+              otherIntention :string, "Other Intention"
               dates :array, "Select Date"
             end
           end)
@@ -109,10 +113,14 @@ defmodule DonationWeb.MassOfferingController do
             emailAddress: "zen9.felix@gmail.com",
             fromWhom: "Felix",
             massLanguage: "English",
+            uuid: "9357666c-9103-46a4-a7e8-ca7f8832283c",
+            amount: 50.00,
+            fpx_callback: %{ fpx_txnCurrency: "MYR", fpx_sellerId: "SE0013401", fpx_sellerExId: "EX0011982" },
             offerings: [
               %{
                   typeOfMass: "Special Intention",
                   intention: "this is a special intention",
+                  otherIntention: "this is an other intention",
                   dates: [
                       "2021-06-01",
                       "2021-06-02"
@@ -121,6 +129,7 @@ defmodule DonationWeb.MassOfferingController do
               %{
                   typeOfMass: "Thanksgiving",
                   intention: "this is thanksgiving",
+                  otherIntention: "this is an other intention",
                   dates: [
                       "2021-06-01",
                       "2021-06-02"
@@ -129,6 +138,7 @@ defmodule DonationWeb.MassOfferingController do
               %{
                   typeOfMass: "Departed Soul",
                   intention: "this is for departed soul",
+                  otherIntention: "this is an other intention",
                   dates: [
                       "2021-06-01",
                       "2021-06-02"

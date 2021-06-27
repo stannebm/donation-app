@@ -18,7 +18,7 @@
                   <%= NaiveDateTime.to_date(@receipt.inserted_at) %>
                 </li>
                 <li style="word-wrap: break-word;">
-                  <strong>Donor name:</strong>
+                  <strong>Received From:</strong>
                   <%= @receipt.donor_name %>
                 </li>
                 <li>

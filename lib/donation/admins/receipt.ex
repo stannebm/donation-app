@@ -24,7 +24,7 @@ defmodule Donation.Admins.Receipt do
     receipt
     |> cast(attrs, [:user_id, :type_of_payment_method_id, :donor_name, :receipt_number, :total_amount, :cheque, :status])
     |> cast_assoc(:receipt_items, required: true)
-    |> validate_required([:type_of_payment_method_id, :donor_name, :receipt_number, :total_amount, :status])
+    |> validate_required([:type_of_payment_method_id, :donor_name, :receipt_number, :total_amount])
     |> foreign_key_constraint(:user_id)
     |> foreign_key_constraint(:type_of_payment_method_id)
   end

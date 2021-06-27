@@ -1,3 +1,5 @@
+require IEx;
+
 defmodule DonationWeb.MassOfferingController do
   use DonationWeb, :controller
   use PhoenixSwagger
@@ -85,6 +87,42 @@ defmodule DonationWeb.MassOfferingController do
     end
   end
 
+  swagger_path :fpx do
+    patch "/api/mass_offerings/{uuid}/fpx"
+    description "Receive FPX callback and update an existing Mass Offering by UUID"
+    parameters do
+      uuid :path, :string, "UUID", required: true
+      fpx_callback :body, Schema.ref(:Fpx_Callback), "FPX callback", required: true
+    end
+    response 201, "Ok", Schema.ref(:Mass_Offering)
+    response 422, "Unprocessable Entity"
+  end
+
+  def fpx(conn, %{"uuid" => uuid, "fpx_callback" => fpx_callback_params}) do
+    mass_offering = MassOfferings.get_mass_offering_uuid!(uuid)
+    with {:ok, %MassOffering{} = mass_offering} <- MassOfferings.update_fpx_callback(mass_offering, fpx_callback_params) do
+      render(conn, "show.json", mass_offering: mass_offering)
+    end
+  end
+
+  swagger_path :cybersource do
+    patch "/api/mass_offerings/{uuid}/cybersource"
+    description "Receive Cybersource callback and update an existing Mass Offering by UUID"
+    parameters do
+      uuid :path, :string, "UUID", required: true
+      cybersource_callback :body, Schema.ref(:Cybersource_Callback), "Cybersource callback", required: true
+    end
+    response 201, "Ok", Schema.ref(:Mass_Offering)
+    response 422, "Unprocessable Entity"
+  end
+
+  def cybersource(conn, %{"uuid" => uuid, "cybersource_callback" => cybersource_callback_params}) do
+    mass_offering = MassOfferings.get_mass_offering_uuid!(uuid)
+    with {:ok, %MassOffering{} = mass_offering} <- MassOfferings.update_cybersource_callback(mass_offering, cybersource_callback_params) do
+      render(conn, "show.json", mass_offering: mass_offering)
+    end
+  end
+
   def swagger_definitions do
     %{
       Mass_Offering: swagger_schema do
@@ -98,6 +136,7 @@ defmodule DonationWeb.MassOfferingController do
           uuid :string, "UUID", required: true
           amount :decimal, "Amount", required: true
           fpx_callback :map
+          cybersource_callback :map
           offerings (Schema.new do
             properties do
               typeOfMass :string, "Type of Mass"
@@ -116,6 +155,7 @@ defmodule DonationWeb.MassOfferingController do
             uuid: "9357666c-9103-46a4-a7e8-ca7f8832283c",
             amount: 50.00,
             fpx_callback: %{ fpx_txnCurrency: "MYR", fpx_sellerId: "SE0013401", fpx_sellerExId: "EX0011982" },
+            cybersource_callback: %{ cybersource_txnCurrency: "MYR", cybersource_sellerId: "CSI1846", cybersource_sellerExId: "CSE1846" },
             offerings: [
               %{
                   typeOfMass: "Special Intention",
@@ -147,8 +187,44 @@ defmodule DonationWeb.MassOfferingController do
             ]
           }
         }
+      end,
+      Fpx_Callback: swagger_schema do
+        title "FPX Callback"
+        description "Record the callback from FPX"
+        properties do
+          fpx_callback :map
+        end
+        example %{
+          fpx_callback: %{ fpx_txnCurrency: "MYR", fpx_sellerId: "SE0013401", fpx_sellerExId: "EX0011982" }
+        }
+      end,
+      Cybersource_Callback: swagger_schema do
+        title "Cybersource Callback"
+        description "Record the callback from Cybersource"
+        properties do
+          cybersource_callback :map
+        end
+        example %{
+          cybersource_callback: %{ cybersource_txnCurrency: "USD", cybersource_sellerId: "AB0013401", cybersource_sellerExId: "CS0011982" }
+        }
       end
     }
+
+  #   %{
+  #   Tracker: # ... the schema above
+  #   Trackers: swagger_schema do
+  #     title "Trackers"
+  #     description "All activities that have been recorded"        type :array
+  #     items Schema.ref(:Tracker)
+  #   end,
+  #   Error: swagger_schema do
+  #     title "Errors"
+  #     description "Error responses from the API"
+  #     properties do
+  #       error :string, "The message of the error raised", required: true
+  #     end
+  #   end
+  # }
   end
 
 end

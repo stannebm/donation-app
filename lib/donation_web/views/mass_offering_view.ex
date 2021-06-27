@@ -29,6 +29,7 @@ defmodule DonationWeb.MassOfferingView do
       emailAddress: mass_offering.emailAddress,
       amount: mass_offering.amount,
       fpx_callback: mass_offering.fpx_callback,
+      cybersource_callback: mass_offering.cybersource_callback,
       offerings: render_many( mass_offering.offerings, OfferingView, "offering.json" )
     }
   end

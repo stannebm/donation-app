@@ -7,43 +7,43 @@ defmodule DonationWeb.MassOfferingController do
   alias Donation.MassOfferings
   alias Donation.MassOfferings.MassOffering
 
-  action_fallback DonationWeb.FallbackController
+  action_fallback(DonationWeb.FallbackController)
 
-  swagger_path :index do
-    get("/api/mass_offerings")
-    description("List of Mass Offerings")
-    response(200, "Success")
-  end
+  # swagger_path :index do
+  #   get("/api/mass_offerings")
+  #   description("List of Mass Offerings")
+  #   response(200, "Success")
+  # end
 
   def index(conn, _params) do
     mass_offerings = MassOfferings.list_mass_offerings()
     render(conn, "index.json", mass_offerings: mass_offerings)
   end
 
-  swagger_path :show do
-    get("/api/mass_offerings/{id}")
-    description("Get a mass offering by ID. Following the result of offerings.")
-    parameter(:id, :path, :integer, "Mass Offering [ID]", required: true)
-    response(200, "Success")
-    response(404, "Not found")
-  end
+  # swagger_path :show do
+  #   get("/api/mass_offerings/{id}")
+  #   description("Get a mass offering by ID. Following the result of offerings.")
+  #   parameter(:id, :path, :integer, "Mass Offering [ID]", required: true)
+  #   response(200, "Success")
+  #   response(404, "Not found")
+  # end
 
   def show(conn, %{"id" => id}) do
     mass_offering = MassOfferings.get_mass_offering!(id)
     render(conn, "show.json", mass_offering: mass_offering)
   end
 
-  swagger_path :create do
-    post("/api/mass_offerings")
-    description("Create new Mass Offering")
+  # swagger_path :create do
+  #   post("/api/mass_offerings")
+  #   description("Create new Mass Offering")
 
-    parameters do
-      mass_offering(:body, Schema.ref(:Mass_Offering), "Create Mass Offering", required: true)
-    end
+  #   parameters do
+  #     mass_offering(:body, Schema.ref(:Mass_Offering), "Create Mass Offering", required: true)
+  #   end
 
-    response(201, "Ok", Schema.ref(:Mass_Offering))
-    response(422, "Unprocessable Entity")
-  end
+  #   response(201, "Ok", Schema.ref(:Mass_Offering))
+  #   response(422, "Unprocessable Entity")
+  # end
 
   def create(conn, %{"mass_offering" => mass_offering_params}) do
     with {:ok, %MassOffering{} = mass_offering} <-
@@ -55,18 +55,18 @@ defmodule DonationWeb.MassOfferingController do
     end
   end
 
-  swagger_path :update do
-    patch("/api/mass_offerings/{id}")
-    description("Update an existing Mass Offering by ID")
+  # swagger_path :update do
+  #   patch("/api/mass_offerings/{id}")
+  #   description("Update an existing Mass Offering by ID")
 
-    parameters do
-      id(:path, :integer, "Mass Offering [ID]", required: true)
-      mass_offering(:body, Schema.ref(:Mass_Offering), "Editing Mass Offering", required: true)
-    end
+  #   parameters do
+  #     id(:path, :integer, "Mass Offering [ID]", required: true)
+  #     mass_offering(:body, Schema.ref(:Mass_Offering), "Editing Mass Offering", required: true)
+  #   end
 
-    response(201, "Ok", Schema.ref(:Mass_Offering))
-    response(422, "Unprocessable Entity")
-  end
+  #   response(201, "Ok", Schema.ref(:Mass_Offering))
+  #   response(422, "Unprocessable Entity")
+  # end
 
   def update(conn, %{"id" => id, "mass_offering" => mass_offering_params}) do
     mass_offering = MassOfferings.get_mass_offering!(id)
@@ -93,21 +93,21 @@ defmodule DonationWeb.MassOfferingController do
     end
   end
 
-  swagger_path :fpx do
-    patch("/api/mass_offerings/{uuid}/fpx")
-    description("Receive FPX callback and update an existing Mass Offering by UUID")
+  # swagger_path :fpx do
+  #   patch("/api/mass_offerings/{reference_no}/fpx")
+  #   description("Receive FPX callback and update an existing Mass Offering by reference no")
 
-    parameters do
-      uuid(:path, :string, "UUID", required: true)
-      fpx_callback(:body, Schema.ref(:Fpx_Callback), "FPX callback", required: true)
-    end
+  #   parameters do
+  #     reference_no(:path, :string, "reference no", required: true)
+  #     fpx_callback(:body, Schema.ref(:Fpx_Callback), "FPX callback", required: true)
+  #   end
 
-    response(201, "Ok", Schema.ref(:Mass_Offering))
-    response(422, "Unprocessable Entity")
-  end
+  #   response(201, "Ok", Schema.ref(:Mass_Offering))
+  #   response(422, "Unprocessable Entity")
+  # end
 
-  def fpx(conn, %{"uuid" => uuid, "fpx_callback" => fpx_callback_params}) do
-    mass_offering = MassOfferings.get_mass_offering_uuid!(uuid)
+  def fpx(conn, %{"referenceNo" => ref, "fpx_callback" => fpx_callback_params}) do
+    mass_offering = MassOfferings.get_mass_offering_reference_no(ref)
 
     with {:ok, %MassOffering{} = mass_offering} <-
            MassOfferings.update_fpx_callback(mass_offering, fpx_callback_params) do
@@ -115,21 +115,24 @@ defmodule DonationWeb.MassOfferingController do
     end
   end
 
-  swagger_path :cybersource do
-    patch("/api/mass_offerings/{uuid}/cybersource")
-    description("Receive Cybersource callback and update an existing Mass Offering by UUID")
+  # swagger_path :cybersource do
+  #   patch("/api/mass_offerings/{referenceNo}/cybersource")
 
-    parameters do
-      uuid(:path, :string, "UUID", required: true)
+  #   description(
+  #     "Receive Cybersource callback and update an existing Mass Offering by reference no"
+  #   )
 
-      cybersource_callback(:body, Schema.ref(:Cybersource_Callback), "Cybersource callback",
-        required: true
-      )
-    end
+  #   parameters do
+  #     reference_no(:path, :string, "reference no", required: true)
 
-    response(201, "Ok", Schema.ref(:Mass_Offering))
-    response(422, "Unprocessable Entity")
-  end
+  #     cybersource_callback(:body, Schema.ref(:Cybersource_Callback), "Cybersource callback",
+  #       required: true
+  #     )
+  #   end
+
+  #   response(201, "Ok", Schema.ref(:Mass_Offering))
+  #   response(422, "Unprocessable Entity")
+  # end
 
   def cybersource(conn, %{"uuid" => uuid, "cybersource_callback" => cybersource_callback_params}) do
     mass_offering = MassOfferings.get_mass_offering_uuid!(uuid)
@@ -254,21 +257,5 @@ defmodule DonationWeb.MassOfferingController do
           })
         end
     }
-
-    #   %{
-    #   Tracker: # ... the schema above
-    #   Trackers: swagger_schema do
-    #     title "Trackers"
-    #     description "All activities that have been recorded"        type :array
-    #     items Schema.ref(:Tracker)
-    #   end,
-    #   Error: swagger_schema do
-    #     title "Errors"
-    #     description "Error responses from the API"
-    #     properties do
-    #       error :string, "The message of the error raised", required: true
-    #     end
-    #   end
-    # }
   end
 end

@@ -105,21 +105,6 @@ defmodule Donation.Admins do
     AUTHENTICATE USERNAME AND PASSWORD
   """
 
-  # def login(params, repo) do
-  #   user = repo.get_by(User, email: String.downcase(params["email"]))
-  #   case authenticate(user, params["password"]) do
-  #     true -> {:ok, user}
-  #     _    -> :error
-  #   end
-  # end
-
-  # defp authenticate(user, password) do
-  #   case user do
-  #     nil -> false
-  #     _   -> Comeonin.Bcrypt.checkpw(password, user.crypted_password)
-  #   end
-  # end
-
   def auth(username, password) when is_binary(username) and is_binary(password) do
     with {:ok, user} <- get_by_username(username), do: verify_password(password, user)
   end
@@ -147,64 +132,6 @@ defmodule Donation.Admins do
     end
   end
 
-  #   def get_user_by_username_and_password(username, password) do
-  #     with user when not is_nil(user) <- @repo.get_by(User, %{username: username}),
-  #          true <- Password.verify_with_hash(password, user.hashed_password) do
-  #       user
-  #     else
-  #       _ -> Password.dummy_verify
-  #     end
-  #   end
-
-  # def get_by_username(username) when is_nil(username) do
-  #   nil
-  # end
-  # def get_by_username(username) when is_binary(username) do
-  #   case Repo.get_by(User, username: username) do
-  #     user -> 
-  #       { :ok, user }
-  #     nil -> 
-  #       { :error, :unauthorized }
-  #   end
-  # end
-
-  #   alias Donation.Admins.User
-  #   alias Donation.Guardian
-  #   import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
-
-  #   @doc """
-  #   Return JWT
-  #   """
-  #   def token_sign_in(username, password) do
-  #     case username_password_auth(username, password) do
-  #       {:ok, user} 
-  #         -> Guardian.encode_and_sign(user)
-  #       _ -> {:error, :unauthorized}
-  #     end
-  #   end
-
-  #   defp username_password_auth(username, password) when is_binary(username) and is_binary(password) do
-  #     with {:ok, user} <- get_by_username(username), do: verify_password(password, user)
-  #   end
-
-  #   defp get_by_username(username) when is_binary(username) do
-  #     case Repo.get_by(User, username: username) do
-  #       nil ->
-  #         dummy_checkpw()
-  #         {:error, "Login error"}
-  #       user ->
-  #         {:ok, user}
-  #     end
-  #   end
-
-  #   defp verify_password(password, %User{} = user) when is_binary(password) do
-  #     if Bcrypt.verify_pass( password, user.password_hash ) do
-  #       {:ok, user}
-  #     else
-  #       {:error, :invalid_password}
-  #     end
-  #   end
-
   alias Donation.Admins.Receipt
 
   @doc """
@@ -227,21 +154,6 @@ defmodule Donation.Admins do
     |> Repo.all()
     |> Repo.preload([:type_of_payment_method, receipt_items: :type_of_contribution])
   end
-
-  #   def list_store_state do
-  #   query = Ecto.Query.from(s in Store, select: s.state, distinct: true)
-  #   Repo.all(query)
-  # end
-
-  # def list_store_city(id) do
-  #   query = Ecto.Query.from(s in Store, where: s.state == ^id, select: s.city, distinct: true)
-  #   Repo.all(query)
-  # end
-
-  # def list_city_store(id) do
-  #   query = Ecto.Query.from(s in Store, where: [s.city] == ^id, select: s.name)
-  #   Repo.all(query)
-  # end
 
   @doc """
   Gets a single receipt.

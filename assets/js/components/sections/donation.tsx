@@ -1,11 +1,10 @@
-import { Box, Button, HStack, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, HStack, VStack } from "@chakra-ui/react";
 import axios from "axios";
 import * as R from "ramda";
 import React from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import FormInput from "../elements/form_input";
 import FormSelect from "../elements/form_select";
-import { v4 as uuidv4 } from "uuid";
 import type { MandatoryForm } from "./mass_offering.types";
 
 export default function Donation() {
@@ -20,19 +19,19 @@ export default function Donation() {
     },
   });
 
-  const onSubmit = (data: MandatoryForm) => {
+  const onSubmit = (transferMethod: "fpx" | "cybersource") => (data: MandatoryForm) => {
     console.log("SUBMIT:", data);
     const submission = { ...data };
     const submission_payload = {
-      mass_offering: { ...submission, uuid: uuidv4() },
+      mass_offering: { ...submission, referenceNo: new Date().getTime(), transferMethod: transferMethod },
     };
     console.log(submission_payload);
     axios
       .post("/api/mass_offerings", submission_payload)
-      .then(function ({ data }) {
+      .then(function({ data }) {
         console.log("POSTED", data);
       })
-      .catch(function (error) {
+      .catch(function(error) {
         console.log(error);
       });
   };
@@ -43,7 +42,7 @@ export default function Donation() {
   });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form>
       <HStack mb={3} align="flex-start">
         <FormInput
           label="Name"
@@ -123,8 +122,18 @@ export default function Donation() {
       )}
 
       <HStack>
-        <Button colorScheme="teal" isLoading={isSubmitting} type="submit">
-          Transfer
+        <Button colorScheme="teal" isLoading={isSubmitting} onClick={(e) => {
+          handleSubmit(onSubmit("fpx"))()
+          e.preventDefault()
+        }}>
+          Online Banking
+        </Button>
+
+        <Button colorScheme="teal" isLoading={isSubmitting} onClick={(e) => {
+          handleSubmit(onSubmit("cybersource"))()
+          e.preventDefault()
+        }}>
+          Credit/Debit Card
         </Button>
       </HStack>
     </form>

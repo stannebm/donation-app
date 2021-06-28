@@ -9,13 +9,12 @@ import {
   PopoverContent,
   PopoverTrigger,
   Text,
-  VStack,
+  VStack
 } from "@chakra-ui/react";
 import axios from "axios";
 import * as R from "ramda";
 import React, { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-import { v4 as uuidv4 } from "uuid";
 import DatePicker from "../elements/datepicker";
 import FormInput from "../elements/form_input";
 import FormSelect from "../elements/form_select";
@@ -44,15 +43,15 @@ export default function MassOffering() {
       },
     }));
     const submission_payload = {
-      mass_offering: { ...submission, uuid: uuidv4() },
+      mass_offering: { ...submission, uuid: new Date().getTime() },
     };
     console.log(submission_payload);
     axios
       .post("/api/mass_offerings", submission_payload)
-      .then(function ({ data }) {
+      .then(function({ data }) {
         console.log("POSTED", data);
       })
-      .catch(function (error) {
+      .catch(function(error) {
         console.log(error);
       });
   };

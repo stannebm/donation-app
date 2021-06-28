@@ -10,16 +10,12 @@ function Routes() {
   return (
     <BrowserRouter>
       <Switch>
-        <Route exact path="/">
+        <Route exact path="/offering">
           <MassOffering />
         </Route>
-
         <Route exact path="/donation">
           <Donation />
         </Route>
-        {/* <Route path="/admins/login"> */}
-        {/*   <Login /> */}
-        {/* </Route> */}
       </Switch>
     </BrowserRouter>
   );

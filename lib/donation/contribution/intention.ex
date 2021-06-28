@@ -5,9 +5,9 @@ defmodule Donation.Contribution.Intention do
   alias Donation.Contribution.Offering
 
   schema "intentions" do
-    field(:typeOfMass, :string)
+    field(:type_of_mass, :string)
     field(:intention, :string)
-    field(:otherIntention, :string)
+    field(:other_intention, :string)
     field(:dates, {:array, :date})
     belongs_to(:offering, Offering)
     timestamps()
@@ -16,8 +16,8 @@ defmodule Donation.Contribution.Intention do
   @doc false
   def changeset(mass_offering_item, attrs) do
     mass_offering_item
-    |> cast(attrs, [:typeOfMass, :intention, :otherIntention, :dates])
-    |> validate_required([:typeOfMass, :dates])
+    |> cast(attrs, [:type_of_mass, :intention, :other_intention, :dates])
+    |> validate_required([:type_of_mass, :dates])
 
     # ensure parent exists
     |> assoc_constraint(:offering)

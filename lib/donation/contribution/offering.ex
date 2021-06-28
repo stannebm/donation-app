@@ -5,15 +5,17 @@ defmodule Donation.Contribution.Offering do
   alias Donation.Contribution.Intention
 
   schema "offerings" do
-    field(:referenceNo, :string)
+    field(:reference_no, :string)
+    # type: donation/mass_offering
     field(:type, :string)
-    field(:fromWhom, :string)
-    field(:contactNumber, :string)
-    field(:emailAddress, :string)
-    field(:massLanguage, :string)
+    field(:name, :string)
+    field(:email, :string)
+    field(:contact_number, :string)
+    field(:mass_language, :string)
     field(:amount, :decimal, precision: 12, scale: 2)
-    field(:fpx_callback, :map)
-    field(:cybersource_callback, :map)
+    field(:transferred, :boolean)
+    field(:fpx_txn_info, :map)
+    field(:cybersource_txn_info, :map)
     has_many(:intentions, Intention, on_delete: :delete_all)
     timestamps()
   end
@@ -22,26 +24,27 @@ defmodule Donation.Contribution.Offering do
   def changeset(mass_offering, attrs) do
     mass_offering
     |> cast(attrs, [
-      :referenceNo,
+      :reference_no,
       :type,
-      :fromWhom,
-      :contactNumber,
-      :emailAddress,
-      :massLanguage,
+      :name,
+      :email,
+      :contact_number,
+      :mass_language,
       :amount,
-      :fpx_callback,
-      :cybersource_callback
+      :transferred,
+      :fpx_txn_info,
+      :cybersource_txn_info
     ])
     |> validate_required([
-      :referenceNo,
+      :reference_no,
       :type,
-      :fromWhom,
-      :contactNumber,
-      :emailAddress,
-      :massLanguage,
+      :from_whom,
+      :contact_number,
+      :email,
+      :mass_language,
       :amount
     ])
-    |> unique_constraint(:referenceNo)
+    |> unique_constraint(:reference_no)
     |> cast_assoc(:intentions)
   end
 end

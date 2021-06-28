@@ -32,8 +32,10 @@ defmodule DonationWeb.ReceiptController do
   end
 
   def create(conn, %{"receipt" => receipt_params}) do
-    type_of_contributions = Admins.list_type_of_contributions() |> Enum.map(&{&1.name, &1.id})
-    type_of_payment_methods = Admins.list_type_of_payment_methods() |> Enum.map(&{&1.name, &1.id})
+    _type_of_contributions = Admins.list_type_of_contributions() |> Enum.map(&{&1.name, &1.id})
+
+    _type_of_payment_methods =
+      Admins.list_type_of_payment_methods() |> Enum.map(&{&1.name, &1.id})
 
     case Admins.create_receipt(receipt_params) do
       {:ok, receipt} ->
@@ -68,8 +70,11 @@ defmodule DonationWeb.ReceiptController do
   end
 
   def update(conn, %{"id" => id, "receipt" => receipt_params}) do
-    type_of_contributions = Admins.list_type_of_contributions() |> Enum.map(&{&1.name, &1.id})
-    type_of_payment_methods = Admins.list_type_of_payment_methods() |> Enum.map(&{&1.name, &1.id})
+    _type_of_contributions = Admins.list_type_of_contributions() |> Enum.map(&{&1.name, &1.id})
+
+    _type_of_payment_methods =
+      Admins.list_type_of_payment_methods() |> Enum.map(&{&1.name, &1.id})
+
     receipt = Admins.get_receipt!(id)
 
     case Admins.update_receipt(receipt, receipt_params) do

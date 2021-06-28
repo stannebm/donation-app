@@ -51,7 +51,6 @@ defmodule Donation.MixProject do
       {:phoenix_swagger, "~> 0.8"},
       # optional
       {:ex_json_schema, "~> 0.5"},
-      {:poison, "~> 3.1"},
       {:comeonin, "~> 5.0"},
       {:bcrypt_elixir, "~> 2.0"},
       {:guardian, "~> 2.0"},

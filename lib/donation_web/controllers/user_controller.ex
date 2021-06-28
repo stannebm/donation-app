@@ -61,7 +61,6 @@ defmodule DonationWeb.UserController do
     |> put_flash(:info, "User deleted successfully.")
     |> redirect(to: Routes.user_path(conn, :index))
   end
-
 end
 
 #   # def login(conn, %{"username" => username, "password" => password}) do

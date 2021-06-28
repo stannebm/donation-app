@@ -8,7 +8,6 @@ defmodule DonationWeb.ReportController do
 
   def index(conn, params) do
     receipts = Admins.search_receipts(params)
-    render(conn, "index.html", receipts: receipts )
+    render(conn, "index.html", receipts: receipts)
   end
-
 end

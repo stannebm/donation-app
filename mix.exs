@@ -8,7 +8,7 @@ defmodule Donation.MixProject do
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
       # compilers: [:phoenix, :gettext] ++ Mix.compilers(),
-      compilers: [:phoenix, :gettext] ++ Mix.compilers ++ [:phoenix_swagger],
+      compilers: [:phoenix, :gettext] ++ Mix.compilers() ++ [:phoenix_swagger],
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps()
@@ -49,14 +49,16 @@ defmodule Donation.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:phoenix_swagger, "~> 0.8"},
-      {:ex_json_schema, "~> 0.5"}, # optional
+      # optional
+      {:ex_json_schema, "~> 0.5"},
       {:poison, "~> 3.1"},
       {:comeonin, "~> 5.0"},
       {:bcrypt_elixir, "~> 2.0"},
       {:guardian, "~> 2.0"},
       {:timex, "~> 3.7"},
       {:faker, "~> 0.16", only: :test},
-      {:pdf_generator, "~> 0.6.2"} ## PDF OUTPUT
+      ## PDF OUTPUT
+      {:pdf_generator, "~> 0.6.2"}
     ]
   end
 

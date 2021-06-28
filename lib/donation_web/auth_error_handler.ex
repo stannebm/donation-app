@@ -8,5 +8,4 @@ defmodule Donation.AuthErrorHandler do
     |> put_resp_content_type("application/json")
     |> send_resp(401, body)
   end
-
 end

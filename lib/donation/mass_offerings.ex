@@ -60,12 +60,12 @@ defmodule Donation.MassOfferings do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_mass_offering( attrs \\ %{} ) do
+  def create_mass_offering(attrs \\ %{}) do
     %MassOffering{}
-    |> MassOffering.changeset( attrs )
+    |> MassOffering.changeset(attrs)
     |> Repo.insert()
     |> case do
-      { :ok, %MassOffering{} = mass_offering } -> { :ok, Repo.preload( mass_offering, :offerings ) }
+      {:ok, %MassOffering{} = mass_offering} -> {:ok, Repo.preload(mass_offering, :offerings)}
       error -> error
     end
   end
@@ -82,19 +82,19 @@ defmodule Donation.MassOfferings do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_mass_offering( %MassOffering{} = mass_offering, attrs ) do
+  def update_mass_offering(%MassOffering{} = mass_offering, attrs) do
     mass_offering
-    |> MassOffering.changeset( attrs )
+    |> MassOffering.changeset(attrs)
     |> Repo.update()
   end
 
-  def update_fpx_callback( %MassOffering{} = mass_offering, fpx_callback_attrs ) do
+  def update_fpx_callback(%MassOffering{} = mass_offering, fpx_callback_attrs) do
     mass_offering
     |> MassOffering.changeset(%{"fpx_callback" => fpx_callback_attrs})
     |> Repo.update()
   end
 
-  def update_cybersource_callback( %MassOffering{} = mass_offering, cybersource_callback_attrs ) do
+  def update_cybersource_callback(%MassOffering{} = mass_offering, cybersource_callback_attrs) do
     mass_offering
     |> MassOffering.changeset(%{"cybersource_callback" => cybersource_callback_attrs})
     |> Repo.update()
@@ -112,8 +112,8 @@ defmodule Donation.MassOfferings do
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_mass_offering( %MassOffering{} = mass_offering ) do
-    Repo.delete( mass_offering )
+  def delete_mass_offering(%MassOffering{} = mass_offering) do
+    Repo.delete(mass_offering)
   end
 
   @doc """
@@ -125,8 +125,8 @@ defmodule Donation.MassOfferings do
       %Ecto.Changeset{data: %MassOffering{}}
 
   """
-  def change_mass_offering( %MassOffering{} = mass_offering, attrs \\ %{} ) do
-    MassOffering.changeset( mass_offering, attrs )
+  def change_mass_offering(%MassOffering{} = mass_offering, attrs \\ %{}) do
+    MassOffering.changeset(mass_offering, attrs)
   end
 
   alias Donation.MassOfferings.Offering
@@ -140,6 +140,7 @@ defmodule Donation.MassOfferings do
       [%Offering{}, ...]
 
   """
+
   # def list_mass_offering_items do
   #   Repo.all(MassOfferingItem)
   # end
@@ -159,10 +160,10 @@ defmodule Donation.MassOfferings do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_mass_offering_item( %MassOffering{} = mass_offering, attrs \\ %{} ) do
+  def create_mass_offering_item(%MassOffering{} = mass_offering, attrs \\ %{}) do
     mass_offering
-    |> Ecto.build_assoc( :offerings )
-    |> Offering.changeset( attrs )
+    |> Ecto.build_assoc(:offerings)
+    |> Offering.changeset(attrs)
     |> Repo.insert()
   end
 
@@ -178,9 +179,9 @@ defmodule Donation.MassOfferings do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_offering( %Offering{} = offering, attrs ) do
+  def update_offering(%Offering{} = offering, attrs) do
     offering
-    |> Offering.changeset( attrs )
+    |> Offering.changeset(attrs)
     |> Repo.update()
   end
 
@@ -196,8 +197,8 @@ defmodule Donation.MassOfferings do
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_offering( %Offering{} = offering ) do
-    Repo.delete( offering )
+  def delete_offering(%Offering{} = offering) do
+    Repo.delete(offering)
   end
 
   @doc """
@@ -209,7 +210,7 @@ defmodule Donation.MassOfferings do
       %Ecto.Changeset{data: %Offering{}}
 
   """
-  def change_mass_offering_item( %Offering{} = offering, attrs \\ %{} ) do
-    Offering.changeset( offering, attrs )
+  def change_mass_offering_item(%Offering{} = offering, attrs \\ %{}) do
+    Offering.changeset(offering, attrs)
   end
 end

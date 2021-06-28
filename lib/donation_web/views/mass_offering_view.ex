@@ -3,11 +3,11 @@ defmodule DonationWeb.MassOfferingView do
   alias DonationWeb.{MassOfferingView, OfferingView}
 
   def render("index.json", %{mass_offerings: mass_offerings}) do
-    %{ data: render_many(mass_offerings, MassOfferingView, "mass_offering.json") }
+    %{data: render_many(mass_offerings, MassOfferingView, "mass_offering.json")}
   end
 
   def render("show.json", %{mass_offering: mass_offering}) do
-    %{ data: render_one(mass_offering, MassOfferingView, "mass_offering_details.json") }
+    %{data: render_one(mass_offering, MassOfferingView, "mass_offering_details.json")}
   end
 
   def render("mass_offering.json", %{mass_offering: mass_offering}) do
@@ -30,8 +30,7 @@ defmodule DonationWeb.MassOfferingView do
       amount: mass_offering.amount,
       fpx_callback: mass_offering.fpx_callback,
       cybersource_callback: mass_offering.cybersource_callback,
-      offerings: render_many( mass_offering.offerings, OfferingView, "offering.json" )
+      offerings: render_many(mass_offering.offerings, OfferingView, "offering.json")
     }
   end
-
 end

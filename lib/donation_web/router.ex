@@ -27,14 +27,16 @@ defmodule DonationWeb.Router do
   end
 
   pipeline :layout_admin do
-    plug :put_layout, { DonationWeb.LayoutView, :admin }
+    plug :put_layout, {DonationWeb.LayoutView, :admin}
   end
 
   scope "/api", DonationWeb do
     pipe_through :api
+
     resources "/mass_offerings", MassOfferingController, except: [:new, :edit] do
       resources "/offerings", MassOfferingItemController, except: [:new, :edit]
     end
+
     patch "/mass_offerings/:uuid/fpx", MassOfferingController, :fpx
     patch "/mass_offerings/:uuid/cybersource", MassOfferingController, :cybersource
   end
@@ -64,14 +66,14 @@ defmodule DonationWeb.Router do
   end
 
   scope "/admins", DonationWeb do
-    pipe_through [ :browser ]
+    pipe_through [:browser]
     get "/sign-in", SessionController, :new
     post "/sign-in", SessionController, :create
     delete "/sign-out", SessionController, :delete
   end
 
   scope "/admins", DonationWeb do
-    pipe_through [ :browser, :authenticate_admin, :layout_admin ]
+    pipe_through [:browser, :authenticate_admin, :layout_admin]
     resources "/receipts", ReceiptController, except: [:delete]
     get "/receipts/:id/generate_pdf", ReceiptController, :generate_pdf
     resources "/reports", ReportController, only: [:index]
@@ -94,5 +96,4 @@ defmodule DonationWeb.Router do
       }
     }
   end
-
 end

@@ -33,8 +33,8 @@ config :donation, :phoenix_swagger,
   }
 
 config :donation, Donation.Guardian,
-       issuer: "donation",
-       secret_key: "dUNnKIAgp3HRXp4QPn3tzwlafdNWWns8e33zJYb0Q5+RxyWrqjiPTSJrxYphEU3A"
+  issuer: "donation",
+  secret_key: "dUNnKIAgp3HRXp4QPn3tzwlafdNWWns8e33zJYb0Q5+RxyWrqjiPTSJrxYphEU3A"
 
 # Use Jason for JSON parsing in Phoenix
 # config :phoenix, :json_library, Jason

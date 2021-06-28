@@ -21,5 +21,4 @@ defmodule DonationWeb.ErrorView do
   def render("500.html", _assigns) do
     render("500.html", %{})
   end
-
 end

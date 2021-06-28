@@ -102,7 +102,7 @@
             <div class="card-content">
 
               <div class="field">
-                <%= label f, :donor_name, class: "label" %>
+                <%= label f, :donor_name, "Received From", class: "label" %>
                 <div class="control">
                   <%= text_input f, :donor_name, class: "input", required: "required" %>
                   <p class="help"><%= error_tag f, :donor_name %></p>
@@ -127,15 +127,17 @@
                 </div>
               </div>
 
-              <div class="field">
-                <%= label f, :status, class: "label" %>
-                <div class="control">
-                  <div class="select is-fullwidth">
-                    <%= select f, :status, [ "Done": 1, "Pending": 2, "Cancelled": 3 ] %>
+              <%= if @conn.assigns.current_admin.is_admin do %>
+                <div class="field">
+                  <%= label f, :status, class: "label" %>
+                  <div class="control">
+                    <div class="select is-fullwidth">
+                      <%= select f, :status, [ "Done": 1, "Pending": 2, "Cancelled": 3 ] %>
+                    </div>
+                    <p class="help"><%= error_tag f, :status %></p>
                   </div>
-                  <p class="help"><%= error_tag f, :status %></p>
                 </div>
-              </div>
+              <% end %>
 
      <%# select(form, :manager_id, Enum.map(@managers, &{&1.name, &1.id}))
       #=> <select id="manager_id" name="project[manager_id]">

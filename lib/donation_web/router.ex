@@ -35,6 +35,8 @@ defmodule DonationWeb.Router do
     resources "/mass_offerings", MassOfferingController, except: [:new, :edit] do
       resources "/offerings", MassOfferingItemController, except: [:new, :edit]
     end
+    patch "/mass_offerings/:uuid/fpx", MassOfferingController, :fpx
+    patch "/mass_offerings/:uuid/cybersource", MassOfferingController, :cybersource
   end
 
   # scope "/api", DonationWeb do

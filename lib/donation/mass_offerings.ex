@@ -36,10 +36,16 @@ defmodule Donation.MassOfferings do
 
   """
   # def get_mass_offering!(id), do: Repo.get!(MassOffering, id)
-  def get_mass_offering!( id ) do
+  def get_mass_offering!(id) do
     MassOffering
-    |> Repo.get!( id )
-    |> Repo.preload( :offerings )
+    |> Repo.get!(id)
+    |> Repo.preload(:offerings)
+  end
+
+  def get_mass_offering_uuid!(uuid) do
+    MassOffering
+    |> Repo.get_by(uuid: uuid)
+    |> Repo.preload(:offerings)
   end
 
   @doc """
@@ -79,6 +85,18 @@ defmodule Donation.MassOfferings do
   def update_mass_offering( %MassOffering{} = mass_offering, attrs ) do
     mass_offering
     |> MassOffering.changeset( attrs )
+    |> Repo.update()
+  end
+
+  def update_fpx_callback( %MassOffering{} = mass_offering, fpx_callback_attrs ) do
+    mass_offering
+    |> MassOffering.changeset(%{"fpx_callback" => fpx_callback_attrs})
+    |> Repo.update()
+  end
+
+  def update_cybersource_callback( %MassOffering{} = mass_offering, cybersource_callback_attrs ) do
+    mass_offering
+    |> MassOffering.changeset(%{"cybersource_callback" => cybersource_callback_attrs})
     |> Repo.update()
   end
 

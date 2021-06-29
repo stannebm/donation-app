@@ -5,7 +5,7 @@ import React from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import FormInput from "../elements/form_input";
 import FormSelect from "../elements/form_select";
-import type { MandatoryForm } from "./mass_offering.types";
+import type { OfferingForm } from "./forms.types";
 
 export default function Donation() {
   const {
@@ -13,21 +13,22 @@ export default function Donation() {
     handleSubmit,
     formState: { errors, isSubmitting },
     control,
-  } = useForm<MandatoryForm>({
+  } = useForm<OfferingForm>({
     defaultValues: {
-      offerings: [{ typeOfMass: "Donation" }],
+      type: "donation",
+      mass_intentions: [],
     },
   });
 
-  const onSubmit = (transferMethod: "fpx" | "cybersource") => (data: MandatoryForm) => {
+  const onSubmit = (transferMethod: "fpx" | "cybersource") => (data: OfferingForm) => {
     console.log("SUBMIT:", data);
     const submission = { ...data };
     const submission_payload = {
-      mass_offering: { ...submission, referenceNo: new Date().getTime(), transferMethod: transferMethod },
+      offering: { ...submission, reference_no: new Date().getTime() },
     };
     console.log(submission_payload);
     axios
-      .post("/api/mass_offerings", submission_payload)
+      .post("/api/offerings", submission_payload)
       .then(function({ data }) {
         console.log("POSTED", data);
       })
@@ -38,7 +39,7 @@ export default function Donation() {
 
   const { fields } = useFieldArray({
     control,
-    name: "offerings",
+    name: "mass_intentions",
   });
 
   return (

@@ -1,8 +1,12 @@
 defmodule Donation.Contribution.Intention do
   use Ecto.Schema
   import Ecto.Changeset
-
   alias Donation.Contribution.Offering
+
+  @doc """
+  Intention can refer to mass intention or donation intention
+  and is always referring to an offering
+  """
 
   schema "intentions" do
     field(:type_of_mass, :string)
@@ -14,10 +18,10 @@ defmodule Donation.Contribution.Intention do
   end
 
   @doc false
-  def changeset(mass_offering_item, attrs) do
-    mass_offering_item
-    |> cast(attrs, [:type_of_mass, :intention, :other_intention, :dates])
-    |> validate_required([:type_of_mass, :dates])
+  def changeset(intention, attrs) do
+    intention
+    |> cast(attrs, [:intention, :dates, :other_intention, :type_of_mass])
+    |> validate_required([:intention, :dates])
 
     # ensure parent exists
     |> assoc_constraint(:offering)

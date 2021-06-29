@@ -16,6 +16,7 @@ export type DonationForm = {
   other_intention?: string;
 };
 
+const FORM_TYPE = "donation"
 const API_PATH = "/api/donation_form";
 
 export default function Donation() {
@@ -34,7 +35,7 @@ export default function Donation() {
     const finalized_intention = submission.intention === "Others" ? submission.other_intention : submission.intention;
     delete submission['other_intention'];
     const submissionPayload = {
-      donation: { ...submission, reference_no: new Date().getTime(), intention: finalized_intention, payment_method }
+      [FORM_TYPE]: { ...submission, reference_no: new Date().getTime(), intention: finalized_intention, payment_method }
     };
     console.log("DEBUG submission", submissionPayload);
     axios

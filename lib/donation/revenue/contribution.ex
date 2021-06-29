@@ -7,6 +7,7 @@ defmodule Donation.Revenue.Contribution do
   Eg. Donations, Mass Offerings, Venue Bookings
   """
 
+  @derive {Jason.Encoder, only: [:type, :name, :email, :contact_number, :amount, :payment_method]}
   schema "contributions" do
     field(:type, :string)
     field(:name, :string)

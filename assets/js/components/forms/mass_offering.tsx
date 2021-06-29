@@ -40,6 +40,7 @@ export type IntentionForm = {
   other_intention?: string;
 };
 
+const FORM_TYPE = "mass_offering";
 const API_PATH = "/api/mass_offering_form";
 
 export default function MassOffering() {
@@ -64,7 +65,7 @@ export default function MassOffering() {
       },
     }));
     const submissionPayload = {
-      mass_offering: { ...submission, reference_no: new Date().getTime(), amount: totalMasses * 10, payment_method },
+      [FORM_TYPE]: { ...submission, reference_no: new Date().getTime(), amount: totalMasses * 10, payment_method },
     };
     console.log("DEBUG submission", submissionPayload);
     axios

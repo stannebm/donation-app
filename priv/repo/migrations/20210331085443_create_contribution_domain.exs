@@ -24,6 +24,7 @@ defmodule Donation.Repo.Migrations.CreateContributionDomain do
     create table(:donations) do
       add :contribution_id, references(:contributions, on_delete: :delete_all), null: false
       add :intention, :string
+      timestamps()
     end
 
     create table(:mass_offerings) do

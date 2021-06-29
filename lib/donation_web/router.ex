@@ -26,9 +26,10 @@ defmodule DonationWeb.Router do
 
   scope "/api", DonationWeb do
     pipe_through(:api)
-    resources("/offerings", ContributionApiController, except: [:new, :edit])
-    patch("/offerings/:reference_no/fpx", ContributionApiController, :fpx)
-    patch("/offerings/:reference_no/cybersource", ContributionApiController, :cybersource)
+    post("/donation_form", WebFormApiController, :donation_form)
+    post("/mass_offering_form", WebFormApiController, :mass_offering_form)
+    # post("/offerings/:reference_no/fpx", ContributionApiController, :fpx)
+    # post("/offerings/:reference_no/cybersource", ContributionApiController, :cybersource)
   end
 
   scope "/api/swagger" do

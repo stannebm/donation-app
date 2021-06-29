@@ -8,6 +8,7 @@ defmodule Donation.Revenue.WebPayment do
 
   @primary_key {:reference_no, :integer, autogenerate: false}
   @derive {Phoenix.Param, key: :reference_no}
+  @derive {Jason.Encoder, only: [:contribution, :reference_no]}
   schema "web_payments" do
     belongs_to(:contribution, Donation.Revenue.Contribution)
     field(:verified, :boolean)
@@ -19,7 +20,7 @@ defmodule Donation.Revenue.WebPayment do
   @doc false
   def changeset(offering, attrs) do
     offering
-    |> cast(attrs, [:verified, :txn_info, :extra_info])
+    |> cast(attrs, [:reference_no, :verified, :txn_info, :extra_info])
     |> assoc_constraint(:contribution)
   end
 end

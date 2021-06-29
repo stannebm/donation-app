@@ -25,6 +25,7 @@ defmodule Donation.Repo.Migrations.CreateInitialMassOfferings do
       timestamps()
     end
 
+    create unique_index(:offerings, [:reference_no])
     create index(:intentions, [:offering_id])
   end
 end

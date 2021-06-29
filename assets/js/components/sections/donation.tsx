@@ -1,46 +1,53 @@
 import { Box, Button, HStack, VStack } from "@chakra-ui/react";
 import axios from "axios";
-import * as R from "ramda";
 import React from "react";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import FormInput from "../elements/form_input";
 import FormSelect from "../elements/form_select";
-import type { OfferingForm } from "./forms.types";
+
+export type DonationForm = {
+  reference_no: string;
+  contact_number: string;
+  email: string;
+  name: string;
+  amount: number;
+  payment_method: string;
+  intention: string;
+  other_intention?: string;
+};
+
+const API_PATH = "/api/donation_form";
 
 export default function Donation() {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    control,
-  } = useForm<OfferingForm>({
+    watch,
+  } = useForm<DonationForm>({
     defaultValues: {
-      type: "donation",
-      mass_intentions: [],
     },
   });
 
-  const onSubmit = (transferMethod: "fpx" | "cybersource") => (data: OfferingForm) => {
-    console.log("SUBMIT:", data);
+  const onSubmit = (payment_method: "fpx" | "cybersource") => (data: DonationForm) => {
     const submission = { ...data };
-    const submission_payload = {
-      offering: { ...submission, reference_no: new Date().getTime() },
+    const finalized_intention = submission.intention === "Others" ? submission.other_intention : submission.intention;
+    delete submission['other_intention'];
+    const submissionPayload = {
+      donation: { ...submission, reference_no: new Date().getTime(), intention: finalized_intention, payment_method }
     };
-    console.log(submission_payload);
+    console.log("DEBUG submission", submissionPayload);
     axios
-      .post("/api/offerings", submission_payload)
+      .post(API_PATH, submissionPayload)
       .then(function({ data }) {
-        console.log("POSTED", data);
+        console.log("posted resp:", data);
       })
       .catch(function(error) {
         console.log(error);
       });
   };
 
-  const { fields } = useFieldArray({
-    control,
-    name: "mass_intentions",
-  });
+  const intention = watch("intention");
 
   return (
     <form>
@@ -48,19 +55,19 @@ export default function Donation() {
         <FormInput
           label="Name"
           errors={errors}
-          {...register("fromWhom", { required: true })}
+          {...register("name", { required: true })}
         />
         <FormInput
           label="Contact H/P"
           errors={errors}
-          {...register("contactNumber", { required: true })}
+          {...register("contact_number", { required: true })}
         />
       </HStack>
       <HStack mb={3} align="flex-start">
         <FormInput
           label="Email"
           errors={errors}
-          {...register("emailAddress", {
+          {...register("email", {
             required: true,
             pattern: {
               value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
@@ -80,47 +87,38 @@ export default function Donation() {
           })}
         />
       </HStack>
-      {fields.map(
-        (item, index): JSX.Element => {
-          return (
-            <>
-              <Box mb={5} p={3} bg="gray.100">
-                <VStack>
-                  <>
-                    <FormSelect
-                      label="Intention"
-                      options={[
-                        "For Minor Basilica St. Anne",
-                        "For the Poor or Sick",
-                        "Others",
-                      ]}
-                      bg="white"
-                      errors={errors}
-                      errorPath={R.path(["offerings", index, "intention"])}
-                      defaultValue={item.intention}
-                      {...register(`offerings.${index}.intention` as const, {
-                        required: true,
-                      })}
-                    />
-                    <FormInput
-                      label="Other Intention"
-                      errors={errors}
-                      errorPath={R.path(["offerings", index, "otherIntention"])}
-                      defaultValue={item.otherIntention}
-                      {...register(
-                        `offerings.${index}.otherIntention` as const,
-                        {
-                          required: false,
-                        },
-                      )}
-                    />
-                  </>
-                </VStack>
-              </Box>
-            </>
-          );
-        },
-      )}
+
+      <Box mb={5} p={3} bg="gray.100">
+        <VStack>
+          <>
+            <FormSelect
+              label="Intention"
+              options={[
+                "For Minor Basilica St. Anne",
+                "For the Poor or Sick",
+                "Others",
+              ]}
+              bg="white"
+              errors={errors}
+              {...register("intention", {
+                required: true,
+              })}
+            />
+            {intention === "Others" && (
+              <FormInput
+                label="Other Intention"
+                errors={errors}
+                {...register(
+                  "other_intention",
+                  {
+                    required: false,
+                  },
+                )}
+              />
+            )}
+          </>
+        </VStack>
+      </Box>
 
       <HStack>
         <Button colorScheme="teal" isLoading={isSubmitting} onClick={(e) => {

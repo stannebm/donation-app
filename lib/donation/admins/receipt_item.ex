@@ -19,5 +19,4 @@ defmodule Donation.Admins.ReceiptItem do
     |> validate_number(:price, greater_than_or_equal_to: Decimal.new(0))
     |> foreign_key_constraint(:type_of_contribution_id, message: "Select a type of contribution")
   end
-
 end

@@ -1,5 +1,4 @@
 defmodule DonationWeb.Plugs.SetCurrentAdmin do
-
   import Plug.Conn
 
   alias Donation.Admins
@@ -14,11 +13,11 @@ defmodule DonationWeb.Plugs.SetCurrentAdmin do
         conn
         |> assign(:current_admin, current_user)
         |> assign(:admin_signed_in?, true)
+
       true ->
         conn
         |> assign(:current_admin, nil)
         |> assign(:admin_signed_in?, false)
     end
   end
-
 end

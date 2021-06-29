@@ -1,7 +1,7 @@
 import { Box, Text, Image } from "@chakra-ui/react";
 import React from "react";
 import MainLayout from "../components/layouts/main_layout";
-import MassOffering from "../components/sections/mass_offering";
+import MassOffering from "../components/forms/mass_offering";
 
 export default function MassOfferingPage(): JSX.Element {
   return (

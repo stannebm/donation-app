@@ -2,7 +2,6 @@ defmodule DonationWeb.UserView do
   use DonationWeb, :view
 end
 
-
 # defmodule DonationWeb.UserView do
 #   use DonationWeb, :view
 #   alias DonationWeb.UserView

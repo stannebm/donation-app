@@ -9,8 +9,6 @@ defmodule Donation.Application do
     children = [
       # Start the Ecto repository
       Donation.Repo,
-      # Start the Telemetry supervisor
-      DonationWeb.Telemetry,
       # Start the PubSub system
       {Phoenix.PubSub, name: Donation.PubSub},
       # Start the Endpoint (http/https)

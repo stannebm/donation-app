@@ -8,5 +8,4 @@ defmodule Donation.Repo.Migrations.CreateTypeOfContributions do
       timestamps()
     end
   end
-
 end

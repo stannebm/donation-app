@@ -101,25 +101,9 @@ defmodule Donation.Admins do
     User.changeset(user, attrs)
   end
 
-
   @doc """
     AUTHENTICATE USERNAME AND PASSWORD
   """
-
-  # def login(params, repo) do
-  #   user = repo.get_by(User, email: String.downcase(params["email"]))
-  #   case authenticate(user, params["password"]) do
-  #     true -> {:ok, user}
-  #     _    -> :error
-  #   end
-  # end
-
-  # defp authenticate(user, password) do
-  #   case user do
-  #     nil -> false
-  #     _   -> Comeonin.Bcrypt.checkpw(password, user.crypted_password)
-  #   end
-  # end
 
   def auth(username, password) when is_binary(username) and is_binary(password) do
     with {:ok, user} <- get_by_username(username), do: verify_password(password, user)
@@ -129,6 +113,7 @@ defmodule Donation.Admins do
     case Repo.get_by(User, username: username) do
       nil ->
         {:error, :unauthorized}
+
       user ->
         {:ok, user}
     end
@@ -137,83 +122,15 @@ defmodule Donation.Admins do
   # defp verify_password(password, nil), do: nil
   defp verify_password(password, %User{} = user) when is_binary(password) do
     # authenticated_user = case Encryption.validate_password(user, password) do
-       # {:ok, validated_user} -> validated_user.email == user.email
-       # {:error, _} -> false
-       # end
-    if Bcrypt.verify_pass( password, user.encrypted_password ) do
+    # {:ok, validated_user} -> validated_user.email == user.email
+    # {:error, _} -> false
+    # end
+    if Bcrypt.verify_pass(password, user.encrypted_password) do
       {:ok, user}
     else
       {:error, "Login error"}
     end
   end
-
-
-#   def get_user_by_username_and_password(username, password) do
-#     with user when not is_nil(user) <- @repo.get_by(User, %{username: username}),
-#          true <- Password.verify_with_hash(password, user.hashed_password) do
-#       user
-#     else
-#       _ -> Password.dummy_verify
-#     end
-#   end
-
-  
-
-  # def get_by_username(username) when is_nil(username) do
-  #   nil
-  # end
-  # def get_by_username(username) when is_binary(username) do
-  #   case Repo.get_by(User, username: username) do
-  #     user -> 
-  #       { :ok, user }
-  #     nil -> 
-  #       { :error, :unauthorized }
-  #   end
-  # end
-
-#   alias Donation.Admins.User
-#   alias Donation.Guardian
-#   import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
-
-#   @doc """
-#   Return JWT
-#   """
-#   def token_sign_in(username, password) do
-#     case username_password_auth(username, password) do
-#       {:ok, user} 
-#         -> Guardian.encode_and_sign(user)
-#       _ -> {:error, :unauthorized}
-#     end
-#   end
-
-#   defp username_password_auth(username, password) when is_binary(username) and is_binary(password) do
-#     with {:ok, user} <- get_by_username(username), do: verify_password(password, user)
-#   end
-
-#   defp get_by_username(username) when is_binary(username) do
-#     case Repo.get_by(User, username: username) do
-#       nil ->
-#         dummy_checkpw()
-#         {:error, "Login error"}
-#       user ->
-#         {:ok, user}
-#     end
-#   end
-
-#   defp verify_password(password, %User{} = user) when is_binary(password) do
-#     if Bcrypt.verify_pass( password, user.password_hash ) do
-#       {:ok, user}
-#     else
-#       {:error, :invalid_password}
-#     end
-#   end
-
-
-
-
-
-
-
 
   alias Donation.Admins.Receipt
 
@@ -229,35 +146,14 @@ defmodule Donation.Admins do
   def list_receipts do
     Receipt
     |> Repo.all()
-    |> Repo.preload([ :type_of_payment_method, receipt_items: :type_of_contribution ])
+    |> Repo.preload([:type_of_payment_method, receipt_items: :type_of_contribution])
   end
 
-  def search_receipts( _search_params ) do
+  def search_receipts(_search_params) do
     Receipt
     |> Repo.all()
-    |> Repo.preload([ :type_of_payment_method, receipt_items: :type_of_contribution ])
+    |> Repo.preload([:type_of_payment_method, receipt_items: :type_of_contribution])
   end
-
-
-
-  #   def list_store_state do
-#   query = Ecto.Query.from(s in Store, select: s.state, distinct: true)
-#   Repo.all(query)
-# end
-
-# def list_store_city(id) do
-#   query = Ecto.Query.from(s in Store, where: s.state == ^id, select: s.city, distinct: true)
-#   Repo.all(query)
-# end
-
-# def list_city_store(id) do
-#   query = Ecto.Query.from(s in Store, where: [s.city] == ^id, select: s.name)
-#   Repo.all(query)
-# end
-
-
-
-
 
   @doc """
   Gets a single receipt.
@@ -279,7 +175,7 @@ defmodule Donation.Admins do
   def get_receipt!(id) do
     Receipt
     |> Repo.get!(id)
-    |> Repo.preload([ :user, :type_of_payment_method, receipt_items: :type_of_contribution ])
+    |> Repo.preload([:user, :type_of_payment_method, receipt_items: :type_of_contribution])
   end
 
   @doc """
@@ -300,18 +196,17 @@ defmodule Donation.Admins do
     |> Repo.insert()
   end
 
-  def put_receipt_number( receipt ) do
+  def put_receipt_number(receipt) do
     post = Repo.get!(Receipt, receipt.id)
-    post = Ecto.Changeset.change post, receipt_number: "MBSA-21-#{number_with_zeros( receipt.id )}"
+    post = Ecto.Changeset.change(post, receipt_number: "MBSA-21-#{number_with_zeros(receipt.id)}")
     Repo.update(post)
   end
 
-  defp number_with_zeros( value ) do 
+  defp number_with_zeros(value) do
     value
-    |> Integer.to_string
+    |> Integer.to_string()
     |> String.pad_leading(5, "0")
   end
-
 
   @doc """
   Updates a receipt.
@@ -359,15 +254,6 @@ defmodule Donation.Admins do
   def change_receipt(%Receipt{} = receipt, attrs \\ %{}) do
     Receipt.changeset(receipt, attrs)
   end
-
-
-
-
-
-
-
-
-
 
   alias Donation.Admins.ReceiptItem
 
@@ -464,12 +350,6 @@ defmodule Donation.Admins do
   def change_receipt_item(%ReceiptItem{} = receipt_item, attrs \\ %{}) do
     ReceiptItem.changeset(receipt_item, attrs)
   end
-
-
-
-
-
-
 
   alias Donation.Admins.TypeOfContribution
 

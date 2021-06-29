@@ -20,6 +20,7 @@ defmodule DonationWeb.SessionController do
         |> put_session(:user_id, user.id)
         |> put_flash(:info, "Signed in successfully.")
         |> redirect(to: Routes.receipt_path(conn, :index))
+
       {:error, :unauthorized} ->
         conn
         |> put_flash(:error, "Invalid username or password. Please try again.")
@@ -34,5 +35,4 @@ defmodule DonationWeb.SessionController do
     |> put_flash(:info, "Signed out successfully.")
     |> redirect(to: Routes.session_path(conn, :new))
   end
-
 end

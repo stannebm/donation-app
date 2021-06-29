@@ -24,15 +24,18 @@ defmodule Donation.Admins.User do
 
   defp put_encrypted_password(changeset) do
     case changeset do
-      %Ecto.Changeset{ valid?: true, changes: %{password: pass} }
-        -> put_change( changeset, :encrypted_password, Bcrypt.Base.hash_password(pass, Bcrypt.gen_salt(12, true)) )
-      _ -> changeset
+      %Ecto.Changeset{valid?: true, changes: %{password: pass}} ->
+        put_change(
+          changeset,
+          :encrypted_password,
+          Bcrypt.Base.hash_password(pass, Bcrypt.gen_salt(12, true))
+        )
+
+      _ ->
+        changeset
     end
   end
-
 end
-
-
 
 # defmodule Donation.Admins.User do
 #   use Ecto.Schema

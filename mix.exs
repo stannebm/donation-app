@@ -8,7 +8,7 @@ defmodule Donation.MixProject do
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
       # compilers: [:phoenix, :gettext] ++ Mix.compilers(),
-      compilers: [:phoenix, :gettext] ++ Mix.compilers ++ [:phoenix_swagger],
+      compilers: [:phoenix, :gettext] ++ Mix.compilers() ++ [:phoenix_swagger],
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps()
@@ -34,13 +34,11 @@ defmodule Donation.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.5.7"},
+      {:phoenix, "~> 1.5.9"},
       {:phoenix_ecto, "~> 4.1"},
-      # {:ecto_sql, "~> 3.4"},
-      {:ecto_sql, "~> 3.6"},
+      {:ecto_sql, "~> 3.4"},
       {:postgrex, ">= 0.0.0"},
-      # {:phoenix_html, "~> 2.11"},
-      {:phoenix_html, "~> 2.14"},
+      {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_dashboard, "~> 0.4"},
       {:telemetry_metrics, "~> 0.4"},
@@ -48,15 +46,12 @@ defmodule Donation.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
+      # optional
       {:phoenix_swagger, "~> 0.8"},
-      {:ex_json_schema, "~> 0.5"}, # optional
-      {:poison, "~> 3.1"},
-      {:comeonin, "~> 5.0"},
+      {:ex_json_schema, "~> 0.5"},
       {:bcrypt_elixir, "~> 2.0"},
-      {:guardian, "~> 2.0"},
       {:timex, "~> 3.7"},
-      {:faker, "~> 0.16", only: :test},
-      {:pdf_generator, "~> 0.6.2"} ## PDF OUTPUT
+      {:pdf_generator, "~> 0.6.2"}
     ]
   end
 

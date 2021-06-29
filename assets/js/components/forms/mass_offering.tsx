@@ -18,7 +18,30 @@ import { useFieldArray, useForm } from "react-hook-form";
 import DatePicker from "../elements/datepicker";
 import FormInput from "../elements/form_input";
 import FormSelect from "../elements/form_select";
-import type { MandatoryForm } from "./mass_offering.types";
+
+export type MassOfferingForm = {
+  reference_no: string;
+  contact_number: string;
+  email: string;
+  name: string;
+  amount: number;
+  payment_method: string;
+  mass_language?: string;
+  intentions: IntentionForm[];
+};
+
+export type IntentionForm = {
+  intention?: string;
+  dates?: string[];
+  type_of_mass:
+  | "Special Intention"
+  | "Thanksgiving"
+  | "Departed Soul"
+  other_intention?: string;
+};
+
+const FORM_TYPE = "mass_offering";
+const API_PATH = "/api/mass_offering_form";
 
 export default function MassOffering() {
   const {
@@ -27,29 +50,28 @@ export default function MassOffering() {
     formState: { errors, isSubmitting },
     control,
     watch,
-  } = useForm<MandatoryForm>({
+  } = useForm<MassOfferingForm>({
     defaultValues: {
-      offerings: [{ typeOfMass: undefined }],
+      intentions: [{ type_of_mass: undefined }],
     },
   });
 
-  const onSubmit = (data: MandatoryForm) => {
-    console.log("SUBMIT:", data, selectedDates);
+  const onSubmit = (payment_method: "fpx" | "cybersource") => (data: MassOfferingForm) => {
     const submission = { ...data };
-    submission.offerings = submission.offerings.map((o, index) => ({
+    submission.intentions = submission.intentions.map((o, index) => ({
       ...o,
       ...{
         dates: selectedDates[index].map((d) => d.toISOString().substr(0, 10)),
       },
     }));
-    const submission_payload = {
-      mass_offering: { ...submission, uuid: new Date().getTime() },
+    const submissionPayload = {
+      [FORM_TYPE]: { ...submission, reference_no: new Date().getTime(), amount: totalMasses * 10, payment_method },
     };
-    console.log(submission_payload);
+    console.log("DEBUG submission", submissionPayload);
     axios
-      .post("/api/mass_offerings", submission_payload)
+      .post(API_PATH, submissionPayload)
       .then(function({ data }) {
-        console.log("POSTED", data);
+        console.log("posted resp:", data);
       })
       .catch(function(error) {
         console.log(error);
@@ -58,13 +80,14 @@ export default function MassOffering() {
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "offerings",
+    name: "intentions",
   });
 
   const [selectedDates, setSelectedDates] = useState<{
     [index: number]: Date[];
   }>({});
-  const offerings = watch("offerings");
+
+  const intentions = watch("intentions");
 
   const totalMasses = Object.values(selectedDates).reduce(
     (acc, list) => acc + list.length,
@@ -72,17 +95,17 @@ export default function MassOffering() {
   );
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form>
       <HStack mb={3} align="flex-start">
         <FormInput
-          label="Contact H/P"
+          label="Offer by Whom"
           errors={errors}
-          {...register("contactNumber", { required: true })}
+          {...register("name", { required: true })}
         />
         <FormInput
           label="Email"
           errors={errors}
-          {...register("emailAddress", {
+          {...register("email", {
             required: true,
             pattern: {
               value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
@@ -93,15 +116,15 @@ export default function MassOffering() {
       </HStack>
       <HStack mb={3} align="flex-start">
         <FormInput
-          label="Offer by Whom"
+          label="Contact H/P"
           errors={errors}
-          {...register("fromWhom", { required: true })}
+          {...register("contact_number", { required: true })}
         />
         <FormSelect
           label="Mass Language"
           options={["English", "Mandarin", "Tamil", "Bahasa"]}
           errors={errors}
-          {...register("massLanguage", { required: true })}
+          {...register("mass_language", { required: true })}
         />
       </HStack>
       {fields.map(
@@ -119,48 +142,48 @@ export default function MassOffering() {
                     ]}
                     bg="white"
                     errors={errors}
-                    errorPath={R.path(["offerings", index, "typeOfMass"])}
-                    defaultValue={item.typeOfMass}
-                    {...register(`offerings.${index}.typeOfMass` as const, {
+                    errorPath={R.path(["intentions", index, "type_of_mass"])}
+                    defaultValue={item.type_of_mass}
+                    {...register(`intentions.${index}.type_of_mass` as const, {
                       required: true,
                     })}
                   />
                 </HStack>
                 <VStack>
-                  {offerings[index].typeOfMass === "Special Intention" && (
+                  {intentions[index].type_of_mass === "Special Intention" && (
                     <>
                       <FormInput
                         label="Intention"
                         errors={errors}
                         errorPath={R.path(["offerings", index, "intention"])}
                         defaultValue={item.intention}
-                        {...register(`offerings.${index}.intention` as const, {
+                        {...register(`intentions.${index}.intention` as const, {
                           required: true,
                         })}
                       />
                     </>
                   )}
-                  {offerings[index].typeOfMass === "Thanksgiving" && (
+                  {intentions[index].type_of_mass === "Thanksgiving" && (
                     <>
                       <FormInput
                         label="Intention"
                         errors={errors}
                         errorPath={R.path(["offerings", index, "intention"])}
                         defaultValue={item.intention}
-                        {...register(`offerings.${index}.intention` as const, {
+                        {...register(`intentions.${index}.intention` as const, {
                           required: true,
                         })}
                       />
                     </>
                   )}
-                  {offerings[index].typeOfMass === "Departed Soul" && (
+                  {intentions[index].type_of_mass === "Departed Soul" && (
                     <>
                       <FormInput
                         label="Name of Departed Soul"
                         errors={errors}
                         errorPath={R.path(["offerings", index, "intention"])}
                         defaultValue={item.intention}
-                        {...register(`offerings.${index}.intention` as const, {
+                        {...register(`intentions.${index}.intention` as const, {
                           required: true,
                         })}
                       />
@@ -168,7 +191,7 @@ export default function MassOffering() {
                   )}
                 </VStack>
 
-                {offerings[index].typeOfMass?.length > 0 && (
+                {intentions[index].type_of_mass?.length > 0 && (
                   <>
                     <Box mt={2}>
                       <Text color="gray.600" fontSize="sm">
@@ -250,7 +273,7 @@ export default function MassOffering() {
           leftIcon={<PlusSquareIcon />}
           onClick={() => {
             append({
-              typeOfMass: undefined,
+              type_of_mass: undefined,
             });
           }}
         >
@@ -271,8 +294,18 @@ export default function MassOffering() {
       </Box>
 
       <HStack>
-        <Button colorScheme="teal" isLoading={isSubmitting} type="submit">
-          Transfer
+        <Button colorScheme="teal" isLoading={isSubmitting} onClick={(e) => {
+          handleSubmit(onSubmit("fpx"))()
+          e.preventDefault()
+        }}>
+          Online Banking
+        </Button>
+
+        <Button colorScheme="teal" isLoading={isSubmitting} onClick={(e) => {
+          handleSubmit(onSubmit("cybersource"))()
+          e.preventDefault()
+        }}>
+          Credit/Debit Card
         </Button>
       </HStack>
     </form>

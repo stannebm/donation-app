@@ -1,7 +1,7 @@
 import { Box, Text, Image } from "@chakra-ui/react";
 import React from "react";
 import MainLayout from "../components/layouts/main_layout";
-import Donation from "../components/sections/donation";
+import Donation from "../components/forms/donation";
 
 export default function DonationPage(): JSX.Element {
   return (

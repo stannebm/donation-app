@@ -34,20 +34,27 @@ defmodule DonationWeb.TypeOfPaymentMethodController do
   def edit(conn, %{"id" => id}) do
     type_of_payment_method = Admins.get_type_of_payment_method!(id)
     changeset = Admins.change_type_of_payment_method(type_of_payment_method)
+
     render(conn, "edit.html", type_of_payment_method: type_of_payment_method, changeset: changeset)
   end
 
   def update(conn, %{"id" => id, "type_of_payment_method" => type_of_payment_method_params}) do
     type_of_payment_method = Admins.get_type_of_payment_method!(id)
 
-    case Admins.update_type_of_payment_method(type_of_payment_method, type_of_payment_method_params) do
+    case Admins.update_type_of_payment_method(
+           type_of_payment_method,
+           type_of_payment_method_params
+         ) do
       {:ok, type_of_payment_method} ->
         conn
         |> put_flash(:info, "Type of payment method updated successfully.")
         |> redirect(to: Routes.type_of_payment_method_path(conn, :show, type_of_payment_method))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", type_of_payment_method: type_of_payment_method, changeset: changeset)
+        render(conn, "edit.html",
+          type_of_payment_method: type_of_payment_method,
+          changeset: changeset
+        )
     end
   end
 

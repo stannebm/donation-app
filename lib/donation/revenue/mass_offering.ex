@@ -2,6 +2,8 @@ defmodule Donation.Revenue.MassOffering do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @derive {Jason.Encoder,
+           only: [:contribution, :type_of_mass, :mass_language, :dates, :intention]}
   schema "mass_offerings" do
     belongs_to(:contribution, Donation.Revenue.Contribution)
     field(:type_of_mass, :string)

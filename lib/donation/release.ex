@@ -7,9 +7,6 @@ defmodule Donation.Release do
   # For eg,
   # _build/prod/rel/donation/bin/donation eval "Donation.Release.migrate"
   # _build/prod/rel/donation/bin/donation eval "Donation.Release.rollback"
-  #
-  # Note:
-  # public functions only
 
   def migrate do
     load_app()

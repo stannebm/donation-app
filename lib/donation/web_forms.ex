@@ -77,7 +77,7 @@ defmodule Donation.WebForms do
            {:ok, contribution} <-
              %Contribution{}
              |> Contribution.changeset(%{
-               type: "donation",
+               type: "mass_offering",
                name: name,
                email: email,
                contact_number: contact_number,

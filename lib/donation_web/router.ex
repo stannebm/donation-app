@@ -28,8 +28,12 @@ defmodule DonationWeb.Router do
     pipe_through(:api)
     post("/donation_form", WebFormApiController, :donation_form)
     post("/mass_offering_form", WebFormApiController, :mass_offering_form)
-    # post("/offerings/:reference_no/fpx", ContributionApiController, :fpx)
-    # post("/offerings/:reference_no/cybersource", ContributionApiController, :cybersource)
+
+    post(
+      "/payment_notification/:payment_provider/:reference_no",
+      WebPaymentApiController,
+      :payment_notification
+    )
   end
 
   scope "/api/swagger" do

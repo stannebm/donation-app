@@ -4,7 +4,6 @@ defmodule Donation.WebForms do
   Donation form, Mass Offering form, etc
   """
 
-  import Ecto.Query, warn: false
   alias Donation.Repo
   alias Ecto.Changeset
   alias Donation.WebForms.{DonationForm, MassOfferingForm}
@@ -126,20 +125,4 @@ defmodule Donation.WebForms do
       end
     end)
   end
-
-  # def update_with_txn_info(%Offering{} = offering, :fpx, success, info) do
-  #   offering
-  #   |> Offering.changeset(%{fpx_txn_info: info, transferred: success})
-  #   |> Repo.update()
-  # end
-
-  # def update_with_txn_info(%Offering{} = offering, :cybersource, success, info) do
-  #   offering
-  #   |> Offering.changeset(%{cybersource_txn_info: info, transferred: success})
-  #   |> Repo.update()
-  # end
-
-  # def delete_offering(%Offering{} = offering) do
-  #   Repo.delete(offering)
-  # end
 end

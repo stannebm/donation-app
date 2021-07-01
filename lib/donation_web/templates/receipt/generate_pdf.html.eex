@@ -1,94 +1,77 @@
-<section class="is-card">
-  <div class="container">
+<section class="">
 
-    <div class="has-text-centered receipt-headline">
-      <b>Official Receipt</b>
+  <div class="has-text-centered receipt-headline">
+    <b>Official Receipt</b>
+  </div>
+
+  <div id="content-container">
+
+    <div style="width: 60%">
+      <ul class="no-bullets">
+        <li style="word-wrap: break-word;">
+          <strong>Received From:</strong>
+          <%= @receipt.donor_name %>
+        </li>
+        <li>
+          <strong>Payment method:</strong>
+          <%= if @receipt.type_of_payment_method.name == "Cheque" do %>
+            <%= @receipt.type_of_payment_method.name %> [<%= @receipt.cheque %>]
+          <% else %>
+            <%= @receipt.type_of_payment_method.name %>
+          <% end %>
+        </li>
+        <li>
+          <strong>Cashier:</strong> <%= @receipt.user.name %>
+        </li>
+      </ul>
     </div>
 
-    <div class="card">
-      <div class="card-content">
-        <div class="content">
-
-          <div id="content-container">
-
-            <div style="width: 60%">
-              <ul class="no-bullets">
-                <li>
-                  <strong>Date:</strong>
-                  <%= NaiveDateTime.to_date(@receipt.inserted_at) %>
-                </li>
-                <li style="word-wrap: break-word;">
-                  <strong>Received From:</strong>
-                  <%= @receipt.donor_name %>
-                </li>
-                <li>
-                  <strong>Payment method:</strong>
-                  <%= if @receipt.type_of_payment_method.name == "Cheque" do %>
-                    <%= @receipt.type_of_payment_method.name %> [<%= @receipt.cheque %>]
-                  <% else %>
-                    <%= @receipt.type_of_payment_method.name %>
-                  <% end %>
-                </li>
-                <li>
-                  <strong>Cashier:</strong>
-                  <%= @receipt.user.name %>
-                </li>
-              </ul>
-            </div>
-
-            <div class="receipt-number">
-              <strong>Receipt number:</strong>
-              <%= @receipt.receipt_number %>
-            </div>
-
-          </div>
-
-        </div>
+    <div class="right-content">
+      <div>
+        <strong>Receipt number:</strong> <%= @receipt.receipt_number %>
       </div>
-    </div>
-
-    <div class="card">
-      <div class="card-content">
-        <div class="content">
-
-          <table class="table is-striped is-hoverable is-fullwidth">
-            <thead>
-              <tr>
-                <th>Contribution for</th>
-                <th class="has-text-right">Amount (RM)</th>
-                <th>Remark</th>
-              </tr>
-            </thead>
-            <tfoot>
-              <tr>
-                <th>Amount Received</th>
-                <th class="has-text-right"><%= @receipt.total_amount %></th>
-                <th></th>
-              </tr>
-            </tfoot>
-            <tbody>
-              <%= for receipt_item <- @receipt.receipt_items do %>
-                <tr>
-                  <td>
-                    <%= receipt_item.type_of_contribution.name %>
-                    <%= if receipt_item.type_of_contribution_id == 5 do %>
-                      : <%= receipt_item.others %>
-                    <% end %>
-                  </td>
-                  <td class="has-text-right"><%= receipt_item.price %></td>
-                  <td><%= receipt_item.remark %></td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-
-        </div>
+      <br/>
+      <div>
+        <strong>Date:</strong>
+        <%= NaiveDateTime.to_date(@receipt.inserted_at) %>
       </div>
-    </div>
-
-    <div class="computer-generated">
-      This is a computer-generated receipt. No signature is required.
     </div>
 
   </div>
+
+  <table class="table is-striped is-hoverable is-fullwidth">
+    <thead>
+      <tr>
+        <th>Contribution for</th>
+        <th class="has-text-right">Amount (RM)</th>
+        <th>Remark</th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr>
+        <th>Amount Received</th>
+        <th class="has-text-right"><%= @receipt.total_amount %></th>
+        <th></th>
+      </tr>
+    </tfoot>
+    <tbody>
+      <%= for receipt_item <- @receipt.receipt_items do %>
+        <tr>
+          <td>
+            <%= receipt_item.type_of_contribution.name %>
+            <%= if receipt_item.type_of_contribution_id == 5 do %>
+              : <%= receipt_item.others %>
+            <% end %>
+          </td>
+          <td class="has-text-right"><%= receipt_item.price %></td>
+          <td><%= receipt_item.remark %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div class="computer-generated">
+    This is a computer-generated receipt. No signature is required.
+  </div>
+
 </section>

@@ -7,8 +7,6 @@ defmodule DonationWeb.SessionController do
 
   alias Donation.Admins
 
-  action_fallback DonationWeb.FallbackController
-
   def new(conn, _params) do
     render(conn, "new.html")
   end
@@ -21,10 +19,11 @@ defmodule DonationWeb.SessionController do
         |> put_flash(:info, "Signed in successfully.")
         |> redirect(to: Routes.receipt_path(conn, :index))
 
-      {:error, :unauthorized} ->
+      {:error, _} ->
         conn
         |> put_flash(:error, "Invalid username or password. Please try again.")
-        |> render("new.html")
+        |> redirect(to: Routes.session_path(conn, :new))
+        |> halt()
     end
   end
 

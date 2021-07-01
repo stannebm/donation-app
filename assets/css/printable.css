@@ -5,10 +5,15 @@
 
 body {
   font-family: 'Open Sans', sans-serif;
+  padding: 0;
+  margin: 0;
 }
+
+/* HEADER CONTACT INFORMATION */
 
 #header-container {
   text-align: center;
+  width: 100%;
 }
 
 #header-container div, 
@@ -17,29 +22,41 @@ body {
   vertical-align: top;
 }
 
-#content-container .receipt-number {
-  float: right;
-}
-
-.receipt-headline {
-  margin-bottom: 10px;
-}
-
-.computer-generated {
-  margin-top: 20px;
-}
-
-.has-text-centered {
-  text-align: center;
-}
-
 #header-container .title {
   font-family: "Times New Roman", Times, serif;
   color: red;
 }
 
 #header-container .logo {
-  height: 130px;
+  height: 120px;
+}
+
+#header-container .contact-information .title {
+  font-size: 30px;
+}
+
+#header-container .contact-information > p {
+  font-size: 15px;
+}
+
+
+
+#content-container .right-content {
+  float: right;
+}
+
+.receipt-headline {
+  margin-bottom: 10px;
+  font-size: 26px;
+}
+
+.computer-generated {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.has-text-centered {
+  text-align: center;
 }
 
 ul.no-bullets {
@@ -49,10 +66,6 @@ ul.no-bullets {
 }
 
 section.is-card {
-  padding: 30px 10px;
-}
-
-.is-card .container,
-.is-table .container {
-  max-width: 100%;
+  padding: 0px 10px;
+  margin: 0px;
 }

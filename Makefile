@@ -1,7 +1,7 @@
 # `make`. This builds and run the system
 default:
 	yarn --cwd ./assets make
-	docker-compose build --force-rm --no-cache && docker-compose up -d
+	docker-compose up -d --build
 
 # create an external network that can be shared later. (one time)
 network:

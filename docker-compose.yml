@@ -4,10 +4,8 @@ services:
   phoenix:
     build:
       context: .
-    environment:
-      # refer config/releases.ex
-      DATABASE_URL: ecto://postgres:postgres@db/donation_db
-      SECRET_KEY_BASE: WWiD+NkQseOZU45FLC+PgtvWGCNklocj4Pe2RSp/OxdlbcSeNF4OnSLUbL5O5mj4
+    env_file:
+      - .env.prod
     ports:
       - "4000:4000"
     depends_on:

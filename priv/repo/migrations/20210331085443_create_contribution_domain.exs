@@ -5,8 +5,8 @@ defmodule Donation.Repo.Migrations.CreateContributionDomain do
     create table(:contributions) do
       add :type, :string, null: false
       add :name, :string, null: false
-      add :email, :string, null: false
-      add :contact_number, :string, null: false
+      add :email, :string
+      add :contact_number, :string
       add :amount, :decimal, precision: 12, scale: 2, default: 0
       add :payment_method, :string, null: false # FPX/Cybersource/Cheque/Cash/etc
       timestamps()

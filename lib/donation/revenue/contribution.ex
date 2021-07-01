@@ -32,8 +32,8 @@ defmodule Donation.Revenue.Contribution do
     |> validate_required([
       :type,
       :name,
-      :email,
-      :contact_number,
+      # :email,
+      # :contact_number,
       :amount,
       :payment_method
     ])

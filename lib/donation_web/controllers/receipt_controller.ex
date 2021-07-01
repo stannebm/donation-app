@@ -107,7 +107,12 @@ defmodule DonationWeb.ReceiptController do
         conn: conn
       )
 
-    {:ok, filename} = PdfGenerator.generate(html)
+    {:ok, filename} = PdfGenerator.generate(
+                        html, page_size: "A5", 
+                        shell_params: [
+                          "--orientation", "landscape"
+                        ]
+                      )
 
     conn
     |> send_download({:file, filename},

@@ -32,8 +32,7 @@
       </div>
       <br/>
       <div>
-        <strong>Date:</strong>
-        <%= NaiveDateTime.to_date(@receipt.inserted_at) %>
+        <strong>Date:</strong> <%= Timex.format!(@receipt.inserted_at, "%d.%m.%Y", :strftime) %>
       </div>
     </div>
 

@@ -30,7 +30,7 @@ defmodule DonationWeb.Router do
     post("/mass_offering_form", WebFormApiController, :mass_offering_form)
 
     post(
-      "/payment_notification/:payment_provider/:reference_no",
+      "/payment_notification/:payment_provider",
       WebPaymentApiController,
       :payment_notification
     )

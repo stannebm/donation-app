@@ -35,3 +35,4 @@ npm-debug.log
 
 .log
 .elixir_ls
+.envrc

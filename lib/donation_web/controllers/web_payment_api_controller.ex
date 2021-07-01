@@ -6,11 +6,16 @@ defmodule DonationWeb.WebPaymentApiController do
   alias Donation.Repo
 
   def payment_notification(conn, %{
-        # "payment_provider" => "fpx",
-        "reference_no" => reference_no,
-        "txn_info" => %{"status" => status, "info" => info}
+        "payment_provider" => provider,
+        "txn_info" => %{
+          "status" => status,
+          "reference_no" => reference_no,
+          "signature" => signature,
+          "info" => info
+        }
       }) do
-    with {:ok, %Payment{} = updated} <-
+    with {:valid_sig} <- verify_sig(provider, reference_no, status, signature),
+         {:ok, %Payment{} = updated} <-
            Repo.get!(Payment, reference_no)
            |> Repo.preload(:contribution)
            |> Payment.changeset(%{txn_info: info, verified: status == "OK"})
@@ -19,18 +24,33 @@ defmodule DonationWeb.WebPaymentApiController do
     end
   end
 
+  defp verify_sig(provider, reference_no, status, signature) do
+    s =
+      :crypto.mac(
+        :hmac,
+        :sha256,
+        System.get_env("CHECKOUT_API_SECRET"),
+        Enum.join([provider, reference_no, status], "|")
+      )
+      |> :base64.encode()
+
+    case Plug.Crypto.secure_compare(s, signature) do
+      true -> :valid_sig
+      _ -> :invalid_sig
+    end
+  end
+
   # -------------------------------------------------------------------------------------------
   # Swagger doc
   # -------------------------------------------------------------------------------------------
 
   swagger_path :payment_notification do
-    post("/api/payment_notification/{payment_provider}/{reference_no}")
+    post("/api/payment_notification/{payment_provider}")
     description("Receive payment callback")
     tag("Payment")
 
     parameters do
       payment_provider(:path, :string, "Payment Provider", required: true)
-      reference_no(:path, :string, "Reference No", required: true)
 
       txn_info(:body, Schema.ref(:txn_info), "Describes whether a payment is successful",
         required: true
@@ -50,14 +70,22 @@ defmodule DonationWeb.WebPaymentApiController do
 
           properties do
             status(:string, "Status", required: true)
+            reference_no(:string, "Reference No", required: true)
+
+            signature(:string, "Hmac(SHA256) Signature \"provider|reference_no|status\"",
+              required: true
+            )
+
             info(:map, "Info", required: true)
           end
 
           example(%{
             txn_info: %{
               status: "OK",
+              reference_no: "1625126279658",
+              signature: "<Base64String>",
               info: %{
-                provider: "FPX",
+                provider: "fpx",
                 fpx_msg: "Transaction is successful",
                 fpx_txnCurrency: "MYR",
                 fpx_sellerReference: "SE0013401"

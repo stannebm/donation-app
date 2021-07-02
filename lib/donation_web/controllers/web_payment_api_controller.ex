@@ -14,7 +14,7 @@ defmodule DonationWeb.WebPaymentApiController do
           "info" => info
         }
       }) do
-    with {:valid_sig} <- verify_sig(provider, reference_no, status, signature),
+    with :valid_sig <- verify_sig(provider, reference_no, status, signature),
          {:ok, %Payment{} = updated} <-
            Repo.get!(Payment, reference_no)
            |> Repo.preload(:contribution)
@@ -22,10 +22,21 @@ defmodule DonationWeb.WebPaymentApiController do
            |> Repo.update() do
       json(conn, updated)
     else
-      _ ->
+      :invalid_sig ->
         conn
-        |> put_status(:expectation_failed)
-        |> json(%{error: "Notification failed to persist"})
+        |> put_status(:unauthorized)
+        |> json(%{error: "Invalid signature"})
+
+      unexpected ->
+        IO.inspect(
+          type: :error,
+          event: :payment_notification,
+          details: unexpected
+        )
+
+        conn
+        |> put_status(:internal_server_error)
+        |> json(%{error: "Unexpected error"})
     end
   end
 

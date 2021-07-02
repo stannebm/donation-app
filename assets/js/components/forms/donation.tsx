@@ -18,6 +18,22 @@ export type DonationForm = {
 
 const FORM_TYPE = "donation"
 const API_PATH = "/api/donation_form";
+const FPX_URL = "https://fpxuat.minorbasilicastannebm.com/fpx";
+const CYBERSOURCE_URL = "https://cybersource.minorbasilicastannebm.com/cybersource";
+
+type PaymentLinkParams = {
+  paymentMethod: string;
+  referenceNo: number;
+  amount: number;
+  name: string;
+  email: string
+}
+
+const mkPaymentUrl = ({ paymentMethod, referenceNo, amount, name, email }: PaymentLinkParams) => {
+  const path = paymentMethod === "fpx" ? FPX_URL : CYBERSOURCE_URL;
+  return `${path}?reference_no=${referenceNo}&amount=${amount}&name=${name}&email=${email}`;
+
+}
 
 export default function Donation() {
   const {
@@ -30,17 +46,28 @@ export default function Donation() {
     },
   });
 
-  const onSubmit = (payment_method: "fpx" | "cybersource") => (data: DonationForm) => {
+  const onSubmit = (paymentMethod: "fpx" | "cybersource") => (data: DonationForm) => {
     const submission = { ...data };
-    const finalized_intention = submission.intention === "Others" ? submission.other_intention : submission.intention;
+    const finalizedIntention = submission.intention === "Others" ? submission.other_intention : submission.intention;
     delete submission['other_intention'];
+    const referenceNo = new Date().getTime();
+    const amount = submission['amount']
+    const email = submission['email']
+    const name = submission['name']
     const submissionPayload = {
-      [FORM_TYPE]: { ...submission, reference_no: new Date().getTime(), intention: finalized_intention, payment_method }
+      [FORM_TYPE]: { ...submission, reference_no: referenceNo, intention: finalizedIntention, paymentMethod }
     };
     console.log("DEBUG submission", submissionPayload);
     axios
       .post(API_PATH, submissionPayload)
       .then(function({ data }) {
+        window.location.replace(mkPaymentUrl({
+          paymentMethod,
+          referenceNo,
+          amount,
+          name,
+          email,
+        }));
         console.log("posted resp:", data);
       })
       .catch(function(error) {

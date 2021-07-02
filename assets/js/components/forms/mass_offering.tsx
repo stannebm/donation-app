@@ -87,7 +87,12 @@ export default function MassOffering() {
     }));
 
     const submissionPayload = {
-      [FORM_TYPE]: { ...submission, reference_no: referenceNo, amount: amount, paymentMethod },
+      [FORM_TYPE]: {
+        ...submission,
+        reference_no: referenceNo,
+        amount: amount,
+        payment_method: paymentMethod
+      },
     };
     console.log("DEBUG submission", submissionPayload);
     axios

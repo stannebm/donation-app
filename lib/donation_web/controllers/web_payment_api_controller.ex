@@ -21,15 +21,17 @@ defmodule DonationWeb.WebPaymentApiController do
            |> Payment.changeset(%{txn_info: info, verified: status == "OK"})
            |> Repo.update() do
       json(conn, updated)
+    else
+      _ ->
+        conn
+        |> put_status(:expectation_failed)
+        |> json(%{error: "Notification failed to persist"})
     end
   end
 
   defp verify_sig(provider, reference_no, status, signature) do
     s =
-      :crypto.mac(
-        :hmac,
-        :sha256,
-        System.get_env("CHECKOUT_API_SECRET"),
+      hmac_fn(:sha256, System.get_env("CHECKOUT_API_SECRET")).(
         Enum.join([provider, reference_no, status], "|")
       )
       |> :base64.encode()
@@ -38,6 +40,13 @@ defmodule DonationWeb.WebPaymentApiController do
       true -> :valid_sig
       _ -> :invalid_sig
     end
+  end
+
+  # OTP compatibility
+  if Code.ensure_loaded?(:crypto) and function_exported?(:crypto, :mac, 4) do
+    defp hmac_fn(digest, key), do: &:crypto.mac(:hmac, digest, key, &1)
+  else
+    defp hmac_fn(digest, key), do: &:crypto.hmac(digest, key, &1)
   end
 
   # -------------------------------------------------------------------------------------------

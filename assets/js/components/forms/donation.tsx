@@ -55,7 +55,12 @@ export default function Donation() {
     const email = submission['email']
     const name = submission['name']
     const submissionPayload = {
-      [FORM_TYPE]: { ...submission, reference_no: referenceNo, intention: finalizedIntention, paymentMethod }
+      [FORM_TYPE]: {
+        ...submission,
+        reference_no: referenceNo,
+        intention: finalizedIntention,
+        payment_method: paymentMethod
+      }
     };
     console.log("DEBUG submission", submissionPayload);
     axios

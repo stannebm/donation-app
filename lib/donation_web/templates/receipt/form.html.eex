@@ -1,13 +1,15 @@
 <section id="receipt" class="is-card">
   <div class="container">
     <%= form_for @changeset, @action, fn f -> %>
-      <div class="columns">
 
-        <%= if @changeset.action do %>
-          <div class="alert alert-danger">
-            <p>Oops, something went wrong! Please check the errors below.</p>
-          </div>
-        <% end %>
+      <%= if @changeset.action do %>
+        <div class="notification is-danger is-light">
+          <button class="delete"></button>
+          <p>Oops, something went wrong! Please check the errors below.</p>
+        </div>
+      <% end %>
+
+      <div class="columns">
 
         <div class="column is-two-thirds">
           <div class="card">
@@ -29,7 +31,7 @@
                   <div class="columns">
                     <div class="column">
                       <div class="field">
-                        <%= label p, :type_of_contribution_id, class: "label" %>
+                        <%= label p, :type_of_contribution_id, "Type of Contribution", class: "label" %>
                         <div class="control">
                           <div class="select is-fullwidth">
                             <%= select p, :type_of_contribution_id, @type_of_contributions, class: "select-contribution" %>
@@ -42,7 +44,7 @@
                       <div class="field">
                         <%= label p, :price, class: "label" %>
                         <div class="control">
-                          <%= number_input p, :price, class: "input price-items", oninput: "calculate_subtotal()", step: "any" %>
+                          <%= number_input p, :price, class: "input price-items", oninput: "calculate_subtotal()", step: "any", required: "required" %>
                           <p class="help"><%= error_tag p, :price %></p>
                         </div>
                       </div>
@@ -63,6 +65,13 @@
                       <%= textarea p, :remark, class: "textarea", rows: "2" %>
                       <p class="help"><%= error_tag p, :remark %></p>
                     </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="checkbox">
+                      <%= checkbox p, :delete, class: "triggerDelete" %>
+                      <%= label p, :delete, "Delete?", class: "control-label" %>
+                    </label>
                   </div>
 
                 </div>
@@ -102,7 +111,7 @@
             <div class="card-content">
 
               <div class="field">
-                <%= label f, :donor_name, "Received From", class: "label" %>
+                <%= label f, :donor_name, "Received from", class: "label" %>
                 <div class="control">
                   <%= text_input f, :donor_name, class: "input", required: "required" %>
                   <p class="help"><%= error_tag f, :donor_name %></p>
@@ -110,7 +119,7 @@
               </div>
 
               <div class="field">
-                <%= label f, :type_of_payment_method_id, class: "label" %>
+                <%= label f, :type_of_payment_method_id, "Type of Payment Method", class: "label" %>
                 <div class="control">
                   <div class="select is-fullwidth">
                     <%= select f, :type_of_payment_method_id, @type_of_payment_methods %>
@@ -127,6 +136,14 @@
                 </div>
               </div>
 
+              <div class="field">
+                <%= label f, :transaction_date, "Transaction Date", class: "label" %>
+                <div class="control">
+                  <%= date_input f, :transaction_date, class: "input" %>
+                  <p class="help"><%= error_tag f, :transaction_date %></p>
+                </div>
+              </div>
+
               <%= if @conn.assigns.current_admin.is_admin do %>
                 <div class="field">
                   <%= label f, :status, class: "label" %>
@@ -138,12 +155,6 @@
                   </div>
                 </div>
               <% end %>
-
-     <%# select(form, :manager_id, Enum.map(@managers, &{&1.name, &1.id}))
-      #=> <select id="manager_id" name="project[manager_id]">
-      #=>   <option value="1">Mary Jane</option>
-      #=>   <option value="2">John Doe</option>
-      #=> </select> %>
 
             </div>
 
@@ -166,8 +177,22 @@
   </div>
 </section>
 
-
+<script type="module" src="<%= Routes.static_path(@conn, "/js/pages/receipt.js") %>"></script>
 <script type="text/javascript">
+  // [TODO] JC will move calculate_subtotal into receipt.js
+  
+  function init_delete_input(){
+    // const deleteInput = document.querySelectorAll<HTMLElement>(".triggerDelete");
+    const deleteInput = document.querySelectorAll(".triggerDelete");
+    if (deleteInput !== null) {
+      deleteInput.forEach((el) => {
+        el.addEventListener('click', () => {
+          calculate_subtotal();
+        });
+      });
+    }
+  }
+  init_delete_input();
 
   function calculate_subtotal(){
     var priceItems = document.querySelectorAll(".price-items");
@@ -176,7 +201,10 @@
     var sum = 0.0;
     if (priceItems.length > 0){
       for ( var i = 0; i < priceItems.length; i++) {
-        sum += parseFloat( priceItems[i].value );
+        const onDelete = priceItems[i].closest(".box.content").querySelector('.triggerDelete');
+        if (!(onDelete.checked)){
+          sum += parseFloat( priceItems[i].value );
+        }
       }
       if (!isNaN(sum)) {
         subtotal.textContent = sum.toFixed(2); 

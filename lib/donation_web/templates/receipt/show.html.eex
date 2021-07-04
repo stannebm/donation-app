@@ -14,18 +14,14 @@
           <div class="content">
 
             <div class="columns">
-              <div class="column is-6">
+              <div class="column is-two-thirds">
                 <ul class="no-bullets">
                   <li>
-                    <strong>Date:</strong>
-                    <%= NaiveDateTime.to_date(@receipt.inserted_at) %>
-                  </li>
-                  <li>
-                    <strong>Received From:</strong>
+                    <strong>Received from:</strong>
                     <%= @receipt.donor_name %>
                   </li>
                   <li>
-                    <strong>Type of payment method:</strong>
+                    <strong>Type of Payment Method:</strong>
                     <%= if @receipt.type_of_payment_method.name == "Cheque" do %>
                       <%= @receipt.type_of_payment_method.name %> [<%= @receipt.cheque %>]
                     <% else %>
@@ -38,9 +34,21 @@
                   </li>
                 </ul>
               </div>
-              <div class="column is-6 has-text-right">
-                <strong>Receipt number:</strong>
-                <%= @receipt.receipt_number %>
+              <div class="column">
+                <div>
+                  <strong>Receipt Number:</strong>
+                  <%= @receipt.receipt_number %>
+                </div>
+                <div>
+                  <strong>Date:</strong>
+                  <%= Timex.format!(@receipt.inserted_at, "%d.%m.%Y", :strftime) %>
+                </div>
+                <%= if !is_nil(@receipt.transaction_date) do %>
+                  <div>
+                    <strong>Transaction Date:</strong>
+                    <%= Timex.format!(@receipt.transaction_date, "%d.%m.%Y", :strftime) %>
+                  </div>
+                <% end %>
               </div>
             </div>
 

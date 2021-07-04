@@ -32,7 +32,7 @@ defmodule DonationWeb.ReceiptController do
   end
 
   def create(conn, %{"receipt" => receipt_params}) do
-    _type_of_contributions = Admins.list_type_of_contributions() |> Enum.map(&{&1.name, &1.id})
+    type_of_contributions = Admins.list_type_of_contributions() |> Enum.map(&{&1.name, &1.id})
 
     _type_of_payment_methods =
       Admins.list_type_of_payment_methods() |> Enum.map(&{&1.name, &1.id})
@@ -46,7 +46,7 @@ defmodule DonationWeb.ReceiptController do
         |> redirect(to: Routes.receipt_path(conn, :show, receipt))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        render(conn, "new.html", changeset: changeset, type_of_contributions: type_of_contributions)
     end
   end
 

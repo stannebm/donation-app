@@ -1,4 +1,4 @@
-// import "phoenix_html"
+// ONCLICK
 
 const el = document.getElementById("add_receipt_item")!;
 el.onclick = (e) => {
@@ -9,20 +9,8 @@ el.onclick = (e) => {
   uniq_template = uniq_template.replace(/\[0]/g, `_${time}_`);
   el.insertAdjacentHTML("afterend", uniq_template);
   init_select_contribution();
+  // init_delete_input(); // Don't remove. I'll put back after solve.
 };
-
-// ALERT MESSAGE
-
-document.addEventListener('DOMContentLoaded', () => {
-  (document.querySelectorAll('.notification .delete') || []).forEach((deleteEl) => {
-    if (deleteEl) {
-      const notification = deleteEl.parentNode!;
-      deleteEl.addEventListener('click', () => {
-        notification.parentNode!.removeChild(notification);
-      });
-    }
-  });
-});
 
 // RECEIPT: SHOW/HIDE OTHERS
 
@@ -67,4 +55,3 @@ if (selectPaymentMethod !== null) {
   });
   show_cheque(selectPaymentMethod);
 }
-

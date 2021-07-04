@@ -18,7 +18,7 @@
           <div class="field">
             <%= label p, :price, class: "label" %>
             <div class="control">
-              <%= number_input p, :price, class: "input price-items", oninput: "calculate_subtotal()", step: "any" %>
+              <%= number_input p, :price, class: "input price-items", oninput: "calculate_subtotal()", step: "any", required: "required" %>
               <p class="help"><%= error_tag p, :price %></p>
             </div>
           </div>
@@ -39,6 +39,13 @@
           <%= textarea p, :remark, class: "textarea", rows: "2" %>
           <p class="help"><%= error_tag p, :remark %></p>
         </div>
+      </div>
+
+      <div class="form-group">
+        <label class="checkbox">
+          <%= checkbox p, :delete, class: "triggerDelete" %> 
+          <%= label p, :delete, "Delete?", class: "control-label" %>
+        </label>
       </div>
 
     </div>

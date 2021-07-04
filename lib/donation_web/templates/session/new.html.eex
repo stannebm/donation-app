@@ -16,6 +16,21 @@
           <div class="column is-4 is-offset-4">
             <h3 class="title has-text-black"><strong>LOGIN</strong></h3>
             <div class="box">
+
+              <%= if info = get_flash(@conn, :info) do %>
+                <div class="notification is-info is-light">
+                  <button class="delete"></button>
+                  <%= info %>
+                </div>
+              <% end %>
+
+              <%= if error = get_flash(@conn, :error) do %>
+                <div class="notification is-danger is-light">
+                  <button class="delete"></button>
+                  <%= error %>
+                </div>
+              <% end %>
+
               <%= form_for @conn, Routes.session_path(@conn, :create), [as: :session], fn f -> %>
 
                 <div class="field has-text-left">

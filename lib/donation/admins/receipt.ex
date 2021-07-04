@@ -12,9 +12,10 @@ defmodule Donation.Admins.Receipt do
     belongs_to :type_of_payment_method, TypeOfPaymentMethod
     field :donor_name, :string
     field :receipt_number, :string, default: "MBSA"
-    field :total_amount, :decimal, precision: 12, scale: 2
+    field :total_amount, :decimal, precision: 12, scale: 2, default: 0
     field :cheque, :string
     field :status, :integer
+    field :transaction_date, :date
     # field :status, Ecto.Enum, values: [ done: 1, pending: 2, cancelled: 3]
     timestamps()
   end
@@ -29,6 +30,7 @@ defmodule Donation.Admins.Receipt do
       :receipt_number,
       :total_amount,
       :cheque,
+      :transaction_date,
       :status
     ])
     |> cast_assoc(:receipt_items, required: true)

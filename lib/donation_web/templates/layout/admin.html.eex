@@ -13,7 +13,7 @@
     <title>Admin | Minor Basilica of St.Anne</title>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app-admin.css") %>"/>
-    <script defer type="module" src="<%= Routes.static_path(@conn, "/js/app-admin.js") %>"></script>
+    <script type="module" src="<%= Routes.static_path(@conn, "/js/pages/admin.js") %>"></script>
   </head>
   <body>
 
@@ -61,20 +61,13 @@
       <div class="column is-2 is-sidebar-menu is-hidden-mobile">
         <aside class="menu">
 
-          <p class="menu-label">
-            General
-            <ul class="menu-list">
-              <li><a>Dashboard **</a></li>
-            </ul>
-          </p>
-
           <%= if @conn.assigns.current_admin.is_admin do %>
             <p class="menu-label">
               Administration
               <ul class="menu-list">
                 <li><%= link("Members", to: '/admins/users' ) %></li>
-                <li><%= link("Contributions", to: '/admins/type_of_contributions' ) %></li>
-                <li><%= link("Payment Methods", to: '/admins/type_of_payment_methods' ) %></li>
+                <li><%= link("Type of Contributions", to: '/admins/type_of_contributions') %></li>
+                <li><%= link("Type of Payment Methods", to: '/admins/type_of_payment_methods') %></li>
               </ul>
             </p>
           <% end %>
@@ -82,12 +75,11 @@
           <p class="menu-label">
             Transactions
             <ul class="menu-list">
+              <li><%#= link("Mass Offerings", to: '/admins/mass_offerings' ) %></li>
               <li><%= link("Receipts", to: '/admins/receipts' ) %></li>
               <li><%= link("Reports", to: '/admins/reports' ) %></li>
             </ul>
           </p>
-
-          <p class="menu-label"> ** UNDER CONSTRUCTION</p>
 
         </aside>
       </div>

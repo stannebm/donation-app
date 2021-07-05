@@ -328,12 +328,12 @@ export default function MassOffering() {
       </Box>
 
       <HStack>
-        <Button colorScheme="teal" isLoading={isSubmitting} onClick={(e) => {
+        {/* <Button colorScheme="teal" isLoading={isSubmitting} onClick={(e) => {
           handleSubmit(onSubmit("fpx"))()
           e.preventDefault()
         }}>
           Online Banking
-        </Button>
+        </Button> */}
 
         <Button colorScheme="teal" isLoading={isSubmitting} onClick={(e) => {
           handleSubmit(onSubmit("cybersource"))()

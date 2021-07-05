@@ -46,9 +46,18 @@ ul.no-bullets {
 }
 
 /* FORM */
-#add_receipt_item {
+#add_receipt_item, #add_offering {
   margin-top: 20px;
   margin-left: 25px;
+}
+
+/* DATE INPUT  */
+ul.date-input-container {
+  list-style-type: none;
+  margin: 0;
+}
+li .input {
+  width: 40%;
 }
 
 /* CRUD Template */

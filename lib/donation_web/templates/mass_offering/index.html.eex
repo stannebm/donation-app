@@ -1,0 +1,85 @@
+<section class="is-table">
+  <div class="container">
+
+    <%= if info = get_flash(@conn, :info) do %>
+      <div class="notification is-info is-light">
+        <button class="delete"></button>
+        <%= info %>
+      </div>
+    <% end %>
+
+    <%= if error = get_flash(@conn, :error) do %>
+      <div class="notification is-danger is-light">
+        <button class="delete"></button>
+        <%= error %>
+      </div>
+    <% end %>
+
+    <div class="card">
+
+      <header class="card-header">
+        <p class="card-header-title">
+          Listing Mass Offerings by Contributors
+        </p>
+        <p class="level-item margin-right-10">
+          <%= link "New Mass Offering", to: Routes.admin_mass_offering_path(@conn, :new), class: "button is-primary" %>
+        </p>
+      </header>
+
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+            <table class="table is-striped is-hoverable is-fullwidth">
+              <thead>
+                <tr>
+                  <th>Created Date</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Contact No.</th>
+                  <th>Amount</th>
+                  <th>Payment Method</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <%= for contribution <- @contributions do %>
+                  <tr>
+                    <td width="15%"><%= Timex.format!(contribution.inserted_at, "%d-%m-%Y", :strftime) %></td>
+                    <td><%= contribution.name %></td>
+                    <td><%= contribution.email %></td>
+                    <td><%= contribution.contact_number %></td>
+                    <td><%= contribution.amount %></td>
+                    <td><%= contribution.payment_method %></td>
+                    <td width="20%">
+                      <div class="field is-grouped">
+                        <p class="control">
+                          <%= link "Show", to: Routes.admin_mass_offering_path(@conn, :show, contribution), class: "button is-primary is-small" %>
+                        </p>
+                        <%= if contribution.payment_method == "none" do %>
+                          <p class="control">
+                            <%= link "Edit", to: Routes.admin_mass_offering_path(@conn, :edit, contribution), class: "button is-info is-small" %>
+                          </p>
+                        <% end %>
+                        <%= if @conn.assigns.current_admin.is_admin do %>
+                          <p class="control">
+                            <form action="/admins/mass_offerings/<%= contribution.id %>" method="post">
+                              <input name="_method" type="hidden" value="delete">
+                              <input name="_csrf_token" type="hidden" value="<%= Plug.CSRFProtection.get_csrf_token() %>">
+                              <button class="button is-danger is-small destructive-index-action" data-confirm="Are you sure?" type="submit">Delete</button>
+                            </form>
+                          </p>
+                        <% end %>
+                      </div>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>

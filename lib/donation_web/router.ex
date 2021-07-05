@@ -40,6 +40,7 @@ defmodule DonationWeb.Router do
     forward("/", PhoenixSwagger.Plug.SwaggerUI, otp_app: :donation, swagger_file: "swagger.json")
   end
 
+  ## WITHOUT AUTHENTICATE
   scope "/admins", DonationWeb do
     pipe_through([:browser])
     get("/sign-in", SessionController, :new)
@@ -47,6 +48,7 @@ defmodule DonationWeb.Router do
     delete("/sign-out", SessionController, :delete)
   end
 
+  ## WITH AUTHENTICATE
   scope "/admins", DonationWeb do
     pipe_through([:browser, :authenticate_admin, :layout_admin])
     resources("/receipts", ReceiptController, except: [:delete])
@@ -55,6 +57,11 @@ defmodule DonationWeb.Router do
     resources("/type_of_contributions", TypeOfContributionController)
     resources("/type_of_payment_methods", TypeOfPaymentMethodController)
     resources("/users", UserController)
+  end
+
+  scope "/admins", DonationWeb, as: :admin do
+    pipe_through [ :browser, :authenticate_admin, :layout_admin ]
+    resources "/mass_offerings", MassOfferingController
   end
 
   scope "/", DonationWeb do

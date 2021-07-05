@@ -67,6 +67,7 @@ defmodule DonationWeb do
       import Phoenix.View
 
       import DonationWeb.ErrorHelpers
+      import DonationWeb.InputHelpers
       import DonationWeb.Gettext
       alias DonationWeb.Router.Helpers, as: Routes
     end

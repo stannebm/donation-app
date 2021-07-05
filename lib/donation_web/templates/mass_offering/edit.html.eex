@@ -1,0 +1,1 @@
+<%= render "form.html", Map.put(assigns, :action, Routes.admin_mass_offering_path(@conn, :update, @contribution)) %>

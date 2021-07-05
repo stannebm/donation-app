@@ -1,0 +1,92 @@
+<section class="is-card">
+  <div class="container">
+
+    <div class="card">
+
+      <header class="card-header">
+        <p class="card-header-title has-text-centered">
+          Contributor for Mass Offering
+        </p>
+      </header>
+
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+
+            <div class="columns">
+              <div class="column is-6">
+                <ul class="no-bullets">
+                  <li>
+                    <strong>Date:</strong>
+                    <%= Timex.format!(@contribution.inserted_at, "%d.%m.%Y", :strftime) %>
+                  </li>
+                  <li>
+                    <strong>Name:</strong>
+                    <%= @contribution.name %>
+                  </li>
+                  <%= if !is_nil(@contribution.email) do %>
+                    <li>
+                      <strong>Email Address:</strong>
+                      <%= @contribution.email %>
+                    </li>
+                  <% end %>
+                  <%= if !is_nil(@contribution.contact_number) do %>
+                    <li>
+                      <strong>Contact Number:</strong>
+                      <%= @contribution.contact_number %>
+                    </li>
+                  <% end %>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+
+            <table class="table is-striped is-hoverable is-fullwidth">
+              <thead>
+                <tr>
+                  <th>Mass Language</th>
+                  <th>Type of Mass</th>
+                  <th>Intention</th>
+                  <th>Mass Dates</th>
+                </tr>
+              </thead>
+              <tbody>
+                <%= for mass_offering <- @contribution.mass_offerings do %>
+                  <tr>
+                    <td><%= mass_offering.mass_language %></td>
+                    <td><%= mass_offering.type_of_mass %></td>
+                    <td><%= mass_offering.intention %></td>
+                    <td>
+                      <%= if !is_nil(mass_offering.dates) do %>
+                        <%= Enum.join(mass_offering.dates, ", ") %>
+                      <% end %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+      </div>
+
+      <footer class="card-footer">
+        <p class="card-footer-item">
+          <span><%= link "Back", to: Routes.admin_mass_offering_path(@conn, :index) %></span>
+        </p>
+        <p class="card-footer-item">
+          <span><%= link "Edit", to: Routes.admin_mass_offering_path(@conn, :edit, @contribution) %></span>
+        </p>
+      </footer>
+    
+    </div>
+
+  </div>
+</section>

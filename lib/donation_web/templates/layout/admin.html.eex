@@ -75,7 +75,7 @@
           <p class="menu-label">
             Transactions
             <ul class="menu-list">
-              <li><%#= link("Mass Offerings", to: '/admins/mass_offerings' ) %></li>
+              <li><%= link("Mass Offerings", to: '/admins/mass_offerings' ) %></li>
               <li><%= link("Receipts", to: '/admins/receipts' ) %></li>
               <li><%= link("Reports", to: '/admins/reports' ) %></li>
             </ul>

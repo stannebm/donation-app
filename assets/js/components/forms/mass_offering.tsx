@@ -192,7 +192,7 @@ export default function MassOffering() {
                         errorPath={R.path(["offerings", index, "intention"])}
                         defaultValue={item.intention}
                         {...register(`intentions.${index}.intention` as const, {
-                          required: true,
+                          required: false,
                         })}
                       />
                     </>
@@ -205,7 +205,7 @@ export default function MassOffering() {
                         errorPath={R.path(["offerings", index, "intention"])}
                         defaultValue={item.intention}
                         {...register(`intentions.${index}.intention` as const, {
-                          required: true,
+                          required: false,
                         })}
                       />
                     </>
@@ -218,7 +218,7 @@ export default function MassOffering() {
                         errorPath={R.path(["offerings", index, "intention"])}
                         defaultValue={item.intention}
                         {...register(`intentions.${index}.intention` as const, {
-                          required: true,
+                          required: false,
                         })}
                       />
                     </>

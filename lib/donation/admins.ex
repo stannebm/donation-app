@@ -6,7 +6,7 @@ defmodule Donation.Admins do
   import Ecto.Query, warn: false
   alias Donation.Repo
 
-  @moduledoc """
+  @doc """
   Admins: USER
   """
 
@@ -38,7 +38,7 @@ defmodule Donation.Admins do
     User.changeset(user, attrs)
   end
 
-  @moduledoc """
+  @doc """
     AUTHENTICATE USERNAME AND PASSWORD
   """
 
@@ -65,7 +65,7 @@ defmodule Donation.Admins do
     end
   end
 
-  @moduledoc """
+  @doc """
   Admins: RECEIPT
   """
 
@@ -121,7 +121,7 @@ defmodule Donation.Admins do
     Receipt.changeset(receipt, attrs)
   end
 
-  @moduledoc """
+  @doc """
   Admins: RECEIPT ITEM
   """
 
@@ -153,7 +153,7 @@ defmodule Donation.Admins do
     ReceiptItem.changeset(receipt_item, attrs)
   end
 
-  @moduledoc """
+  @doc """
   Admins: Type of Contributions
   """
 
@@ -185,7 +185,7 @@ defmodule Donation.Admins do
     TypeOfContribution.changeset(type_of_contribution, attrs)
   end
 
-  @moduledoc """
+  @doc """
   Admins: Type of Payment Methods
   """
 
@@ -217,7 +217,7 @@ defmodule Donation.Admins do
     TypeOfPaymentMethod.changeset(type_of_payment_method, attrs)
   end
 
-  @moduledoc """
+  @doc """
   Admins: Contribution -> list Mass Offering
   In Admin, they need to data entry for Mass Offering without Payment
   A contribution has many mass_offerings
@@ -226,7 +226,7 @@ defmodule Donation.Admins do
 
   def list_mass_offering_by_contributors do
     Contribution
-    |> where(type: ^"mass_offering")
+    # |> where(type: ^"mass_offering")
     |> Repo.all()
     |> Repo.preload([:mass_offerings])
   end
@@ -255,6 +255,27 @@ defmodule Donation.Admins do
 
   def change_mass_offering_by_contributor(%Contribution{} = contribution, attrs \\ %{}) do
     Contribution.changeset(contribution, attrs)
+  end
+
+  @doc """
+    REPORTS
+  """
+  def find_mass_offering_dates(from_date) do
+    Repo.all(
+      from mo in MassOffering,
+      join: c in Contribution, on: c.id == mo.contribution_id,
+      where: fragment("? = ANY (?)", ^from_date, mo.dates),
+      order_by: [mo.mass_language, mo.type_of_mass],
+      preload: [:contribution]
+    )
+  end
+
+  def filter_mass_intentions(_), do: nil
+  def filter_mass_intentions(scope, language, type_mass) do
+    scope
+    |> Enum.filter(&(&1.mass_language == language and &1.type_of_mass == type_mass))
+    |> Enum.map(fn x -> x.intention end)
+    |> Enum.join("; ")
   end
 
 end

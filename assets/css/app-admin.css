@@ -59,16 +59,18 @@ ul.date-input-container {
 li .input {
   width: 40%;
 }
+.input.from-date { width: 20% }
 
 /* CRUD Template */
 
 section.is-card,
-section.is-table {
+section.is-table,
+section#mass-intentions-pdf {
   padding: 30px 20px;
 }
 
 .is-card .container,
-.is-table .container {
+.is-table .container, #mass-intentions-pdf .container {
   max-width: 100%;
 }
 

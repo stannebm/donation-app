@@ -27,12 +27,3 @@ generate-swagger:
 
 shell:
 	docker-compose exec phoenix sh
-
-psql:
-	docker-compose exec db \
-		psql postgres://postgres:postgres@db/donation_db
-
-pg_dump:
-	docker-compose exec db \
-		pg_dump postgres://postgres:postgres@db/donation_db \
-		> "$(shell date +%Y%m%d)-dump.sql"

@@ -33,6 +33,7 @@
               <thead>
                 <tr>
                   <th>Created Date</th>
+                  <th>Type</th>
                   <th>Name</th>
                   <th>Email</th>
                   <th>Contact No.</th>
@@ -45,6 +46,7 @@
                 <%= for contribution <- @contributions do %>
                   <tr>
                     <td width="15%"><%= Timex.format!(contribution.inserted_at, "%d-%m-%Y", :strftime) %></td>
+                    <td><%= contribution.type %></td>
                     <td><%= contribution.name %></td>
                     <td><%= contribution.email %></td>
                     <td><%= contribution.contact_number %></td>
@@ -59,15 +61,15 @@
                           <p class="control">
                             <%= link "Edit", to: Routes.admin_mass_offering_path(@conn, :edit, contribution), class: "button is-info is-small" %>
                           </p>
-                        <% end %>
-                        <%= if @conn.assigns.current_admin.is_admin do %>
-                          <p class="control">
-                            <form action="/admins/mass_offerings/<%= contribution.id %>" method="post">
-                              <input name="_method" type="hidden" value="delete">
-                              <input name="_csrf_token" type="hidden" value="<%= Plug.CSRFProtection.get_csrf_token() %>">
-                              <button class="button is-danger is-small destructive-index-action" data-confirm="Are you sure?" type="submit">Delete</button>
-                            </form>
-                          </p>
+                          <%= if @conn.assigns.current_admin.is_admin do %>
+                            <p class="control">
+                              <form action="/admins/mass_offerings/<%= contribution.id %>" method="post">
+                                <input name="_method" type="hidden" value="delete">
+                                <input name="_csrf_token" type="hidden" value="<%= Plug.CSRFProtection.get_csrf_token() %>">
+                                <button class="button is-danger is-small destructive-index-action" data-confirm="Are you sure?" type="submit">Delete</button>
+                              </form>
+                            </p>
+                          <% end %>
                         <% end %>
                       </div>
                     </td>

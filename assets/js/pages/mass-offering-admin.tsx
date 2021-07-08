@@ -10,6 +10,7 @@ addOffer.onclick = (e) => {
   uniq_template = uniq_template.replace(/\[0]/g, `_${time}_`);
   addOffer.insertAdjacentHTML("afterend", uniq_template);
   insert_mass_language();
+  init_select_type_of_mass();
   init_array_date_input();
 };
 
@@ -60,3 +61,27 @@ const removeItem = (event: any) => {
   let ol = li.parentNode;
   ol.removeChild(li);
 }
+
+// MASS OFFERING: SHOW LABEL
+
+function show_label_name(selectTypeOfMass: any){
+  const name = selectTypeOfMass.options[selectTypeOfMass.selectedIndex].text;
+  const nodeLabelName = selectTypeOfMass.closest(".box.content").querySelector('.node-label-name');
+  if (name == "Departed Soul"){
+    nodeLabelName.innerText = "Name of Departed Soul";
+  } else {
+    nodeLabelName.innerText = "Intention";
+  }
+}
+
+function init_select_type_of_mass(){
+  const selectAllTypeOfMass = document.querySelectorAll<HTMLElement>(".select-type-of-mass");
+  selectAllTypeOfMass.forEach( (selectTypeOfMass) => {
+    selectTypeOfMass.addEventListener('change', () => {
+      show_label_name(selectTypeOfMass);
+    });
+    show_label_name(selectTypeOfMass);
+  });  
+}
+
+init_select_type_of_mass();

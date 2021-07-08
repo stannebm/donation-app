@@ -1,0 +1,123 @@
+<section id="mass-intentions-pdf">
+  <div class="content">
+
+    <div id="header-container">
+      <div>
+        <img src="http://localhost:4000/images/Basilica_Logo_Crop.jpg" class="logo">
+      </div>
+    </div>
+
+    <%# ENGLIGH %>
+    <%= if @mass_offerings_eng_tg != "" || @mass_offerings_eng_si != "" || @mass_offerings_eng_ds != "" do %>
+      <h2 class="date">
+        <b><%= Timex.format!(@current_date, "%d.%m.%Y %A", :strftime) %> (E)</b>
+      </h2>
+
+      <%= if @mass_offerings_eng_tg != "" do %>
+        <p>
+          <div class="title is-4">THANKSGIVING</div>
+          <div class="subtitle is-5"><%= @mass_offerings_eng_tg %></div>
+        </p>
+      <% end %>
+
+      <%= if @mass_offerings_eng_si != "" do %>
+        <p>
+          <div class="title is-4">SPECIAL INTENTIONS</div>
+          <div class="subtitle is-5"><%= @mass_offerings_eng_si %></div>
+        </p>
+      <% end %>
+
+      <%= if @mass_offerings_eng_ds != "" do %>
+        <p>
+          <div class="title is-4">REQUIEM</div>
+          <div class="subtitle is-5"><%= @mass_offerings_eng_ds %></div>
+        </p>
+      <% end %>
+    <% end %>
+
+    <%# CHINESE %>
+    <%= if @mass_offerings_chi_tg != "" || @mass_offerings_chi_si != "" || @mass_offerings_chi_ds != "" do %>
+      <h2 class="date">
+        <b><%= Timex.format!(@current_date, "%d.%m.%Y %A", :strftime) %> (C)</b>
+      </h2>
+
+      <%= if @mass_offerings_chi_tg != "" do %>
+        <p>
+          <div class="title is-4">THANKSGIVING</div>
+          <div class="subtitle is-5"><%= @mass_offerings_chi_tg %></div>
+        </p>
+      <% end %>
+
+      <%= if @mass_offerings_chi_si != "" do %>
+        <p>
+          <div class="title is-4">SPECIAL INTENTIONS</div>
+          <div class="subtitle is-5"><%= @mass_offerings_chi_si %></div>
+        </p>
+      <% end %>
+
+      <%= if @mass_offerings_chi_ds != "" do %>
+        <p>
+          <div class="title is-4">REQUIEM</div>
+          <div class="subtitle is-5"><%= @mass_offerings_chi_ds %></div>
+        </p>
+      <% end %>
+    <% end %>
+
+    <%# TAMIL %>
+    <%= if @mass_offerings_tml_tg != "" || @mass_offerings_tml_si != "" || @mass_offerings_tml_ds != "" do %>
+      <h2 class="date">
+        <b><%= Timex.format!(@current_date, "%d.%m.%Y %A", :strftime) %> (T)</b>
+      </h2>
+
+      <%= if @mass_offerings_tml_tg != "" do %>
+        <p>
+          <div class="title is-4">THANKSGIVING</div>
+          <div class="subtitle is-5"><%= @mass_offerings_tml_tg %></div>
+        </p>
+      <% end %>
+
+      <%= if @mass_offerings_tml_si != "" do %>
+        <p>
+          <div class="title is-4">SPECIAL INTENTIONS</div>
+          <div class="subtitle is-5"><%= @mass_offerings_tml_si %></div>
+        </p>
+      <% end %>
+
+      <%= if @mass_offerings_tml_ds != "" do %>
+        <p>
+          <div class="title is-4">REQUIEM</div>
+          <div class="subtitle is-5"><%= @mass_offerings_tml_ds %></div>
+        </p>
+      <% end %>
+    <% end %>
+
+    <%# BAHASA %>
+    <%= if @mass_offerings_bm_tg != "" || @mass_offerings_bm_si != "" || @mass_offerings_bm_ds != "" do %>
+      <h2 class="date">
+        <b><%= Timex.format!(@current_date, "%d.%m.%Y %A", :strftime) %> (B)</b>
+      </h2>
+
+      <%= if @mass_offerings_bm_tg != "" do %>
+        <p>
+          <div class="title is-4">THANKSGIVING</div>
+          <div class="subtitle is-5"><%= @mass_offerings_bm_tg %></div>
+        </p>
+      <% end %>
+
+      <%= if @mass_offerings_bm_si != "" do %>
+        <p>
+          <div class="title is-4">SPECIAL INTENTIONS</div>
+          <div class="subtitle is-5"><%= @mass_offerings_bm_si %></div>
+        </p>
+      <% end %>
+
+      <%= if @mass_offerings_bm_ds != "" do %>
+        <p>
+          <div class="title is-4">REQUIEM</div>
+          <div class="subtitle is-5"><%= @mass_offerings_bm_ds %></div>
+        </p>
+      <% end %>
+    <% end %>
+
+  </div>
+</section>

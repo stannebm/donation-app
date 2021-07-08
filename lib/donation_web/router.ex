@@ -53,7 +53,6 @@ defmodule DonationWeb.Router do
     pipe_through([:browser, :authenticate_admin, :layout_admin])
     resources("/receipts", ReceiptController, except: [:delete])
     get("/receipts/:id/generate_pdf", ReceiptController, :generate_pdf)
-    resources("/reports", ReportController, only: [:index])
     resources("/type_of_contributions", TypeOfContributionController)
     resources("/type_of_payment_methods", TypeOfPaymentMethodController)
     resources("/users", UserController)
@@ -61,7 +60,10 @@ defmodule DonationWeb.Router do
 
   scope "/admins", DonationWeb, as: :admin do
     pipe_through [ :browser, :authenticate_admin, :layout_admin ]
-    resources "/mass_offerings", MassOfferingController
+    resources("/mass_offerings", MassOfferingController)
+    resources("/reports", ReportController, only: [:index])
+    get("/reports/list_mass_offerings", ReportController, :list_mass_offerings)
+    get("/reports/list_mass_offerings/pdf", ReportController, :list_mass_offerings_pdf)
   end
 
   scope "/", DonationWeb do

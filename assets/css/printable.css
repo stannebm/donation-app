@@ -39,8 +39,6 @@ body {
   font-size: 15px;
 }
 
-
-
 #content-container .right-content {
   float: right;
 }
@@ -68,4 +66,18 @@ ul.no-bullets {
 section.is-card {
   padding: 0px 10px;
   margin: 0px;
+}
+
+#mass-intentions-pdf {
+  margin: 0px 50px;
+}
+
+#mass-intentions-pdf .date {
+  background-color: #FFFF00;
+  padding: 5px 10px;
+}
+
+#mass-intentions-pdf .title {
+  color: #FF8C00;
+  font-weight: bolder;
 }

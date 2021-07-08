@@ -1,0 +1,71 @@
+<section class="is-table">
+  <div class="container">
+
+    <div class="card">
+
+      <header class="card-header">
+        <div class="card-header-title">
+          Reports: Listing of Mass Intention
+        </div>
+
+        <div class="card-header-icon">
+          <%= if @conn.params != %{} do %>
+            <%= link("PDF", to: Routes.admin_report_path(@conn, :list_mass_offerings_pdf, @conn.params)) %>
+          <% end %>
+        </div>
+
+      </header>
+
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+
+            <%= form_for @conn, Routes.admin_report_path(@conn, :list_mass_offerings), [ method: :get, as: :search], fn f -> %>
+              <div class="field">
+                <label class="label">From Date</label>
+                <div class="control">
+                  <%= date_input f, :from_date, class: "input from-date" %>
+                  <%= submit "Search", class: "button is-info" %>
+                </div>
+              </div>
+            <% end %>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+
+            <table class="table is-striped is-hoverable is-fullwidth">
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Mass Language</th>
+                  <th>Type of Mass</th>
+                  <th>From Whom</th>
+                  <th>Intention</th>
+                </tr>
+              </thead>
+              <tbody>
+                <%= for mass_offering <- @mass_offerings do %>
+                  <tr>
+                    <td><%= mass_offering.contribution.type %></td>
+                    <td><%= mass_offering.mass_language %></td>
+                    <td><%= mass_offering.type_of_mass %></td>
+                    <td><%= mass_offering.contribution.name %></td>
+                    <td><%= mass_offering.intention %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>

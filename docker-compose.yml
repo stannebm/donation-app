@@ -2,6 +2,8 @@ version: "3.8"
 
 services:
   phoenix:
+    logging:
+      driver: journald
     build:
       context: .
     env_file:

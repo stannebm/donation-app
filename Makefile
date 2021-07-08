@@ -36,3 +36,6 @@ pg_dump:
 	docker-compose exec db \
 		pg_dump postgres://postgres:postgres@db/donation_db \
 		> "$(shell date +%Y%m%d)-dump.sql"
+
+log:
+	ssh arch "journalctl CONTAINER_NAME=donation-app_phoenix_1"

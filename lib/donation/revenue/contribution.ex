@@ -9,7 +9,6 @@ defmodule Donation.Revenue.Contribution do
 
   @derive {Jason.Encoder, only: [:type, :name, :email, :contact_number, :amount, :payment_method]}
   schema "contributions" do
-    has_many :mass_offerings, Donation.Revenue.MassOffering
     field(:type, :string)
     field(:name, :string)
     field(:email, :string)
@@ -30,7 +29,6 @@ defmodule Donation.Revenue.Contribution do
       :amount,
       :payment_method
     ])
-    |> cast_assoc(:mass_offerings, required: true)
     |> validate_required([
       :type,
       :name,

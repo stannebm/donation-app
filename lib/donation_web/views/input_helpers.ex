@@ -3,6 +3,7 @@ defmodule DonationWeb.InputHelpers do
 
   def array_date_input(form, field) do
     values = Phoenix.HTML.Form.input_value(form, field) || [""]
+
     content_tag :ul, class: "date-input-container" do
       for {value, i} <- Enum.with_index(values) do
         input_opts = [
@@ -11,7 +12,8 @@ defmodule DonationWeb.InputHelpers do
           type: "date",
           class: "input"
         ]
-        create_li(form, field, input_opts, [index: i])
+
+        create_li(form, field, input_opts, index: i)
       end
     end
   end
@@ -20,6 +22,7 @@ defmodule DonationWeb.InputHelpers do
     type = Phoenix.HTML.Form.input_type(form, field)
     name = Phoenix.HTML.Form.input_name(form, field) <> "[]"
     opts = Keyword.put_new(input_opts, :name, name)
+
     content_tag :li do
       [
         apply(Phoenix.HTML.Form, type, [form, field, opts]),
@@ -27,5 +30,4 @@ defmodule DonationWeb.InputHelpers do
       ]
     end
   end
-
 end

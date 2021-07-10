@@ -31,5 +31,4 @@ defmodule Donation.Admins.ReceiptItem do
       changeset
     end
   end
-
 end

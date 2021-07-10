@@ -8,7 +8,8 @@ defmodule Donation.Repo.Migrations.CreateContributionDomain do
       add :email, :string
       add :contact_number, :string
       add :amount, :decimal, precision: 12, scale: 2, default: 0
-      add :payment_method, :string, null: false # FPX/Cybersource/Cheque/Cash/etc
+      # FPX/Cybersource/Cheque/Cash/etc
+      add :payment_method, :string, null: false
       timestamps()
     end
 

@@ -59,7 +59,7 @@ defmodule DonationWeb.Router do
   end
 
   scope "/admins", DonationWeb, as: :admin do
-    pipe_through [ :browser, :authenticate_admin, :layout_admin ]
+    pipe_through [:browser, :authenticate_admin, :layout_admin]
     resources("/mass_offerings", MassOfferingController)
     resources("/reports", ReportController, only: [:index])
     get("/reports/list_mass_offerings", ReportController, :list_mass_offerings)

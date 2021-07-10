@@ -264,19 +264,20 @@ defmodule Donation.Admins do
   def find_mass_offering_dates(from_date) do
     Repo.all(
       from mo in MassOffering,
-      join: c in Contribution, on: c.id == mo.contribution_id,
-      where: fragment("? = ANY (?)", ^from_date, mo.dates),
-      order_by: [mo.mass_language, mo.type_of_mass],
-      preload: [:contribution]
+        join: c in Contribution,
+        on: c.id == mo.contribution_id,
+        where: fragment("? = ANY (?)", ^from_date, mo.dates),
+        order_by: [mo.mass_language, mo.type_of_mass],
+        preload: [:contribution]
     )
   end
 
   def filter_mass_intentions(_), do: nil
+
   def filter_mass_intentions(scope, language, type_mass) do
     scope
     |> Enum.filter(&(&1.mass_language == language and &1.type_of_mass == type_mass))
     |> Enum.map(fn x -> x.intention end)
     |> Enum.join("; ")
   end
-
 end

@@ -3,7 +3,6 @@
 # work for phoenix 1.4 https://github.com/andkar73/nested_forms
 
 defmodule DonationWeb.MassOfferingController do
-
   @moduledoc """
     Admin need to entry data of mass_offerings for a contributor, no payment required
     - In table, we set default for no payment required, such as email: na@na.na, contact_number: -, amount: 0, payment_method: none
@@ -22,10 +21,11 @@ defmodule DonationWeb.MassOfferingController do
   end
 
   def new(conn, _params) do
-    changeset = 
+    changeset =
       Admins.change_mass_offering_by_contributor(%Contribution{
         mass_offerings: [%MassOffering{}]
       })
+
     render(conn, "new.html", changeset: changeset, language: "English")
   end
 
@@ -35,6 +35,7 @@ defmodule DonationWeb.MassOfferingController do
         conn
         |> put_flash(:info, "Mass Offering created successfully.")
         |> redirect(to: Routes.admin_mass_offering_path(conn, :show, contribution))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -49,12 +50,15 @@ defmodule DonationWeb.MassOfferingController do
     contribution = Admins.get_mass_offering_by_contributor!(id)
     language = List.first(contribution.mass_offerings).mass_language || "English"
     changeset = Admins.change_mass_offering_by_contributor(contribution)
+
     render(conn, "edit.html", contribution: contribution, changeset: changeset, language: language)
   end
 
   def update(conn, %{"id" => id, "contribution" => contribution_params}) do
     contribution = Admins.get_mass_offering_by_contributor!(id)
-    with {:ok, %Contribution{} = contribution} <- Admins.update_mass_offering_by_contributor(contribution, contribution_params) do
+
+    with {:ok, %Contribution{} = contribution} <-
+           Admins.update_mass_offering_by_contributor(contribution, contribution_params) do
       render(conn, :show, contribution: contribution)
     end
   end
@@ -62,6 +66,7 @@ defmodule DonationWeb.MassOfferingController do
   def delete(conn, %{"id" => id}) do
     contribution = Admins.get_mass_offering_by_contributor!(id)
     {:ok, _contribution} = Admins.delete_mass_offering_by_contributor(contribution)
+
     conn
     |> put_flash(:info, "Receipt deleted successfully.")
     |> redirect(to: Routes.admin_mass_offering_path(conn, :index))

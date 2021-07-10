@@ -46,7 +46,10 @@ defmodule DonationWeb.ReceiptController do
         |> redirect(to: Routes.receipt_path(conn, :show, receipt))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset, type_of_contributions: type_of_contributions)
+        render(conn, "new.html",
+          changeset: changeset,
+          type_of_contributions: type_of_contributions
+        )
     end
   end
 
@@ -107,12 +110,15 @@ defmodule DonationWeb.ReceiptController do
         conn: conn
       )
 
-    {:ok, filename} = PdfGenerator.generate(
-                        html, page_size: "A5", 
-                        shell_params: [
-                          "--orientation", "landscape"
-                        ]
-                      )
+    {:ok, filename} =
+      PdfGenerator.generate(
+        html,
+        page_size: "A5",
+        shell_params: [
+          "--orientation",
+          "landscape"
+        ]
+      )
 
     conn
     |> send_download({:file, filename},

@@ -1,19 +1,5 @@
 # ====================================================
-# STAGE 1: Snowpack build
-FROM node:alpine AS snowpack
-WORKDIR /snowpack
-
-# snowpack build
-COPY assets ./
-
-# override config
-COPY assets/snowpack.config.prod.js ./snowpack.config.js
-
-RUN yarn install
-RUN yarn make
-
-# ====================================================
-# STAGE 2: Elixir build (mix release)
+# STAGE 1: Elixir build (mix release)
 
 FROM elixir:1.9.0-alpine AS build
 RUN apk add --no-cache build-base
@@ -32,7 +18,6 @@ COPY config config
 RUN mix do deps.get, deps.compile
 
 # copy prebuilt assets and hash it into a digest
-COPY --from=snowpack /snowpack/build ./priv/static/
 COPY priv priv
 RUN mix phx.digest
 
@@ -40,10 +25,11 @@ RUN mix phx.digest
 COPY lib lib
 # uncomment COPY if rel/ exists
 # COPY rel rel
+
 RUN mix do compile, release
 
 # ====================================================
-# STAGE 3: Production image
+# STAGE 2: Production image
 
 # prepare release image
 FROM alpine:3.9 AS app

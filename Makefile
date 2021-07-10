@@ -1,29 +1,39 @@
-# `make`. This builds and run the system
-default:
-	yarn --cwd ./assets make
+# ----------------------------------------------------------------------------
+# Deploy
+# ----------------------------------------------------------------------------
+
+default: build-assets
 	docker-compose up -d --build
 
-# create an external network that can be shared later. (one time)
-network:
-	docker network create donation_net
+build-assets:
+	rm -rf priv/static
+	cd assets && yarn exec snowpack build
 
-# # Setup reverse proxy with SSL
-# caddy:
-# 	docker-compose -f docker-compose.caddy.yml up -d --build
+network-once:
+	docker network create donation_net
 
 # run migration
 migrate:
 	docker-compose exec phoenix bin/donation eval "Donation.Release.migrate"
 
-# starts an IEX shell attached to current system
-iex:
-	docker-compose exec phoenix bin/donation remote
+
+# ----------------------------------------------------------------------------
+# Dev
+# ----------------------------------------------------------------------------
 
 dev: generate-swagger
 	mix phx.server
 
 generate-swagger:
 	mix phx.swagger.generate
+
+# ----------------------------------------------------------------------------
+# Debugging
+# ----------------------------------------------------------------------------
+
+# starts an IEX shell attached to current system
+iex:
+	docker-compose exec phoenix bin/donation remote
 
 shell:
 	docker-compose exec phoenix sh

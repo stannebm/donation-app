@@ -17,23 +17,14 @@ defmodule DonationWeb.ReportController do
   ## List Mass Offerings -> CASE 1
   def list_mass_offerings(conn, %{"search" => search}) do
     new_date = Date.from_iso8601!(search["from_date"])
-    query = Repo.all( 
-            from p in MassOffering, 
-            where: fragment("? = ANY (?)", ^new_date, p.dates),
-            preload: [:contribution]
-          )
-
+    query = Admins.find_mass_offering_dates(new_date)
     render(conn, :list_mass_offerings, mass_offerings: query)
   end
 
   ## List Mass Offerings -> CASE 2
   def list_mass_offerings(conn, _) do
     default_date = Date.utc_today
-    query = Repo.all( 
-            from p in MassOffering, 
-            where: fragment("? = ANY (?)", ^default_date, p.dates),
-            preload: [:contribution]
-          )
+    query = Admins.find_mass_offering_dates(default_date)
     render(conn, :list_mass_offerings, mass_offerings: query)
   end
 
@@ -68,6 +59,17 @@ defmodule DonationWeb.ReportController do
       disposition: :inline,
       filename: "Mass_Intentions.pdf"
     )
+  end
+
+  def list_mass_offerings_xlsx(conn, params) do
+    from_date = get_in(params, ["search", "from_date"])
+    new_date = Date.from_iso8601!(from_date)
+    mass_offerings = Admins.find_mass_offering_dates(new_date)
+
+    conn
+    |> put_resp_content_type("text/xlsx")
+    |> put_resp_header("content-disposition", "attachment; filename=mass_intention.xlsx;")
+    |> render("mass_intention.xlsx", %{mass_offerings: mass_offerings})
   end
 
 end

@@ -97,9 +97,11 @@
 
             <div class="card-content">
 
-              <%= hidden_input f, :type, value: "mass_offering" %>
-              <%= hidden_input f, :payment_method, value: "none" %>
-              <%= hidden_input f, :amount, value: 0 %>
+              <%= if @conn.private.phoenix_action == :new do %>
+                <%= hidden_input f, :type, value: "mass_offering" %>
+                <%= hidden_input f, :payment_method, value: "none" %>
+                <%= hidden_input f, :amount, value: 0 %>
+              <% end %>
 
               <div class="field">
                 <%= label f, :name, "From Whom *", class: "label" %>

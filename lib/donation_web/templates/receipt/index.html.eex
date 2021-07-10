@@ -43,7 +43,7 @@
               <tbody>
                 <%= for receipt <- @receipts do %>
                   <tr>
-                    <td width="15%"><%= NaiveDateTime.to_date(receipt.inserted_at) %></td>
+                    <td width="15%"><%= Timex.format!(receipt.inserted_at, "%d.%m.%Y", :strftime) %></td>
                     <td width="30%" style="word-break:break-all;"><%= receipt.donor_name %></td>
                     <td width="15%"><%= receipt.receipt_number %></td>
                     <td width="10%" class="has-text-right"><%= receipt.total_amount %></td>

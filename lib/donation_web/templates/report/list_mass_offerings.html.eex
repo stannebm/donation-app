@@ -10,7 +10,9 @@
 
         <div class="card-header-icon">
           <%= if @conn.params != %{} do %>
-            <%= link("PDF", to: Routes.admin_report_path(@conn, :list_mass_offerings_pdf, @conn.params)) %>
+            <%= link("PDF", to: Routes.admin_report_path(@conn, :list_mass_offerings_pdf, @conn.params), target: "_blank", class: "button is-small is-primary is-outlined") %>
+            &nbsp;
+            <%= link("XLSX", to: Routes.admin_report_path(@conn, :list_mass_offerings_xlsx, @conn.params), target: "_blank", class: "button is-small is-primary is-outlined") %>
           <% end %>
         </div>
 

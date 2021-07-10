@@ -73,6 +73,7 @@ defmodule Donation.Admins do
 
   def list_receipts do
     Receipt
+    |> order_by(desc: :inserted_at)
     |> Repo.all()
     |> Repo.preload([:type_of_payment_method, receipt_items: :type_of_contribution])
   end
@@ -226,7 +227,7 @@ defmodule Donation.Admins do
 
   def list_mass_offering_by_contributors do
     Contribution
-    # |> where(type: ^"mass_offering")
+    |> order_by(desc: :inserted_at)
     |> Repo.all()
     |> Repo.preload([:mass_offerings])
   end

@@ -56,7 +56,7 @@
         <aside class="menu">
 
           <div>
-            <img src="http://localhost:4000/images/Basilica_Logo_Crop.jpg">
+            <img src="/images/Basilica_Logo_Crop.jpg">
           </div>
 
           <%= if @conn.assigns.current_admin.is_admin do %>

@@ -6,7 +6,7 @@
 
   <div id="content-container">
 
-    <div style="width: 60%">
+    <div class="left-content">
       <ul class="no-bullets">
         <li style="word-wrap: break-word;">
           <strong>Received From:</strong>
@@ -27,29 +27,24 @@
     </div>
 
     <div class="right-content">
-      <div>
-        <strong>Receipt number:</strong> <%= @receipt.receipt_number %>
-      </div>
-      <br/>
-      <div>
-        <strong>Date:</strong> <%= Timex.format!(@receipt.inserted_at, "%d.%m.%Y", :strftime) %>
-      </div>
+      <strong>Receipt number: </strong><%= @receipt.receipt_number %><br/>
+      <strong>Date:</strong> <%= Timex.format!(@receipt.inserted_at, "%d.%m.%Y", :strftime) %>
     </div>
 
   </div>
 
-  <table class="table is-striped is-hoverable is-fullwidth">
+  <table class="table is-fullwidth">
     <thead>
       <tr>
-        <th>Contribution for</th>
-        <th class="has-text-right">Amount (RM)</th>
-        <th>Remark</th>
+        <th style="color: #000;">Contribution for</th>
+        <th style="color: #000;" class="has-text-right">Amount (RM)</th>
+        <th style="color: #000;">Remark</th>
       </tr>
     </thead>
     <tfoot>
       <tr>
-        <th>Amount Received</th>
-        <th class="has-text-right"><%= @receipt.total_amount %></th>
+        <th style="color: #000;">Amount Received</th>
+        <th style="color: #000;" class="has-text-right"><%= @receipt.total_amount %></th>
         <th></th>
       </tr>
     </tfoot>

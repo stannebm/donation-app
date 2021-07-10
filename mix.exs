@@ -7,7 +7,6 @@ defmodule Donation.MixProject do
       version: "0.1.0",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
-      # compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       compilers: [:phoenix, :gettext] ++ Mix.compilers() ++ [:phoenix_swagger],
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
@@ -46,12 +45,12 @@ defmodule Donation.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      # optional
       {:phoenix_swagger, "~> 0.8"},
       {:ex_json_schema, "~> 0.5"},
       {:bcrypt_elixir, "~> 2.0"},
       {:timex, "~> 3.7"},
-      {:pdf_generator, "~> 0.6.2"}
+      {:pdf_generator, "~> 0.6.2"},
+      {:elixlsx, "~> 0.4.2"}
     ]
   end
 

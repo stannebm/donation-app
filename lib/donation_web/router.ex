@@ -64,6 +64,7 @@ defmodule DonationWeb.Router do
     resources("/reports", ReportController, only: [:index])
     get("/reports/list_mass_offerings", ReportController, :list_mass_offerings)
     get("/reports/list_mass_offerings/pdf", ReportController, :list_mass_offerings_pdf)
+    get("/reports/list_mass_offerings/xlsx", ReportController, :list_mass_offerings_xlsx)
   end
 
   scope "/", DonationWeb do

@@ -12,8 +12,6 @@ services:
       - "4000:4000"
     depends_on:
       - db
-    networks:
-      - donation
   db:
     image: postgres:13
     environment:
@@ -32,14 +30,6 @@ services:
     restart: always
     volumes:
       - pgdata:/var/lib/postgresql/data
-    networks:
-      - donation
-
-# make docker stack composable
-networks:
-  donation:
-    external: true
-    name: donation_net
 
 volumes:
   pgdata:

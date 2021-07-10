@@ -9,9 +9,6 @@ build-assets:
 	rm -rf priv/static
 	cd assets && yarn exec snowpack build
 
-network-once:
-	docker network create donation_net
-
 # run migration
 migrate:
 	docker-compose exec phoenix bin/donation eval "Donation.Release.migrate"
@@ -26,6 +23,9 @@ dev: generate-swagger
 
 generate-swagger:
 	mix phx.swagger.generate
+
+upgrade-package-json:
+	cd assets && yarn yarn-upgrade-all
 
 # ----------------------------------------------------------------------------
 # Debugging

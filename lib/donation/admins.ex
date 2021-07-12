@@ -5,12 +5,14 @@ defmodule Donation.Admins do
 
   import Ecto.Query, warn: false
   alias Donation.Repo
+  alias Donation.Admins.User
+  alias Donation.Admins.{Receipt, ReceiptItem}
+  alias Donation.Admins.{TypeOfContribution, TypeOfPaymentMethod}
+  alias Donation.Revenue.{Contribution, MassOffering, Donation}
 
   @doc """
   Admins: USER
   """
-
-  alias Donation.Admins.User
 
   def list_users do
     Repo.all(User)
@@ -69,13 +71,10 @@ defmodule Donation.Admins do
   Admins: RECEIPT
   """
 
-  alias Donation.Admins.Receipt
-
-  def list_receipts do
+  def list_receipts(params) do
     Receipt
     |> order_by(desc: :inserted_at)
-    |> Repo.all()
-    |> Repo.preload([:type_of_payment_method, receipt_items: :type_of_contribution])
+    |> Repo.paginate(params)
   end
 
   def search_receipts(_search_params) do
@@ -126,8 +125,6 @@ defmodule Donation.Admins do
   Admins: RECEIPT ITEM
   """
 
-  alias Donation.Admins.ReceiptItem
-
   def list_receipt_items do
     Repo.all(ReceiptItem)
   end
@@ -158,8 +155,6 @@ defmodule Donation.Admins do
   Admins: Type of Contributions
   """
 
-  alias Donation.Admins.TypeOfContribution
-
   def list_type_of_contributions do
     Repo.all(TypeOfContribution)
   end
@@ -189,8 +184,6 @@ defmodule Donation.Admins do
   @doc """
   Admins: Type of Payment Methods
   """
-
-  alias Donation.Admins.TypeOfPaymentMethod
 
   def list_type_of_payment_methods do
     Repo.all(TypeOfPaymentMethod)
@@ -223,7 +216,6 @@ defmodule Donation.Admins do
   In Admin, they need to data entry for Mass Offering without Payment
   A contribution has many mass_offerings
   """
-  alias Donation.Revenue.{Contribution, MassOffering}
 
   def list_mass_offering_by_contributors do
     Contribution
@@ -261,6 +253,35 @@ defmodule Donation.Admins do
   @doc """
     REPORTS
   """
+
+  def filter_donations(%{search: nil}) do
+    Repo.all(
+      from d in Donation,
+        join: c in Contribution,
+        on: c.id == d.contribution_id,
+        order_by: [desc: :inserted_at],
+        preload: [:contribution]
+    )
+  end
+
+  ## Practice: https://stackoverflow.com/questions/49382461/ecto-query-composition-with-nil-values
+  def filter_donations(%{search: search}) do
+    from_date =
+      if get_in(search, ["from_date"]) != "" do
+        Date.from_iso8601!(get_in(search, ["from_date"]))
+      else
+        Date.utc_today()
+      end
+    Repo.all(
+      from d in Donation,
+        join: c in Contribution,
+        on: c.id == d.contribution_id,
+        where: fragment("?::date", d.inserted_at) >= ^from_date,
+        where: fragment("?::date", d.inserted_at) <= ^from_date,
+        preload: [:contribution]
+    )
+  end
+
   def find_mass_offering_dates(from_date) do
     Repo.all(
       from mo in MassOffering,

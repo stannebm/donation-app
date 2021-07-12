@@ -3,6 +3,8 @@ defmodule DonationWeb.ReportView do
 
   alias Elixlsx.{Workbook, Sheet}
 
+  ## MASS OFFERING: EXPORT EXCEL
+
   @header [
     "Type",
     "Mass Language",
@@ -42,4 +44,43 @@ defmodule DonationWeb.ReportView do
       mass_offering.intention
     ]
   end
+
+  ## DONATION: EXPORT EXCEL
+
+  @header_donations [
+    "Created Date",
+    "From Whom",
+    "Intention"
+  ]
+
+  def render("donations.xlsx", %{donations: donations}) do
+    report_generator_for_donations(donations)
+    |> Elixlsx.write_to_memory("donations.xlsx")
+    |> elem(1)
+    |> elem(1)
+  end
+
+  def report_generator_for_donations(donations) do
+    rows =
+      donations
+      |> Enum.map(&row_donation(&1))
+
+    %Workbook{
+      sheets: [
+        %Sheet{
+          name: "Donations",
+          rows: [@header_donations] ++ rows
+        }
+      ]
+    }
+  end
+
+  def row_donation(donation) do
+    [
+      Timex.format!(donation.inserted_at, "%d.%m.%Y", :strftime),
+      donation.contribution.name,
+      donation.intention
+    ]
+  end
+
 end

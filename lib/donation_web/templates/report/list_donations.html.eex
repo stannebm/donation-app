@@ -1,0 +1,65 @@
+<section class="is-table">
+  <div class="container">
+
+    <div class="card">
+
+      <header class="card-header">
+        <div class="card-header-title">
+          Reports: Listing of Donations
+        </div>
+
+        <div class="card-header-icon">
+          <%= if @conn.params != %{} do %>
+            <%= link("XLSX", to: Routes.admin_report_path(@conn, :list_donations_xlsx, @conn.params), target: "_blank", class: "button is-small is-primary is-outlined") %>
+          <% end %>
+        </div>
+
+      </header>
+
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+            <%= form_for @conn, Routes.admin_report_path(@conn, :list_donations), [ method: :get, as: :search], fn f -> %>
+              <div class="field">
+                <label class="label">From Date</label>
+                <div class="control">
+                  <%= date_input f, :from_date, class: "input from-date" %>
+                  <%= submit "Search", class: "button is-info" %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+
+            <table class="table is-striped is-hoverable is-fullwidth">
+              <thead>
+                <tr>
+                  <th>Created Date</th>
+                  <th>From Whom</th>
+                  <th>Intention</th>
+                </tr>
+              </thead>
+              <tbody>
+                <%= for donation <- @donations do %>
+                  <tr>
+                    <td width="20%"><%= Timex.format!(donation.inserted_at, "%d.%m.%Y", :strftime) %></td>
+                    <td><%= donation.contribution.name %></td>
+                    <td><%= donation.intention %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>

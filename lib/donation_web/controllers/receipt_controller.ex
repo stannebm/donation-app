@@ -9,8 +9,8 @@ defmodule DonationWeb.ReceiptController do
   alias Donation.Admins.Receipt
   alias Donation.Admins.ReceiptItem
 
-  def index(conn, _params) do
-    receipts = Admins.list_receipts()
+  def index(conn, params) do
+    receipts = Admins.list_receipts(params)
     render(conn, "index.html", receipts: receipts)
   end
 

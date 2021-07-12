@@ -81,10 +81,10 @@
           <p class="menu-label">
             Reports
             <ul class="menu-list">
-              <li><%= link("Reports", to: '/admins/reports' ) %></li>
-              <li><%= link "List Mass Offerings", to: Routes.admin_report_path(@conn, :list_mass_offerings) %></li>
-              <!--<li><%#= link("List Donations", to: '/admins/reports' ) %></li>
-              <li><%#= link("List receipt by contributor", to: '/admins/reports' ) %></li>
+              <li><%= link("Reports", to: "/admins/reports") %></li>
+              <li><%= link("List Mass Offerings", to: Routes.admin_report_path(@conn, :list_mass_offerings)) %></li>
+              <li><%= link("List Donations", to: Routes.admin_report_path(@conn, :list_donations)) %></li>
+              <!--<li><%#= link("List receipt by contributor", to: '/admins/reports' ) %></li>
               <li><%#= link("List Payment Methods by contributor", to: '/admins/reports' ) %></li>
               <li><%#= link("List Cashiers", to: '/admins/reports' ) %></li>-->
             </ul>

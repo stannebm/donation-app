@@ -29,6 +29,7 @@
       <div class="card">
         <div class="card-content">
           <div class="content">
+
             <table class="table is-striped is-hoverable is-fullwidth">
               <thead>
                 <tr>
@@ -71,6 +72,21 @@
                 <% end %>
               </tbody>
             </table>
+
+            <nav class="pagination" role="navigation" aria-label="pagination">
+
+              <%= link "Prev Page",
+                  class: "button pagination-previous",
+                  disabled: @receipts.page_number < 2,
+                  to: Routes.receipt_path(@conn, :index, page: @receipts.page_number - 1) %>
+
+              <%= link "Next Page",
+                  class: "button pagination-next",
+                  disabled: @receipts.page_number >= @receipts.total_pages,
+                  to: Routes.receipt_path(@conn, :index, page: @receipts.page_number + 1) %>
+
+            </nav>
+
           </div>
         </div>
       </div>

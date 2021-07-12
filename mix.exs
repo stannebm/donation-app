@@ -50,7 +50,8 @@ defmodule Donation.MixProject do
       {:bcrypt_elixir, "~> 2.0"},
       {:timex, "~> 3.7"},
       {:pdf_generator, "~> 0.6.2"},
-      {:elixlsx, "~> 0.4.2"}
+      {:elixlsx, "~> 0.4.2"},
+      {:scrivener_ecto, "~> 2.7"}
     ]
   end
 

@@ -45,7 +45,7 @@
               <tbody>
                 <%= for contribution <- @contributions do %>
                   <tr>
-                    <td width="15%"><%= Timex.format!(contribution.inserted_at, "%d-%m-%Y", :strftime) %></td>
+                    <td width="20%"><%= Timex.format!(contribution.inserted_at, "%d.%m.%Y", :strftime) %></td>
                     <td><%= contribution.type %></td>
                     <td><%= contribution.name %></td>
                     <td><%= contribution.email %></td>
@@ -54,9 +54,11 @@
                     <td><%= contribution.payment_method %></td>
                     <td width="20%">
                       <div class="field is-grouped">
-                        <p class="control">
-                          <%= link "Show", to: Routes.admin_mass_offering_path(@conn, :show, contribution), class: "button is-primary is-small" %>
-                        </p>
+                        <%= if contribution.type != "donation" do %>
+                          <p class="control">
+                            <%= link "Show", to: Routes.admin_mass_offering_path(@conn, :show, contribution), class: "button is-primary is-small" %>
+                          </p>
+                        <% end %>
                         <%= if contribution.payment_method == "none" do %>
                           <p class="control">
                             <%= link "Edit", to: Routes.admin_mass_offering_path(@conn, :edit, contribution), class: "button is-info is-small" %>

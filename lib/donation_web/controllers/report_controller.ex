@@ -1,34 +1,49 @@
 defmodule DonationWeb.ReportController do
   use DonationWeb, :controller
 
-  import Ecto.Query
-  alias Donation.Repo
   alias Donation.Admins
-  # alias Donation.Admins.{Receipt}
-  alias Donation.Revenue.MassOffering
-
-  # action_fallback DonationWeb.FallbackController
 
   def index(conn, params) do
     receipts = Admins.search_receipts(params)
     render(conn, "index.html", receipts: receipts)
   end
 
-  ## List Mass Offerings -> CASE 1
+  ## LIST DONATIONS -> CASE 1
+  def list_donations(conn, %{"search" => search}) do
+    query = Admins.filter_donations(%{search: search})
+    render(conn, :list_donations, donations: query)
+  end
+
+  ## LIST DONATIONS -> CASE 2
+  def list_donations(conn, _) do
+    query = Admins.filter_donations(%{search: nil})
+    render(conn, :list_donations, donations: query)
+  end
+
+  ## LIST DONATIONS -> EXPORT EXCEL
+  def list_donations_xlsx(conn, %{"search" => search}) do
+    query = Admins.filter_donations(%{search: search})
+    conn
+    |> put_resp_content_type("text/xlsx")
+    |> put_resp_header("content-disposition", "attachment; filename=donations.xlsx;")
+    |> render("donations.xlsx", %{donations: query})
+  end
+
+  ## LIST MASS OFFERINGS -> CASE 1
   def list_mass_offerings(conn, %{"search" => search}) do
     new_date = Date.from_iso8601!(search["from_date"])
     query = Admins.find_mass_offering_dates(new_date)
     render(conn, :list_mass_offerings, mass_offerings: query)
   end
 
-  ## List Mass Offerings -> CASE 2
+  ## LIST MASS OFFERINGS -> CASE 2
   def list_mass_offerings(conn, _) do
     default_date = Date.utc_today()
     query = Admins.find_mass_offering_dates(default_date)
     render(conn, :list_mass_offerings, mass_offerings: query)
   end
 
-  ## GENERATE PDF
+  ## LIST MASS OFFERINGS: GENERATE PDF
   def list_mass_offerings_pdf(conn, params) do
     from_date = get_in(params, ["search", "from_date"])
     new_date = Date.from_iso8601!(from_date)
@@ -64,14 +79,15 @@ defmodule DonationWeb.ReportController do
     )
   end
 
+  ## LIST MASS OFFERINGS: EXPORT XLSX
   def list_mass_offerings_xlsx(conn, params) do
     from_date = get_in(params, ["search", "from_date"])
     new_date = Date.from_iso8601!(from_date)
     mass_offerings = Admins.find_mass_offering_dates(new_date)
-
     conn
     |> put_resp_content_type("text/xlsx")
     |> put_resp_header("content-disposition", "attachment; filename=mass_intention.xlsx;")
     |> render("mass_intention.xlsx", %{mass_offerings: mass_offerings})
   end
+
 end

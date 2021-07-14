@@ -9,7 +9,7 @@ import {
   PopoverContent,
   PopoverTrigger,
   Text,
-  VStack
+  VStack,
 } from "@chakra-ui/react";
 import axios from "axios";
 import * as R from "ramda";
@@ -33,31 +33,34 @@ export type MassOfferingForm = {
 export type IntentionForm = {
   intention?: string;
   dates?: string[];
-  type_of_mass:
-  | "Special Intention"
-  | "Thanksgiving"
-  | "Departed Soul"
+  type_of_mass: "Special Intention" | "Thanksgiving" | "Departed Soul";
   other_intention?: string;
 };
 
 const FORM_TYPE = "mass_offering";
 const API_PATH = "/api/mass_offering_form";
 const FPX_URL = "https://fpxuat.minorbasilicastannebm.com/fpx";
-const CYBERSOURCE_URL = "https://cybersource.minorbasilicastannebm.com/cybersource";
+const CYBERSOURCE_URL =
+  "https://cybersource.minorbasilicastannebm.com/cybersource";
 
 type PaymentLinkParams = {
   paymentMethod: string;
   referenceNo: number;
   amount: number;
   name: string;
-  email: string
-}
+  email: string;
+};
 
-const mkPaymentUrl = ({ paymentMethod, referenceNo, amount, name, email }: PaymentLinkParams) => {
+const mkPaymentUrl = ({
+  paymentMethod,
+  referenceNo,
+  amount,
+  name,
+  email,
+}: PaymentLinkParams) => {
   const path = paymentMethod === "fpx" ? FPX_URL : CYBERSOURCE_URL;
   return `${path}?reference_no=${referenceNo}&amount=${amount}&name=${name}&email=${email}`;
-
-}
+};
 
 export default function MassOffering() {
   const {
@@ -72,12 +75,14 @@ export default function MassOffering() {
     },
   });
 
-  const onSubmit = (paymentMethod: "fpx" | "cybersource") => (data: MassOfferingForm) => {
+  const onSubmit = (paymentMethod: "fpx" | "cybersource") => (
+    data: MassOfferingForm,
+  ) => {
     const submission = { ...data };
     const referenceNo = new Date().getTime();
     const amount = totalMasses * 10;
-    const email = submission['email']
-    const name = submission['name']
+    const email = submission["email"];
+    const name = submission["name"];
 
     submission.intentions = submission.intentions.map((o, index) => ({
       ...o,
@@ -91,23 +96,25 @@ export default function MassOffering() {
         ...submission,
         reference_no: referenceNo,
         amount: amount,
-        payment_method: paymentMethod
+        payment_method: paymentMethod,
       },
     };
     console.log("DEBUG submission", submissionPayload);
     axios
       .post(API_PATH, submissionPayload)
-      .then(function({ data }) {
-        window.location.replace(mkPaymentUrl({
-          paymentMethod,
-          referenceNo,
-          amount,
-          name,
-          email,
-        }));
+      .then(function ({ data }) {
+        window.location.replace(
+          mkPaymentUrl({
+            paymentMethod,
+            referenceNo,
+            amount,
+            name,
+            email,
+          }),
+        );
         console.log("posted resp:", data);
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
       });
   };
@@ -335,10 +342,14 @@ export default function MassOffering() {
           Online Banking
         </Button> */}
 
-        <Button colorScheme="teal" isLoading={isSubmitting} onClick={(e) => {
-          handleSubmit(onSubmit("cybersource"))()
-          e.preventDefault()
-        }}>
+        <Button
+          colorScheme="teal"
+          isLoading={isSubmitting}
+          onClick={(e) => {
+            handleSubmit(onSubmit("cybersource"))();
+            e.preventDefault();
+          }}
+        >
           Credit/Debit Card
         </Button>
       </HStack>

@@ -46,7 +46,8 @@ ul.no-bullets {
 }
 
 /* FORM */
-#add_receipt_item, #add_offering {
+#add_receipt_item,
+#add_offering {
   margin-top: 20px;
   margin-left: 25px;
 }
@@ -59,7 +60,9 @@ ul.date-input-container {
 li .input {
   width: 40%;
 }
-.input.from-date { width: 20% }
+.input.from-date {
+  width: 20%;
+}
 
 /* CRUD Template */
 
@@ -70,7 +73,8 @@ section#mass-intentions-pdf {
 }
 
 .is-card .container,
-.is-table .container, #mass-intentions-pdf .container {
+.is-table .container,
+#mass-intentions-pdf .container {
   max-width: 100%;
 }
 

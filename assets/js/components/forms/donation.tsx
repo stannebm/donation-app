@@ -16,24 +16,30 @@ export type DonationForm = {
   other_intention?: string;
 };
 
-const FORM_TYPE = "donation"
+const FORM_TYPE = "donation";
 const API_PATH = "/api/donation_form";
 const FPX_URL = "https://fpxuat.minorbasilicastannebm.com/fpx";
-const CYBERSOURCE_URL = "https://cybersource.minorbasilicastannebm.com/cybersource";
+const CYBERSOURCE_URL =
+  "https://cybersource.minorbasilicastannebm.com/cybersource";
 
 type PaymentLinkParams = {
   paymentMethod: string;
   referenceNo: number;
   amount: number;
   name: string;
-  email: string
-}
+  email: string;
+};
 
-const mkPaymentUrl = ({ paymentMethod, referenceNo, amount, name, email }: PaymentLinkParams) => {
+const mkPaymentUrl = ({
+  paymentMethod,
+  referenceNo,
+  amount,
+  name,
+  email,
+}: PaymentLinkParams) => {
   const path = paymentMethod === "fpx" ? FPX_URL : CYBERSOURCE_URL;
   return `${path}?reference_no=${referenceNo}&amount=${amount}&name=${name}&email=${email}`;
-
-}
+};
 
 export default function Donation() {
   const {
@@ -42,40 +48,46 @@ export default function Donation() {
     formState: { errors, isSubmitting },
     watch,
   } = useForm<DonationForm>({
-    defaultValues: {
-    },
+    defaultValues: {},
   });
 
-  const onSubmit = (paymentMethod: "fpx" | "cybersource") => (data: DonationForm) => {
+  const onSubmit = (paymentMethod: "fpx" | "cybersource") => (
+    data: DonationForm,
+  ) => {
     const submission = { ...data };
-    const finalizedIntention = submission.intention === "Others" ? submission.other_intention : submission.intention;
-    delete submission['other_intention'];
+    const finalizedIntention =
+      submission.intention === "Others"
+        ? submission.other_intention
+        : submission.intention;
+    delete submission["other_intention"];
     const referenceNo = new Date().getTime();
-    const amount = submission['amount']
-    const email = submission['email']
-    const name = submission['name']
+    const amount = submission["amount"];
+    const email = submission["email"];
+    const name = submission["name"];
     const submissionPayload = {
       [FORM_TYPE]: {
         ...submission,
         reference_no: referenceNo,
         intention: finalizedIntention,
-        payment_method: paymentMethod
-      }
+        payment_method: paymentMethod,
+      },
     };
     console.log("DEBUG submission", submissionPayload);
     axios
       .post(API_PATH, submissionPayload)
-      .then(function({ data }) {
-        window.location.replace(mkPaymentUrl({
-          paymentMethod,
-          referenceNo,
-          amount,
-          name,
-          email,
-        }));
+      .then(function ({ data }) {
+        window.location.replace(
+          mkPaymentUrl({
+            paymentMethod,
+            referenceNo,
+            amount,
+            name,
+            email,
+          }),
+        );
         console.log("posted resp:", data);
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
       });
   };
@@ -141,12 +153,9 @@ export default function Donation() {
               <FormInput
                 label="Other Intention"
                 errors={errors}
-                {...register(
-                  "other_intention",
-                  {
-                    required: false,
-                  },
-                )}
+                {...register("other_intention", {
+                  required: false,
+                })}
               />
             )}
           </>
@@ -161,10 +170,14 @@ export default function Donation() {
           Online Banking
         </Button> */}
 
-        <Button colorScheme="teal" isLoading={isSubmitting} onClick={(e) => {
-          handleSubmit(onSubmit("cybersource"))()
-          e.preventDefault()
-        }}>
+        <Button
+          colorScheme="teal"
+          isLoading={isSubmitting}
+          onClick={(e) => {
+            handleSubmit(onSubmit("cybersource"))();
+            e.preventDefault();
+          }}
+        >
           Credit/Debit Card
         </Button>
       </HStack>

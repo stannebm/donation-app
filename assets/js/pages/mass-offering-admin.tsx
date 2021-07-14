@@ -15,31 +15,44 @@ addOffer.onclick = (e) => {
 };
 
 // Adding the block of Date
-function init_array_date_input(){
-  const dateInputSelector = document.querySelectorAll<HTMLElement>(".add-array-date-input");
+function init_array_date_input() {
+  const dateInputSelector = document.querySelectorAll<HTMLElement>(
+    ".add-array-date-input",
+  );
   dateInputSelector.forEach((el: any) => {
     el.onclick = () => {
-      const firstLI = el.closest(".box.content").querySelector("ul > li:first-child");
-      let cloneLI = '<li>' + firstLI.innerHTML + '</li>';
+      const firstLI = el
+        .closest(".box.content")
+        .querySelector("ul > li:first-child");
+      let cloneLI = "<li>" + firstLI.innerHTML + "</li>";
       firstLI.insertAdjacentHTML("afterend", cloneLI);
-      eachSelected(".remove-array-item", (el: any) => el.onclick = removeItem);
-    }
+      eachSelected(
+        ".remove-array-item",
+        (el: any) => (el.onclick = removeItem),
+      );
+    };
   });
 }
 init_array_date_input();
 
 // MASS OFFERING (ADMIN): massLanguage
-function insert_mass_language(){
-  let selectMassLanguage = (document.getElementById("contribution_massLanguage") as HTMLInputElement).value;
-  let selectNestedMassLanguages = document.querySelectorAll<HTMLElement>(".node-mass-language");
+function insert_mass_language() {
+  let selectMassLanguage = (document.getElementById(
+    "contribution_massLanguage",
+  ) as HTMLInputElement).value;
+  let selectNestedMassLanguages = document.querySelectorAll<HTMLElement>(
+    ".node-mass-language",
+  );
   selectNestedMassLanguages.forEach((elm: any) => {
     elm.value = selectMassLanguage;
   });
 }
 
-function init_select_mass_language(){
-  const selectMassLanguage = document.getElementById("contribution_massLanguage")!;
-  selectMassLanguage.addEventListener('change', () => {
+function init_select_mass_language() {
+  const selectMassLanguage = document.getElementById(
+    "contribution_massLanguage",
+  )!;
+  selectMassLanguage.addEventListener("change", () => {
     insert_mass_language();
   });
   insert_mass_language();
@@ -49,39 +62,43 @@ init_select_mass_language();
 
 // ADD or REMOVE DATES
 window.onload = () => {
-  eachSelected(".remove-array-item", (el: any) => el.onclick = removeItem);
-}
+  eachSelected(".remove-array-item", (el: any) => (el.onclick = removeItem));
+};
 
 const eachSelected = (selector: any, fn: any) => {
   Array.prototype.forEach.call(document.querySelectorAll(selector), fn);
-}
+};
 
 const removeItem = (event: any) => {
   let li = event.target.parentNode;
   let ol = li.parentNode;
   ol.removeChild(li);
-}
+};
 
 // MASS OFFERING: SHOW LABEL
 
-function show_label_name(selectTypeOfMass: any){
+function show_label_name(selectTypeOfMass: any) {
   const name = selectTypeOfMass.options[selectTypeOfMass.selectedIndex].text;
-  const nodeLabelName = selectTypeOfMass.closest(".box.content").querySelector('.node-label-name');
-  if (name == "Departed Soul"){
+  const nodeLabelName = selectTypeOfMass
+    .closest(".box.content")
+    .querySelector(".node-label-name");
+  if (name == "Departed Soul") {
     nodeLabelName.innerText = "Name of Departed Soul";
   } else {
     nodeLabelName.innerText = "Intention";
   }
 }
 
-function init_select_type_of_mass(){
-  const selectAllTypeOfMass = document.querySelectorAll<HTMLElement>(".select-type-of-mass");
-  selectAllTypeOfMass.forEach( (selectTypeOfMass) => {
-    selectTypeOfMass.addEventListener('change', () => {
+function init_select_type_of_mass() {
+  const selectAllTypeOfMass = document.querySelectorAll<HTMLElement>(
+    ".select-type-of-mass",
+  );
+  selectAllTypeOfMass.forEach((selectTypeOfMass) => {
+    selectTypeOfMass.addEventListener("change", () => {
       show_label_name(selectTypeOfMass);
     });
     show_label_name(selectTypeOfMass);
-  });  
+  });
 }
 
 init_select_type_of_mass();

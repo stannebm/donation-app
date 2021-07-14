@@ -1,23 +1,18 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import React from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-import MassOffering from "./pages/mass-offering";
 import Donation from "./pages/donation";
+import MassOffering from "./pages/mass-offering";
 // import Login from "./pages/login";
 import theme from "./theme";
 
 function Routes() {
   return (
-    <BrowserRouter>
-      <Switch>
-        <Route exact path="/mass-offering">
-          <MassOffering />
-        </Route>
-        <Route exact path="/donation">
-          <Donation />
-        </Route>
-      </Switch>
-    </BrowserRouter>
+    <>
+      {window.location.pathname.startsWith("/mass-offering") && (
+        <MassOffering />
+      )}
+      {window.location.pathname.startsWith("/donation") && <Donation />}
+    </>
   );
 }
 

@@ -15,6 +15,11 @@ defmodule DonationWeb.MassOfferingController do
   alias Donation.Admins
   alias Donation.Revenue.{Contribution, MassOffering}
 
+  def index(conn, %{"search" => search}) do
+    contributions = Admins.list_mass_offering_by_contributors(search)
+    render(conn, :index, contributions: contributions)
+  end
+
   def index(conn, _params) do
     contributions = Admins.list_mass_offering_by_contributors()
     render(conn, :index, contributions: contributions)

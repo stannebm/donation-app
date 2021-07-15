@@ -17,6 +17,7 @@ ul.no-bullets {
 
 .is-sidebar-menu {
   padding: 2rem;
+  padding: 30px 15px 30px 25px;
   background: #4a4a4a;
 }
 .is-sidebar-menu li a {

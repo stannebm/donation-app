@@ -42,14 +42,16 @@
                   <th>Created Date</th>
                   <th>From Whom</th>
                   <th>Intention</th>
+                  <th>Amount (RM)</th>
                 </tr>
               </thead>
               <tbody>
                 <%= for donation <- @donations do %>
                   <tr>
-                    <td width="20%"><%= Timex.format!(donation.inserted_at, "%d.%m.%Y", :strftime) %></td>
+                    <td><%= Timex.format!(donation.inserted_at, "%d.%m.%Y", :strftime) %></td>
                     <td><%= donation.contribution.name %></td>
                     <td><%= donation.intention %></td>
+                    <td><%= donation.contribution.amount %></td>
                   </tr>
                 <% end %>
               </tbody>

@@ -217,6 +217,19 @@ defmodule Donation.Admins do
   A contribution has many mass_offerings
   """
 
+  def list_mass_offering_by_contributors(search_params) do
+    Contribution
+    |> filter_by_date(search_params["start_date"], search_params["end_date"])
+    |> filter_by_type(search_params["type"])
+    |> filter_by_name(search_params["name"])
+    |> filter_by_email(search_params["email"])
+    |> filter_by_contact_number(search_params["contact_number"])
+    |> filter_by_online_payment_method(search_params["payment_method"])
+    |> order_by(desc: :inserted_at)
+    |> Repo.all()
+    |> Repo.preload([:mass_offerings])
+  end
+
   def list_mass_offering_by_contributors do
     Contribution
     |> order_by(desc: :inserted_at)
@@ -301,4 +314,124 @@ defmodule Donation.Admins do
     |> Enum.map(fn x -> x.intention end)
     |> Enum.join("; ")
   end
+
+  @doc """
+    RECEIPT REPORTS
+  """
+
+  def unique_cashier_in_receipt() do
+    Repo.all(
+      from r in Receipt,
+      join: u in User, on: u.id == r.user_id,
+      order_by: [u.name],
+      distinct: r.user_id,
+      select: {u.name,  u.id}
+    )
+  end
+
+  def filter_receipt_and_payment_method(search_params) do
+    Receipt
+    |> filter_by_date(search_params["start_date"], search_params["end_date"])
+    |> filter_by_cashier_name(search_params["user_id"])
+    |> filter_by_receipt_number(search_params["receipt_number"])
+    |> filter_by_donor_name(search_params["donor_name"])
+    |> filter_by_payment_method(search_params["type_of_payment_method_id"])
+    |> order_by(desc: :inserted_at)
+    |> Repo.all()
+    |> Repo.preload([:user, :type_of_payment_method])
+  end
+
+  def filter_receipt_and_payment_method() do
+    Repo.all(
+      from r in Receipt,
+      join: u in User, on: u.id == r.user_id,
+      order_by: [u.name],
+      preload: [:user, :type_of_payment_method]
+    )
+  end
+
+  ## PROTECTED FILTER
+
+  defp filter_by_date(query, nil, nil), do: query
+  defp filter_by_date(query, "", ""), do: query
+  defp filter_by_date(query, start_date, end_date) do
+    case {start_date, end_date} do
+      {start_date, ""} -> 
+        sd = Date.from_iso8601!(start_date)
+        ed = Date.from_iso8601!(start_date)
+        from q in query,
+          where: fragment("?::date", q.inserted_at) >= ^sd,
+          where: fragment("?::date", q.inserted_at) <= ^ed
+      {start_date, end_date} ->
+        sd = Date.from_iso8601!(start_date)
+        ed = Date.from_iso8601!(end_date)
+        from q in query,
+          where: fragment("?::date", q.inserted_at) >= ^sd,
+          where: fragment("?::date", q.inserted_at) <= ^ed
+    end
+  end
+
+  defp filter_by_cashier_name(query, nil), do: query
+  defp filter_by_cashier_name(query, ""), do: query
+  defp filter_by_cashier_name(query, user_id) do
+    from receipt in query,
+    where: receipt.user_id == ^user_id
+  end
+
+  defp filter_by_receipt_number(query, nil), do: query
+  defp filter_by_receipt_number(query, ""), do: query
+  defp filter_by_receipt_number(query, receipt_number) do
+    from receipt in query,
+    where: ilike(receipt.receipt_number, ^"%#{receipt_number}%")
+  end
+
+  defp filter_by_donor_name(query, nil), do: query
+  defp filter_by_donor_name(query, ""), do: query
+  defp filter_by_donor_name(query, donor_name) do
+    from receipt in query,
+    where: receipt.donor_name == ^donor_name
+  end
+
+  defp filter_by_payment_method(query, nil), do: query
+  defp filter_by_payment_method(query, ""), do: query
+  defp filter_by_payment_method(query, type_of_payment_method_id) do
+    from receipt in query,
+    where: receipt.type_of_payment_method_id == ^type_of_payment_method_id
+  end
+
+  defp filter_by_type(query, nil), do: query
+  defp filter_by_type(query, ""), do: query
+  defp filter_by_type(query, type) do
+    from q in query,
+    where: q.type == ^type
+  end
+
+  defp filter_by_name(query, nil), do: query
+  defp filter_by_name(query, ""), do: query
+  defp filter_by_name(query, name) do
+    from q in query,
+    where: ilike(q.name, ^"%#{name}%")
+  end
+
+  defp filter_by_email(query, nil), do: query
+  defp filter_by_email(query, ""), do: query
+  defp filter_by_email(query, email) do
+    from q in query,
+    where: ilike(q.email, ^"%#{email}%")
+  end
+
+  defp filter_by_contact_number(query, nil), do: query
+  defp filter_by_contact_number(query, ""), do: query
+  defp filter_by_contact_number(query, contact_number) do
+    from q in query,
+    where: ilike(q.contact_number, ^"%#{contact_number}%")
+  end
+
+  defp filter_by_online_payment_method(query, nil), do: query
+  defp filter_by_online_payment_method(query, ""), do: query
+  defp filter_by_online_payment_method(query, payment_method) do
+    from q in query,
+    where: q.payment_method == ^payment_method
+  end
+
 end

@@ -1,0 +1,103 @@
+<section class="is-table">
+  <div class="container">
+
+    <div class="card">
+
+      <header class="card-header">
+        <p class="card-header-title">
+          Report: List of Receipts and Payment Methods
+        </p>
+
+        <div class="card-header-icon">
+          <%= if @conn.params != %{} do %>
+            <%= link("XLSX", to: Routes.admin_report_path(@conn, :list_receipts_and_payment_methods_xlsx, @conn.params), target: "_blank", class: "button is-small is-primary is-outlined") %>
+          <% end %>
+        </div>
+      </header>
+
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+
+            <%= form_for @conn, Routes.admin_report_path(@conn, :list_receipts_and_payment_methods), [ method: :get, as: :search], fn f -> %>
+              <div class="control">
+                <div class="columns">
+                  <div class="column">
+                    <label class="label">From Date</label>
+                    <%= date_input(f, :start_date, class: "input") %>
+                  </div>
+                  <div class="column">
+                    <label class="label">To Date</label>
+                    <%= date_input(f, :end_date, class: "input") %>
+                  </div>
+                  <div class="column">
+                    <label class="label">Cashier Name</label>
+                    <div class="select is-fullwidth">
+                      <%= select f, :user_id, @cashiers, prompt: "Select Cashier" %>
+                    </div>
+                  </div>
+                  <div class="column">
+                    <label class="label">Receipt Number</label>
+                    <%= text_input f, :receipt_number, class: "input" %>
+                  </div>
+                </div>
+                <div class="columns">
+                  <div class="column">
+                    <label class="label">Donor Name</label>
+                    <%= text_input f, :donor_name, class: "input" %>
+                  </div>
+                  <div class="column">
+                    <label class="label">Payment Method</label>
+                    <div class="select is-fullwidth">
+                      <%= select f, :type_of_payment_method_id, @type_of_payment_methods, prompt: "Select Payment Method" %>
+                    </div>
+                  </div>
+                  <div class="column">
+                    <label class="label">&nbsp;</label>
+                    <%= submit "Search", class: "button is-info" %>
+                  </div>
+                  <div class="column">
+                  </div>
+                </div>
+              </div>
+            <% end %>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+            <table class="table is-striped is-hoverable is-fullwidth">
+              <thead>
+                <tr>
+                  <th>Created Date</th>
+                  <th>Cashier Name</th>
+                  <th>Receipt Number</th>
+                  <th>Donor Name</th>
+                  <th>Payment Method</th>
+                  <th>Total Amount (RM)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <%= for receipt <- @receipts do %>
+                  <tr>
+                    <td><%= Timex.format!(receipt.inserted_at, "%d.%m.%Y", :strftime) %></td>
+                    <td><%= receipt.user.name %></td>
+                    <td><%= receipt.receipt_number %></td>
+                    <td style="word-break:break-all;"><%= receipt.donor_name %></td>
+                    <td><%= receipt.type_of_payment_method.name %></td>
+                    <td class="has-text-right"><%= receipt.total_amount %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>

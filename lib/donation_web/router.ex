@@ -61,12 +61,16 @@ defmodule DonationWeb.Router do
   scope "/admins", DonationWeb, as: :admin do
     pipe_through [:browser, :authenticate_admin, :layout_admin]
     resources("/mass_offerings", MassOfferingController)
-    resources("/reports", ReportController, only: [:index])
+    ## REPORTS
     get("/reports/list_donations", ReportController, :list_donations)
     get("/reports/list_donations/xlsx", ReportController, :list_donations_xlsx)
     get("/reports/list_mass_offerings", ReportController, :list_mass_offerings)
     get("/reports/list_mass_offerings/pdf", ReportController, :list_mass_offerings_pdf)
     get("/reports/list_mass_offerings/xlsx", ReportController, :list_mass_offerings_xlsx)
+    ## FINANCIAL MANAGEMENT
+    get("/reports/list_receipts_and_payment_methods", ReportController, :list_receipts_and_payment_methods)
+    get("/reports/list_receipts_and_payment_methods/xlsx", ReportController, :list_receipts_and_payment_methods_xlsx)
+    get("/reports/list_receipts_and_contributions", ReportController, :list_receipts_and_contributions)
   end
 
   scope "/", DonationWeb do

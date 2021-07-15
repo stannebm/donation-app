@@ -8,6 +8,8 @@ defmodule DonationWeb.ReportController do
     render(conn, "index.html", receipts: receipts)
   end
 
+  ## NORMAL REPORTS
+
   ## LIST DONATIONS -> CASE 1
   def list_donations(conn, %{"search" => search}) do
     query = Admins.filter_donations(%{search: search})
@@ -89,5 +91,47 @@ defmodule DonationWeb.ReportController do
     |> put_resp_header("content-disposition", "attachment; filename=mass_intention.xlsx;")
     |> render("mass_intention.xlsx", %{mass_offerings: mass_offerings})
   end
+
+  ## FINANCIAL REPORTS
+
+  def list_receipts_and_payment_methods(conn, %{"search" => search}) do
+    cashiers = Admins.unique_cashier_in_receipt()
+    type_of_payment_methods = Admins.list_type_of_payment_methods() |> Enum.map(&{&1.name, &1.id})
+    receipts = Admins.filter_receipt_and_payment_method(search)
+    render(conn, :list_receipts_and_payment_methods, 
+      receipts: receipts, 
+      cashiers: cashiers, 
+      type_of_payment_methods: type_of_payment_methods
+    )
+  end
+
+  def list_receipts_and_payment_methods_xlsx(conn, %{"search" => search}) do
+    receipts = Admins.filter_receipt_and_payment_method(search)
+    conn
+    |> put_resp_content_type("text/xlsx")
+    |> put_resp_header("content-disposition", "attachment; filename=receipts_and_payment_methods.xlsx;")
+    |> render("receipts_and_payment_methods.xlsx", %{receipts: receipts})
+  end
+
+  def list_receipts_and_payment_methods(conn, _) do
+    cashiers = Admins.unique_cashier_in_receipt()
+    type_of_payment_methods = Admins.list_type_of_payment_methods() |> Enum.map(&{&1.name, &1.id})
+    receipts = Admins.filter_receipt_and_payment_method()
+    render(conn, :list_receipts_and_payment_methods, 
+      receipts: receipts, 
+      cashiers: cashiers,
+      type_of_payment_methods: type_of_payment_methods
+    )
+  end
+
+  # def list_receipts_and_contributions(conn, %{"search" => search}) do
+  #   receipts = Admins.filter_receipt_and_contribution(search)
+  #   render(conn, :list_receipts_and_contributions, receipts: receipts)
+  # end
+
+  # def list_receipts_and_contributions(conn, _) do
+  #   receipts = Admins.filter_receipt_and_contribution()
+  #   render(conn, :list_receipts_and_contributions, receipts: receipts)
+  # end
 
 end

@@ -9,11 +9,11 @@
     <div class="left-content">
       <ul class="no-bullets">
         <li style="word-wrap: break-word;">
-          <strong>Received From:</strong>
+          <b>Received From:</b>
           <%= @receipt.donor_name %>
         </li>
         <li>
-          <strong>Payment method:</strong>
+          <b>Payment method:</b>
           <%= if @receipt.type_of_payment_method.name == "Cheque" do %>
             <%= @receipt.type_of_payment_method.name %> [<%= @receipt.cheque %>]
           <% else %>
@@ -21,14 +21,14 @@
           <% end %>
         </li>
         <li>
-          <strong>Cashier:</strong> <%= @receipt.user.name %>
+          <b>Cashier:</b> <%= @receipt.user.name %>
         </li>
       </ul>
     </div>
 
     <div class="right-content">
-      <strong>Receipt number: </strong><%= @receipt.receipt_number %><br/>
-      <strong>Date:</strong> <%= Timex.format!(@receipt.inserted_at, "%d.%m.%Y", :strftime) %>
+      <b>Receipt number: </b><%= @receipt.receipt_number %><br/>
+      <b>Date:</b> <%= Timex.format!(@receipt.inserted_at, "%d.%m.%Y", :strftime) %>
     </div>
 
   </div>
@@ -51,14 +51,14 @@
     <tbody>
       <%= for receipt_item <- @receipt.receipt_items do %>
         <tr>
-          <td>
+          <td style="color: #000;">
             <%= receipt_item.type_of_contribution.name %>
             <%= if receipt_item.type_of_contribution_id == 5 do %>
               : <%= receipt_item.others %>
             <% end %>
           </td>
-          <td class="has-text-right"><%= receipt_item.price %></td>
-          <td><%= receipt_item.remark %></td>
+          <td style="color: #000;" class="has-text-right"><%= receipt_item.price %></td>
+          <td style="color: #000;"><%= receipt_item.remark %></td>
         </tr>
       <% end %>
     </tbody>

@@ -3,7 +3,7 @@ defmodule DonationWeb.ReportView do
 
   alias Elixlsx.{Workbook, Sheet}
 
-  ## MASS OFFERING: EXPORT EXCEL
+  ## MASS OFFERING
 
   @header [
     "Type",
@@ -13,12 +13,48 @@ defmodule DonationWeb.ReportView do
     "Intention"
   ]
 
+  ## DONATION
+
+  @header_donations [
+    "Created Date",
+    "From Whom",
+    "Intention",
+    "Amount (RM)"
+  ]
+
+  ## RECEIPTS AND PAYMENT METHODS
+
+  @header_receipt_and_payment_method [
+    "Created Date",
+    "Cashier Name",
+    "Receipt Number",
+    "Donor Name",
+    "Payment Method",
+    "Total Amount (RM)"
+  ]
+
   def render("mass_intention.xlsx", %{mass_offerings: mass_offerings}) do
     report_generator(mass_offerings)
     |> Elixlsx.write_to_memory("mass_intention.xlsx")
     |> elem(1)
     |> elem(1)
   end
+
+  def render("donations.xlsx", %{donations: donations}) do
+    report_generator_for_donations(donations)
+    |> Elixlsx.write_to_memory("donations.xlsx")
+    |> elem(1)
+    |> elem(1)
+  end
+
+  def render("receipts_and_payment_methods.xlsx", %{receipts: receipts}) do
+    report_generator_for_receipts_and_payment_methods(receipts)
+    |> Elixlsx.write_to_memory("receipts_and_payment_methods.xlsx")
+    |> elem(1)
+    |> elem(1)
+  end
+
+  ## PROTECTED
 
   defp report_generator(mass_offerings) do
     rows =
@@ -33,32 +69,6 @@ defmodule DonationWeb.ReportView do
         }
       ]
     }
-  end
-
-  defp row(mass_offering) do
-    [
-      mass_offering.contribution.type,
-      mass_offering.mass_language,
-      mass_offering.type_of_mass,
-      mass_offering.contribution.name,
-      mass_offering.intention
-    ]
-  end
-
-  ## DONATION: EXPORT EXCEL
-
-  @header_donations [
-    "Created Date",
-    "From Whom",
-    "Intention",
-    "Amount (RM)"
-  ]
-
-  def render("donations.xlsx", %{donations: donations}) do
-    report_generator_for_donations(donations)
-    |> Elixlsx.write_to_memory("donations.xlsx")
-    |> elem(1)
-    |> elem(1)
   end
 
   defp report_generator_for_donations(donations) do
@@ -76,33 +86,6 @@ defmodule DonationWeb.ReportView do
     }
   end
 
-  defp row_donation(donation) do
-    [
-      Timex.format!(donation.inserted_at, "%d.%m.%Y", :strftime),
-      donation.contribution.name,
-      donation.intention,
-      Decimal.to_string(donation.contribution.amount)
-    ]
-  end
-
-  ## RECEIPTS AND PAYMENT METHODS
-
-  @header_receipt_and_payment_method [
-    "Created Date",
-    "Cashier Name",
-    "Receipt Number",
-    "Donor Name",
-    "Payment Method",
-    "Total Amount (RM)"
-  ]
-
-  def render("receipts_and_payment_methods.xlsx", %{receipts: receipts}) do
-    report_generator_for_receipts_and_payment_methods(receipts)
-    |> Elixlsx.write_to_memory("receipts_and_payment_methods.xlsx")
-    |> elem(1)
-    |> elem(1)
-  end
-
   defp report_generator_for_receipts_and_payment_methods(receipts) do
     rows =
       receipts
@@ -116,6 +99,25 @@ defmodule DonationWeb.ReportView do
         }
       ]
     }
+  end
+
+  defp row(mass_offering) do
+    [
+      mass_offering.contribution.type,
+      mass_offering.mass_language,
+      mass_offering.type_of_mass,
+      mass_offering.contribution.name,
+      mass_offering.intention
+    ]
+  end
+
+  defp row_donation(donation) do
+    [
+      Timex.format!(donation.inserted_at, "%d.%m.%Y", :strftime),
+      donation.contribution.name,
+      donation.intention,
+      Decimal.to_string(donation.contribution.amount)
+    ]
   end
 
   defp row_receipt_and_payment_method(receipt) do

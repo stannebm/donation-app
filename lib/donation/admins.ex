@@ -224,7 +224,7 @@ defmodule Donation.Admins do
     |> filter_by_name(search_params["name"])
     |> filter_by_email(search_params["email"])
     |> filter_by_contact_number(search_params["contact_number"])
-    |> filter_by_online_payment_method(search_params["payment_method"])
+    |> filter_by_payment_method(search_params["payment_method"])
     |> order_by(desc: :inserted_at)
     |> Repo.all()
     |> Repo.preload([:mass_offerings])
@@ -329,13 +329,32 @@ defmodule Donation.Admins do
     )
   end
 
+  def filter_receipt_and_contribution(search_params) do
+    ReceiptItem
+    |> filter_by_date(search_params["start_date"], search_params["end_date"])
+    |> filter_by_join_cashier_name(search_params["user_id"])
+    |> filter_by_join_receipt_number(search_params["receipt_number"])
+    |> filter_by_join_donor_name(search_params["donor_name"])
+    |> filter_by_contribution_for(search_params["type_of_contribution_id"])
+    |> order_by(desc: :inserted_at)
+    |> Repo.all()
+    |> Repo.preload([:type_of_contribution, receipt: :user])
+  end
+
+  def filter_receipt_and_contribution() do
+    ReceiptItem
+    |> order_by(desc: :inserted_at)
+    |> Repo.all()
+    |> Repo.preload([:type_of_contribution, receipt: :user])
+  end
+
   def filter_receipt_and_payment_method(search_params) do
     Receipt
     |> filter_by_date(search_params["start_date"], search_params["end_date"])
     |> filter_by_cashier_name(search_params["user_id"])
     |> filter_by_receipt_number(search_params["receipt_number"])
     |> filter_by_donor_name(search_params["donor_name"])
-    |> filter_by_payment_method(search_params["type_of_payment_method_id"])
+    |> filter_by_type_of_payment_method(search_params["type_of_payment_method_id"])
     |> order_by(desc: :inserted_at)
     |> Repo.all()
     |> Repo.preload([:user, :type_of_payment_method])
@@ -374,29 +393,53 @@ defmodule Donation.Admins do
   defp filter_by_cashier_name(query, nil), do: query
   defp filter_by_cashier_name(query, ""), do: query
   defp filter_by_cashier_name(query, user_id) do
-    from receipt in query,
-    where: receipt.user_id == ^user_id
+    from q in query,
+    where: q.user_id == ^user_id
+  end
+
+  defp filter_by_join_cashier_name(query, nil), do: query
+  defp filter_by_join_cashier_name(query, ""), do: query
+  defp filter_by_join_cashier_name(query, user_id) do
+    from ri in query,
+    inner_join: r in assoc(ri, :receipt),
+    where: r.user_id == ^user_id
   end
 
   defp filter_by_receipt_number(query, nil), do: query
   defp filter_by_receipt_number(query, ""), do: query
   defp filter_by_receipt_number(query, receipt_number) do
-    from receipt in query,
-    where: ilike(receipt.receipt_number, ^"%#{receipt_number}%")
+    from q in query,
+    where: ilike(q.receipt_number, ^"%#{receipt_number}%")
+  end
+
+  defp filter_by_join_receipt_number(query, nil), do: query
+  defp filter_by_join_receipt_number(query, ""), do: query
+  defp filter_by_join_receipt_number(query, receipt_number) do
+    from ri in query,
+    inner_join: r in assoc(ri, :receipt),
+    where: ilike(r.receipt_number, ^"%#{receipt_number}%")
   end
 
   defp filter_by_donor_name(query, nil), do: query
   defp filter_by_donor_name(query, ""), do: query
   defp filter_by_donor_name(query, donor_name) do
-    from receipt in query,
-    where: receipt.donor_name == ^donor_name
+    from q in query,
+    where: q.donor_name == ^donor_name
   end
 
-  defp filter_by_payment_method(query, nil), do: query
-  defp filter_by_payment_method(query, ""), do: query
-  defp filter_by_payment_method(query, type_of_payment_method_id) do
-    from receipt in query,
-    where: receipt.type_of_payment_method_id == ^type_of_payment_method_id
+  defp filter_by_join_donor_name(query, nil), do: query
+  defp filter_by_join_donor_name(query, ""), do: query
+  defp filter_by_join_donor_name(query, donor_name) do
+    from ri in query,
+    inner_join: r in assoc(ri, :receipt),
+    where: r.donor_name == ^donor_name
+  end
+
+  defp filter_by_type_of_payment_method(query, nil), do: query
+  defp filter_by_type_of_payment_method(query, ""), do: query
+  defp filter_by_type_of_payment_method(query, type_of_payment_method_id) do
+    from q in query,
+    where: q.type_of_payment_method_id == ^type_of_payment_method_id
   end
 
   defp filter_by_type(query, nil), do: query
@@ -427,11 +470,18 @@ defmodule Donation.Admins do
     where: ilike(q.contact_number, ^"%#{contact_number}%")
   end
 
-  defp filter_by_online_payment_method(query, nil), do: query
-  defp filter_by_online_payment_method(query, ""), do: query
-  defp filter_by_online_payment_method(query, payment_method) do
+  defp filter_by_payment_method(query, nil), do: query
+  defp filter_by_payment_method(query, ""), do: query
+  defp filter_by_payment_method(query, payment_method) do
     from q in query,
     where: q.payment_method == ^payment_method
+  end
+
+  defp filter_by_contribution_for(query, nil), do: query
+  defp filter_by_contribution_for(query, ""), do: query
+  defp filter_by_contribution_for(query, type_of_contribution_id) do
+    from q in query,
+    where: q.type_of_contribution_id == ^type_of_contribution_id
   end
 
 end

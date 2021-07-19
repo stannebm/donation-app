@@ -20,8 +20,13 @@ ul.no-bullets {
   padding: 30px 15px 30px 25px;
   background: #4a4a4a;
 }
+
 .is-sidebar-menu li a {
   color: white;
+}
+
+.is-sidebar-menu li a.no-hover {
+  pointer-events: none;
 }
 
 .columns.is-fullheight {

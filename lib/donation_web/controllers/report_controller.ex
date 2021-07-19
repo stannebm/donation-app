@@ -94,6 +94,36 @@ defmodule DonationWeb.ReportController do
 
   ## FINANCIAL REPORTS
 
+  def list_receipts_and_contributions(conn, %{"search" => search}) do
+    cashiers = Admins.unique_cashier_in_receipt()
+    type_of_contributions = Admins.list_type_of_contributions() |> Enum.map(&{&1.name, &1.id})
+    receipt_items = Admins.filter_receipt_and_contribution(search)
+    render(conn, :list_receipts_and_contributions, 
+      cashiers: cashiers,
+      receipt_items: receipt_items, 
+      type_of_contributions: type_of_contributions
+    )
+  end
+
+  def list_receipts_and_contributions(conn, _) do
+    cashiers = Admins.unique_cashier_in_receipt()
+    type_of_contributions = Admins.list_type_of_contributions() |> Enum.map(&{&1.name, &1.id})
+    receipt_items = Admins.filter_receipt_and_contribution()
+    render(conn, :list_receipts_and_contributions, 
+      cashiers: cashiers,
+      receipt_items: receipt_items, 
+      type_of_contributions: type_of_contributions
+    )
+  end
+
+  def list_receipts_and_contributions_xlsx(conn, %{"search" => search}) do
+    receipt_items = Admins.filter_receipt_and_contribution(search)
+    conn
+    |> put_resp_content_type("text/xlsx")
+    |> put_resp_header("content-disposition", "attachment; filename=receipts_and_contributions.xlsx;")
+    |> render("receipts_and_contributions.xlsx", %{receipt_items: receipt_items})
+  end
+
   def list_receipts_and_payment_methods(conn, %{"search" => search}) do
     cashiers = Admins.unique_cashier_in_receipt()
     type_of_payment_methods = Admins.list_type_of_payment_methods() |> Enum.map(&{&1.name, &1.id})
@@ -103,14 +133,6 @@ defmodule DonationWeb.ReportController do
       cashiers: cashiers, 
       type_of_payment_methods: type_of_payment_methods
     )
-  end
-
-  def list_receipts_and_payment_methods_xlsx(conn, %{"search" => search}) do
-    receipts = Admins.filter_receipt_and_payment_method(search)
-    conn
-    |> put_resp_content_type("text/xlsx")
-    |> put_resp_header("content-disposition", "attachment; filename=receipts_and_payment_methods.xlsx;")
-    |> render("receipts_and_payment_methods.xlsx", %{receipts: receipts})
   end
 
   def list_receipts_and_payment_methods(conn, _) do
@@ -124,14 +146,12 @@ defmodule DonationWeb.ReportController do
     )
   end
 
-  # def list_receipts_and_contributions(conn, %{"search" => search}) do
-  #   receipts = Admins.filter_receipt_and_contribution(search)
-  #   render(conn, :list_receipts_and_contributions, receipts: receipts)
-  # end
-
-  # def list_receipts_and_contributions(conn, _) do
-  #   receipts = Admins.filter_receipt_and_contribution()
-  #   render(conn, :list_receipts_and_contributions, receipts: receipts)
-  # end
+  def list_receipts_and_payment_methods_xlsx(conn, %{"search" => search}) do
+    receipts = Admins.filter_receipt_and_payment_method(search)
+    conn
+    |> put_resp_content_type("text/xlsx")
+    |> put_resp_header("content-disposition", "attachment; filename=receipts_and_payment_methods.xlsx;")
+    |> render("receipts_and_payment_methods.xlsx", %{receipts: receipts})
+  end
 
 end

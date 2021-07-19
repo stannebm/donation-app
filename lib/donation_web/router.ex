@@ -68,9 +68,10 @@ defmodule DonationWeb.Router do
     get("/reports/list_mass_offerings/pdf", ReportController, :list_mass_offerings_pdf)
     get("/reports/list_mass_offerings/xlsx", ReportController, :list_mass_offerings_xlsx)
     ## FINANCIAL MANAGEMENT
+    get("/reports/list_receipts_and_contributions", ReportController, :list_receipts_and_contributions)
+    get("/reports/list_receipts_and_contributions/xlsx", ReportController, :list_receipts_and_contributions_xlsx)
     get("/reports/list_receipts_and_payment_methods", ReportController, :list_receipts_and_payment_methods)
     get("/reports/list_receipts_and_payment_methods/xlsx", ReportController, :list_receipts_and_payment_methods_xlsx)
-    get("/reports/list_receipts_and_contributions", ReportController, :list_receipts_and_contributions)
   end
 
   scope "/", DonationWeb do

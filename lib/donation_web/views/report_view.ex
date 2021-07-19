@@ -33,6 +33,17 @@ defmodule DonationWeb.ReportView do
     "Total Amount (RM)"
   ]
 
+  ## RECEIPTS AND CONTRIBUTIONS
+
+  @header_receipt_and_contribution [
+    "Created Date",
+    "Cashier Name",
+    "Receipt Number",
+    "Donor Name",
+    "Contribution for",
+    "Total Amount (RM)"
+  ]
+
   def render("mass_intention.xlsx", %{mass_offerings: mass_offerings}) do
     report_generator(mass_offerings)
     |> Elixlsx.write_to_memory("mass_intention.xlsx")
@@ -50,6 +61,13 @@ defmodule DonationWeb.ReportView do
   def render("receipts_and_payment_methods.xlsx", %{receipts: receipts}) do
     report_generator_for_receipts_and_payment_methods(receipts)
     |> Elixlsx.write_to_memory("receipts_and_payment_methods.xlsx")
+    |> elem(1)
+    |> elem(1)
+  end
+
+  def render("receipts_and_contributions.xlsx", %{receipt_items: receipt_items}) do
+    report_generator_for_receipts_and_contributions(receipt_items)
+    |> Elixlsx.write_to_memory("receipts_and_contributions.xlsx")
     |> elem(1)
     |> elem(1)
   end
@@ -101,6 +119,21 @@ defmodule DonationWeb.ReportView do
     }
   end
 
+  defp report_generator_for_receipts_and_contributions(receipt_items) do
+    rows =
+      receipt_items
+      |> Enum.map(&row_receipt_and_contribution(&1))
+
+    %Workbook{
+      sheets: [
+        %Sheet{
+          name: "Receipts and Contributions",
+          rows: [@header_receipt_and_contribution] ++ rows
+        }
+      ]
+    }
+  end
+
   defp row(mass_offering) do
     [
       mass_offering.contribution.type,
@@ -128,6 +161,17 @@ defmodule DonationWeb.ReportView do
       receipt.donor_name,
       receipt.type_of_payment_method.name,
       Decimal.to_string(receipt.total_amount)
+    ]
+  end
+
+  defp row_receipt_and_contribution(receipt_item) do
+    [
+      Timex.format!(receipt_item.inserted_at, "%d.%m.%Y", :strftime),
+      receipt_item.receipt.user.name,
+      receipt_item.receipt.receipt_number,
+      receipt_item.receipt.donor_name,
+      receipt_item.type_of_contribution.name,
+      Decimal.to_string(receipt_item.price)
     ]
   end
 

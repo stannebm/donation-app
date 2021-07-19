@@ -83,16 +83,13 @@
             <ul class="menu-list">
               <li><%= link("List Mass Offerings", to: Routes.admin_report_path(@conn, :list_mass_offerings)) %></li>
               <li><%= link("List Donations", to: Routes.admin_report_path(@conn, :list_donations)) %></li>
-              
               <li>
-                <a href="#" class="is-active">List Receipts</a>
+                <a href="#" class="no-hover">List Receipts</a>
                 <ul>
-                  <li><%#= link("List Receipts and Contributions", to: Routes.admin_report_path(@conn, :list_receipts_and_contributions)) %></li>
+                  <li><%= link("by Contributions", to: Routes.admin_report_path(@conn, :list_receipts_and_contributions)) %></li>
                   <li><%= link("by Payment Methods", to: Routes.admin_report_path(@conn, :list_receipts_and_payment_methods)) %></li>
                 </ul>
               </li>
-
-              
             </ul>
           </p>
 

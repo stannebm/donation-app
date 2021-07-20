@@ -51,46 +51,45 @@ export default function Donation() {
     defaultValues: {},
   });
 
-  const onSubmit = (paymentMethod: "fpx" | "cybersource") => (
-    data: DonationForm,
-  ) => {
-    const submission = { ...data };
-    const finalizedIntention =
-      submission.intention === "Others"
-        ? submission.other_intention
-        : submission.intention;
-    delete submission["other_intention"];
-    const referenceNo = new Date().getTime();
-    const amount = submission["amount"];
-    const email = submission["email"];
-    const name = submission["name"];
-    const submissionPayload = {
-      [FORM_TYPE]: {
-        ...submission,
-        reference_no: referenceNo,
-        intention: finalizedIntention,
-        payment_method: paymentMethod,
-      },
+  const onSubmit =
+    (paymentMethod: "fpx" | "cybersource") => (data: DonationForm) => {
+      const submission = { ...data };
+      const finalizedIntention =
+        submission.intention === "Others"
+          ? submission.other_intention
+          : submission.intention;
+      delete submission["other_intention"];
+      const referenceNo = new Date().getTime();
+      const amount = submission["amount"];
+      const email = submission["email"];
+      const name = submission["name"];
+      const submissionPayload = {
+        [FORM_TYPE]: {
+          ...submission,
+          reference_no: referenceNo,
+          intention: finalizedIntention,
+          payment_method: paymentMethod,
+        },
+      };
+      console.log("DEBUG submission", submissionPayload);
+      axios
+        .post(API_PATH, submissionPayload)
+        .then(function ({ data }) {
+          window.location.replace(
+            mkPaymentUrl({
+              paymentMethod,
+              referenceNo,
+              amount,
+              name,
+              email,
+            }),
+          );
+          console.log("posted resp:", data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     };
-    console.log("DEBUG submission", submissionPayload);
-    axios
-      .post(API_PATH, submissionPayload)
-      .then(function ({ data }) {
-        window.location.replace(
-          mkPaymentUrl({
-            paymentMethod,
-            referenceNo,
-            amount,
-            name,
-            email,
-          }),
-        );
-        console.log("posted resp:", data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
 
   const intention = watch("intention");
 

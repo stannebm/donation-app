@@ -75,49 +75,48 @@ export default function MassOffering() {
     },
   });
 
-  const onSubmit = (paymentMethod: "fpx" | "cybersource") => (
-    data: MassOfferingForm,
-  ) => {
-    const submission = { ...data };
-    const referenceNo = new Date().getTime();
-    const amount = totalMasses * 10;
-    const email = submission["email"];
-    const name = submission["name"];
+  const onSubmit =
+    (paymentMethod: "fpx" | "cybersource") => (data: MassOfferingForm) => {
+      const submission = { ...data };
+      const referenceNo = new Date().getTime();
+      const amount = totalMasses * 10;
+      const email = submission["email"];
+      const name = submission["name"];
 
-    submission.intentions = submission.intentions.map((o, index) => ({
-      ...o,
-      ...{
-        dates: selectedDates[index].map((d) => d.toISOString().substr(0, 10)),
-      },
-    }));
+      submission.intentions = submission.intentions.map((o, index) => ({
+        ...o,
+        ...{
+          dates: selectedDates[index].map((d) => d.toISOString().substr(0, 10)),
+        },
+      }));
 
-    const submissionPayload = {
-      [FORM_TYPE]: {
-        ...submission,
-        reference_no: referenceNo,
-        amount: amount,
-        payment_method: paymentMethod,
-      },
+      const submissionPayload = {
+        [FORM_TYPE]: {
+          ...submission,
+          reference_no: referenceNo,
+          amount: amount,
+          payment_method: paymentMethod,
+        },
+      };
+      console.log("DEBUG submission", submissionPayload);
+      axios
+        .post(API_PATH, submissionPayload)
+        .then(function ({ data }) {
+          window.location.replace(
+            mkPaymentUrl({
+              paymentMethod,
+              referenceNo,
+              amount,
+              name,
+              email,
+            }),
+          );
+          console.log("posted resp:", data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     };
-    console.log("DEBUG submission", submissionPayload);
-    axios
-      .post(API_PATH, submissionPayload)
-      .then(function ({ data }) {
-        window.location.replace(
-          mkPaymentUrl({
-            paymentMethod,
-            referenceNo,
-            amount,
-            name,
-            email,
-          }),
-        );
-        console.log("posted resp:", data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -168,141 +167,139 @@ export default function MassOffering() {
           {...register("mass_language", { required: true })}
         />
       </HStack>
-      {fields.map(
-        (item, index): JSX.Element => {
-          return (
-            <>
-              <Box mb={5} p={3} bg="gray.100">
-                <HStack mb={3} key={item.id}>
-                  <FormSelect
-                    label="Mass Offering/Intention"
-                    options={[
-                      "Special Intention",
-                      "Thanksgiving",
-                      "Departed Soul",
-                    ]}
-                    bg="white"
-                    errors={errors}
-                    errorPath={R.path(["intentions", index, "type_of_mass"])}
-                    defaultValue={item.type_of_mass}
-                    {...register(`intentions.${index}.type_of_mass` as const, {
-                      required: true,
-                    })}
-                  />
-                </HStack>
-                <VStack>
-                  {intentions[index].type_of_mass === "Special Intention" && (
-                    <>
-                      <FormInput
-                        label="Intention"
-                        errors={errors}
-                        errorPath={R.path(["offerings", index, "intention"])}
-                        defaultValue={item.intention}
-                        {...register(`intentions.${index}.intention` as const, {
-                          required: false,
-                        })}
-                      />
-                    </>
-                  )}
-                  {intentions[index].type_of_mass === "Thanksgiving" && (
-                    <>
-                      <FormInput
-                        label="Intention"
-                        errors={errors}
-                        errorPath={R.path(["offerings", index, "intention"])}
-                        defaultValue={item.intention}
-                        {...register(`intentions.${index}.intention` as const, {
-                          required: false,
-                        })}
-                      />
-                    </>
-                  )}
-                  {intentions[index].type_of_mass === "Departed Soul" && (
-                    <>
-                      <FormInput
-                        label="Name of Departed Soul"
-                        errors={errors}
-                        errorPath={R.path(["offerings", index, "intention"])}
-                        defaultValue={item.intention}
-                        {...register(`intentions.${index}.intention` as const, {
-                          required: false,
-                        })}
-                      />
-                    </>
-                  )}
-                </VStack>
-
-                {intentions[index].type_of_mass?.length > 0 && (
+      {fields.map((item, index): JSX.Element => {
+        return (
+          <>
+            <Box mb={5} p={3} bg="gray.100">
+              <HStack mb={3} key={item.id}>
+                <FormSelect
+                  label="Mass Offering/Intention"
+                  options={[
+                    "Special Intention",
+                    "Thanksgiving",
+                    "Departed Soul",
+                  ]}
+                  bg="white"
+                  errors={errors}
+                  errorPath={R.path(["intentions", index, "type_of_mass"])}
+                  defaultValue={item.type_of_mass}
+                  {...register(`intentions.${index}.type_of_mass` as const, {
+                    required: true,
+                  })}
+                />
+              </HStack>
+              <VStack>
+                {intentions[index].type_of_mass === "Special Intention" && (
                   <>
-                    <Box mt={2}>
-                      <Text color="gray.600" fontSize="sm">
-                        Selected dates:
-                      </Text>
-                      {selectedDates[index]?.map((d: Date) => (
-                        <Text fontSize="md">{d.toLocaleDateString()}</Text>
-                      ))}
-                    </Box>
-
-                    <Popover>
-                      <PopoverTrigger>
-                        <Box mt={2}>
-                          <Button
-                            size="md"
-                            fontWeight={600}
-                            colorScheme="blue"
-                            type="button"
-                            variant="link"
-                            leftIcon={<CalendarIcon />}
-                          >
-                            Select Dates
-                          </Button>
-                        </Box>
-                      </PopoverTrigger>
-                      <PopoverContent>
-                        <PopoverCloseButton />
-                        <PopoverBody>
-                          <DatePicker
-                            index={index}
-                            selectedDays={selectedDates}
-                            setSelectedDays={setSelectedDates}
-                          />
-                        </PopoverBody>
-                      </PopoverContent>
-                    </Popover>
+                    <FormInput
+                      label="Intention"
+                      errors={errors}
+                      errorPath={R.path(["offerings", index, "intention"])}
+                      defaultValue={item.intention}
+                      {...register(`intentions.${index}.intention` as const, {
+                        required: false,
+                      })}
+                    />
                   </>
                 )}
-
-                {index >= 1 && (
-                  <Box mt={2}>
-                    <Button
-                      size="md"
-                      colorScheme="red"
-                      fontWeight={400}
-                      type="button"
-                      variant="link"
-                      leftIcon={<MinusIcon />}
-                      onClick={() => {
-                        remove(index);
-                        setSelectedDates((prev) =>
-                          Object.keys(prev)
-                            .filter((key) => parseInt(key) !== index)
-                            .reduce((obj: any, key) => {
-                              const intkey = parseInt(key);
-                              obj[intkey] = prev[intkey];
-                              return obj;
-                            }, {}),
-                        );
-                      }}
-                    >
-                      Remove
-                    </Button>
-                  </Box>
+                {intentions[index].type_of_mass === "Thanksgiving" && (
+                  <>
+                    <FormInput
+                      label="Intention"
+                      errors={errors}
+                      errorPath={R.path(["offerings", index, "intention"])}
+                      defaultValue={item.intention}
+                      {...register(`intentions.${index}.intention` as const, {
+                        required: false,
+                      })}
+                    />
+                  </>
                 )}
-              </Box>
-            </>
-          );
-        },
-      )}
+                {intentions[index].type_of_mass === "Departed Soul" && (
+                  <>
+                    <FormInput
+                      label="Name of Departed Soul"
+                      errors={errors}
+                      errorPath={R.path(["offerings", index, "intention"])}
+                      defaultValue={item.intention}
+                      {...register(`intentions.${index}.intention` as const, {
+                        required: false,
+                      })}
+                    />
+                  </>
+                )}
+              </VStack>
+
+              {intentions[index].type_of_mass?.length > 0 && (
+                <>
+                  <Box mt={2}>
+                    <Text color="gray.600" fontSize="sm">
+                      Selected dates:
+                    </Text>
+                    {selectedDates[index]?.map((d: Date) => (
+                      <Text fontSize="md">{d.toLocaleDateString()}</Text>
+                    ))}
+                  </Box>
+
+                  <Popover>
+                    <PopoverTrigger>
+                      <Box mt={2}>
+                        <Button
+                          size="md"
+                          fontWeight={600}
+                          colorScheme="blue"
+                          type="button"
+                          variant="link"
+                          leftIcon={<CalendarIcon />}
+                        >
+                          Select Dates
+                        </Button>
+                      </Box>
+                    </PopoverTrigger>
+                    <PopoverContent>
+                      <PopoverCloseButton />
+                      <PopoverBody>
+                        <DatePicker
+                          index={index}
+                          selectedDays={selectedDates}
+                          setSelectedDays={setSelectedDates}
+                        />
+                      </PopoverBody>
+                    </PopoverContent>
+                  </Popover>
+                </>
+              )}
+
+              {index >= 1 && (
+                <Box mt={2}>
+                  <Button
+                    size="md"
+                    colorScheme="red"
+                    fontWeight={400}
+                    type="button"
+                    variant="link"
+                    leftIcon={<MinusIcon />}
+                    onClick={() => {
+                      remove(index);
+                      setSelectedDates((prev) =>
+                        Object.keys(prev)
+                          .filter((key) => parseInt(key) !== index)
+                          .reduce((obj: any, key) => {
+                            const intkey = parseInt(key);
+                            obj[intkey] = prev[intkey];
+                            return obj;
+                          }, {}),
+                      );
+                    }}
+                  >
+                    Remove
+                  </Button>
+                </Box>
+              )}
+            </Box>
+          </>
+        );
+      })}
 
       <Box my={3} p={2}>
         <Button

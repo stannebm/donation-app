@@ -75,49 +75,6 @@ export default function MassOffering() {
     },
   });
 
-  const onSubmit =
-    (paymentMethod: "fpx" | "cybersource") => (data: MassOfferingForm) => {
-      const submission = { ...data };
-      const referenceNo = new Date().getTime();
-      const amount = totalMasses * 10;
-      const email = submission["email"];
-      const name = submission["name"];
-
-      submission.intentions = submission.intentions.map((o, index) => ({
-        ...o,
-        ...{
-          dates: selectedDates[index].map((d) => d.toISOString().substr(0, 10)),
-        },
-      }));
-
-      const submissionPayload = {
-        [FORM_TYPE]: {
-          ...submission,
-          reference_no: referenceNo,
-          amount: amount,
-          payment_method: paymentMethod,
-        },
-      };
-      console.log("DEBUG submission", submissionPayload);
-      axios
-        .post(API_PATH, submissionPayload)
-        .then(function ({ data }) {
-          window.location.replace(
-            mkPaymentUrl({
-              paymentMethod,
-              referenceNo,
-              amount,
-              name,
-              email,
-            }),
-          );
-          console.log("posted resp:", data);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    };
-
   const { fields, append, remove } = useFieldArray({
     control,
     name: "intentions",
@@ -127,12 +84,76 @@ export default function MassOffering() {
     [index: number]: Date[];
   }>({});
 
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [submitted, setSubmitted] = useState<boolean>(false);
+
   const intentions = watch("intentions");
 
   const totalMasses = Object.values(selectedDates).reduce(
     (acc, list) => acc + list.length,
     0,
   );
+
+  const onSubmit =
+    (paymentMethod: "fpx" | "cybersource") => (data: MassOfferingForm) => {
+      // NOTE
+      // this function is only called when form data is deemed valid by `react-hook-form`
+      const submission = { ...data };
+      const referenceNo = new Date().getTime();
+      const amount = totalMasses * 10;
+      const email = submission["email"];
+      const name = submission["name"];
+
+      let hasErr = false;
+      setErrorMsg(null);
+      setSubmitted(true);
+
+      submission.intentions = submission.intentions.map((o, index) => ({
+        ...o,
+        ...{
+          dates: (selectedDates[index] || []).map((d) =>
+            d.toISOString().substr(0, 10),
+          ),
+        },
+      }));
+
+      submission.intentions.forEach((o) => {
+        if (o.dates!.length == 0) {
+          setErrorMsg("Missing mass dates");
+          hasErr = true;
+        }
+      });
+
+      const submissionPayload = {
+        [FORM_TYPE]: {
+          ...submission,
+          reference_no: referenceNo,
+          amount: amount,
+          payment_method: paymentMethod,
+        },
+      };
+
+      if (!hasErr) {
+        console.log("[DEBUG] submission:", submissionPayload);
+        axios
+          .post(API_PATH, submissionPayload)
+          .then(function ({ data }) {
+            window.location.replace(
+              mkPaymentUrl({
+                paymentMethod,
+                referenceNo,
+                amount,
+                name,
+                email,
+              }),
+            );
+            console.log("[DEBUG] response:", data);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
+    };
 
   return (
     <form>
@@ -168,9 +189,12 @@ export default function MassOffering() {
         />
       </HStack>
       {fields.map((item, index): JSX.Element => {
+        const dates = selectedDates[index];
+        const bgColor =
+          !submitted || dates?.length > 0 ? "gray.100" : "red.100";
         return (
           <>
-            <Box mb={5} p={3} bg="gray.100">
+            <Box mb={5} p={3} bg={bgColor}>
               <HStack mb={3} key={item.id}>
                 <FormSelect
                   label="Mass Offering/Intention"
@@ -329,6 +353,11 @@ export default function MassOffering() {
         <Text fontSize="2xl" fontWeight={800} as="h3" color="gray.600">
           {`RM ${totalMasses ? totalMasses * 10 : 0}`}
         </Text>
+        {errorMsg && (
+          <Text fontSize="sm" fontWeight={500} as="h3" color="red.500">
+            {errorMsg}
+          </Text>
+        )}
       </Box>
 
       <HStack>

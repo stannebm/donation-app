@@ -149,7 +149,7 @@ defmodule DonationWeb.ReportView do
       Timex.format!(donation.inserted_at, "%d.%m.%Y", :strftime),
       donation.contribution.name,
       donation.intention,
-      Decimal.to_string(donation.contribution.amount)
+      Decimal.to_float(donation.contribution.amount)
     ]
   end
 
@@ -160,7 +160,7 @@ defmodule DonationWeb.ReportView do
       receipt.receipt_number,
       receipt.donor_name,
       receipt.type_of_payment_method.name,
-      Decimal.to_string(receipt.total_amount)
+      Decimal.to_float(receipt.total_amount)
     ]
   end
 
@@ -171,7 +171,7 @@ defmodule DonationWeb.ReportView do
       receipt_item.receipt.receipt_number,
       receipt_item.receipt.donor_name,
       receipt_item.type_of_contribution.name,
-      Decimal.to_string(receipt_item.price)
+      Decimal.to_float(receipt_item.price)
     ]
   end
 

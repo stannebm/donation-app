@@ -18,7 +18,7 @@ export type DonationForm = {
 
 const FORM_TYPE = "donation";
 const API_PATH = "/api/donation_form";
-const FPX_URL = "https://fpxuat.minorbasilicastannebm.com/fpx";
+const FPX_URL = "https://fpx.minorbasilicastannebm.com/fpx";
 const CYBERSOURCE_URL =
   "https://cybersource.minorbasilicastannebm.com/cybersource";
 
@@ -162,12 +162,16 @@ export default function Donation() {
       </Box>
 
       <HStack>
-        {/* <Button colorScheme="teal" isLoading={isSubmitting} onClick={(e) => {
-          handleSubmit(onSubmit("fpx"))()
-          e.preventDefault()
-        }}>
+        <Button
+          colorScheme="teal"
+          isLoading={isSubmitting}
+          onClick={(e) => {
+            handleSubmit(onSubmit("fpx"))();
+            e.preventDefault();
+          }}
+        >
           Online Banking
-        </Button> */}
+        </Button>
 
         <Button
           colorScheme="teal"

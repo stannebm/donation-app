@@ -39,7 +39,7 @@ export type IntentionForm = {
 
 const FORM_TYPE = "mass_offering";
 const API_PATH = "/api/mass_offering_form";
-const FPX_URL = "https://fpxuat.minorbasilicastannebm.com/fpx";
+const FPX_URL = "https://fpx.minorbasilicastannebm.com/fpx";
 const CYBERSOURCE_URL =
   "https://cybersource.minorbasilicastannebm.com/cybersource";
 
@@ -361,12 +361,16 @@ export default function MassOffering() {
       </Box>
 
       <HStack>
-        {/* <Button colorScheme="teal" isLoading={isSubmitting} onClick={(e) => {
-          handleSubmit(onSubmit("fpx"))()
-          e.preventDefault()
-        }}>
+        <Button
+          colorScheme="teal"
+          isLoading={isSubmitting}
+          onClick={(e) => {
+            handleSubmit(onSubmit("fpx"))();
+            e.preventDefault();
+          }}
+        >
           Online Banking
-        </Button> */}
+        </Button>
 
         <Button
           colorScheme="teal"

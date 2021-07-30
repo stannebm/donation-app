@@ -216,7 +216,7 @@ export default function MassOffering() {
                 {intentions[index].type_of_mass === "Special Intention" && (
                   <>
                     <FormInput
-                      label="Intention"
+                      label="Name"
                       errors={errors}
                       errorPath={R.path(["offerings", index, "intention"])}
                       defaultValue={item.intention}
@@ -229,7 +229,7 @@ export default function MassOffering() {
                 {intentions[index].type_of_mass === "Thanksgiving" && (
                   <>
                     <FormInput
-                      label="Intention"
+                      label="Name"
                       errors={errors}
                       errorPath={R.path(["offerings", index, "intention"])}
                       defaultValue={item.intention}

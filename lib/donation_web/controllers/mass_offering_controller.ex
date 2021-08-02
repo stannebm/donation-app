@@ -46,6 +46,11 @@ defmodule DonationWeb.MassOfferingController do
     end
   end
 
+  def show(conn, %{"id" => id, "type" => "donation"}) do
+    contribution = Admins.get_mass_offering_by_contributor!(id)
+    render(conn, "show_donation.html", contribution: contribution)
+  end
+
   def show(conn, %{"id" => id}) do
     contribution = Admins.get_mass_offering_by_contributor!(id)
     render(conn, "show.html", contribution: contribution)

@@ -223,24 +223,24 @@ defmodule Donation.Admins do
     |> filter_by_type(search_params["type"])
     |> filter_by_name(search_params["name"])
     |> filter_by_email(search_params["email"])
-    |> filter_by_contact_number(search_params["contact_number"])
     |> filter_by_payment_method(search_params["payment_method"])
+    |> filter_by_verified(search_params["verified"])
     |> order_by(desc: :inserted_at)
     |> Repo.all()
-    |> Repo.preload([:mass_offerings])
+    |> Repo.preload([:mass_offerings, :donation, :web_payment])
   end
 
   def list_mass_offering_by_contributors do
     Contribution
     |> order_by(desc: :inserted_at)
     |> Repo.all()
-    |> Repo.preload([:mass_offerings])
+    |> Repo.preload([:mass_offerings, :donation, :web_payment])
   end
 
   def get_mass_offering_by_contributor!(id) do
     Contribution
     |> Repo.get!(id)
-    |> Repo.preload([:mass_offerings])
+    |> Repo.preload([:mass_offerings, :donation])
   end
 
   def create_mass_offering_by_contributor(attrs \\ %{}) do
@@ -463,18 +463,20 @@ defmodule Donation.Admins do
     where: ilike(q.email, ^"%#{email}%")
   end
 
-  defp filter_by_contact_number(query, nil), do: query
-  defp filter_by_contact_number(query, ""), do: query
-  defp filter_by_contact_number(query, contact_number) do
-    from q in query,
-    where: ilike(q.contact_number, ^"%#{contact_number}%")
-  end
-
   defp filter_by_payment_method(query, nil), do: query
   defp filter_by_payment_method(query, ""), do: query
   defp filter_by_payment_method(query, payment_method) do
     from q in query,
     where: q.payment_method == ^payment_method
+  end
+
+  ## Contributor has one WebPayment
+  defp filter_by_verified(query, nil), do: query
+  defp filter_by_verified(query, ""), do: query
+  defp filter_by_verified(query, verified) do
+    from q in query,
+    inner_join: wb in assoc(q, :web_payment),
+    where: wb.verified == ^verified
   end
 
   defp filter_by_contribution_for(query, nil), do: query

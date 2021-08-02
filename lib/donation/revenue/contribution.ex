@@ -10,6 +10,7 @@ defmodule Donation.Revenue.Contribution do
   @derive {Jason.Encoder, only: [:type, :name, :email, :contact_number, :amount, :payment_method]}
   schema "contributions" do
     has_many(:mass_offerings, Donation.Revenue.MassOffering)
+    has_one(:donation, Donation.Revenue.Donation)
     has_one(:web_payment, Donation.Revenue.WebPayment)
     field(:type, :string)
     field(:name, :string)

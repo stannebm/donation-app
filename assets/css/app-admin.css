@@ -11,6 +11,18 @@ ul.no-bullets {
   margin: 0; /* Remove margins */
 }
 
+table .border-top {
+  border-top: 3px solid black;
+}
+
+table thead {
+  background: 
+}
+
+.break-word {
+  word-break: break-word;
+}
+
 .margin-right-10 {
   margin-right: 10px;
 }

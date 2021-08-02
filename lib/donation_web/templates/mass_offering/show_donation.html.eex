@@ -5,7 +5,7 @@
 
       <header class="card-header">
         <p class="card-header-title has-text-centered">
-          Contributor for Mass Offering
+          Contributor for Donation
         </p>
       </header>
 
@@ -38,20 +38,18 @@
                   <% end %>
                 </ul>
               </div>
-              <%= if @contribution.payment_method != "none" do %>
-                <div class="column is-4">
-                  <ul class="no-bullets">
-                    <li>
-                      <strong>Amount (RM): </strong>
-                      <%= @contribution.amount %>
-                    </li>
-                    <li>
-                      <strong>Payment Method: </strong>
-                      <%= @contribution.payment_method %>
-                    </li>
-                  </ul>
-                </div>
-              <% end %>
+              <div class="column is-4">
+                <ul class="no-bullets">
+                  <li>
+                    <strong>Amount (RM): </strong>
+                    <%= @contribution.amount %>
+                  </li>
+                  <li>
+                    <strong>Payment Method: </strong>
+                    <%= @contribution.payment_method %>
+                  </li>
+                </ul>
+              </div>
             </div>
 
           </div>
@@ -65,25 +63,13 @@
             <table class="table is-striped is-hoverable is-fullwidth">
               <thead>
                 <tr>
-                  <th>Mass Language</th>
-                  <th>Type of Mass</th>
-                  <th>Name / Name of Departed Soul</th>
-                  <th>Mass Dates</th>
+                  <th>Intention</th>
                 </tr>
               </thead>
               <tbody>
-                <%= for mass_offering <- @contribution.mass_offerings do %>
                   <tr>
-                    <td width="15%"><%= mass_offering.mass_language %></td>
-                    <td width="15%"><%= mass_offering.type_of_mass %></td>
-                    <td width="30%"><%= mass_offering.intention %></td>
-                    <td width="40%">
-                      <%= if !is_nil(mass_offering.dates) do %>
-                        <%= parse_array_dates(mass_offering.dates) %>
-                      <% end %>
-                    </td>
+                    <td><%= @contribution.donation.intention %></td>
                   </tr>
-                <% end %>
               </tbody>
             </table>
 
@@ -96,7 +82,7 @@
           <span><%= link "Back", to: Routes.admin_mass_offering_path(@conn, :index) %></span>
         </p>
         <p class="card-footer-item">
-          <span><%= link "Edit", to: Routes.admin_mass_offering_path(@conn, :edit, @contribution) %></span>
+          <span><%#= link "Edit", to: Routes.admin_mass_offering_path(@conn, :edit, @contribution) %></span>
         </p>
       </footer>
     

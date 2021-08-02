@@ -21,4 +21,23 @@ defmodule DonationWeb.MassOfferingView do
       class: "button is-primary"
     )
   end
+
+  def check_verified(contribution) do
+    if contribution.payment_method == "fpx" || contribution.payment_method == "cybersource" do
+      if contribution.web_payment && contribution.web_payment.verified do
+        "Success"
+      else
+        "Failed"
+      end
+    end
+  end
+
+  def parse_array_dates(dates) do
+    dates
+    |> Enum.map(fn date -> 
+        Timex.format!(date, "%d.%m.%Y", :strftime)
+       end)
+    |> Enum.join(", ")
+  end
+
 end

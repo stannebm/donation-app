@@ -273,7 +273,7 @@ defmodule Donation.Admins do
         join: c in Contribution,
         on: c.id == d.contribution_id,
         order_by: [desc: :inserted_at],
-        preload: [:contribution]
+        preload: [:contribution, contribution: :web_payment]
     )
   end
 
@@ -291,19 +291,25 @@ defmodule Donation.Admins do
         on: c.id == d.contribution_id,
         where: fragment("?::date", d.inserted_at) >= ^from_date,
         where: fragment("?::date", d.inserted_at) <= ^from_date,
-        preload: [:contribution]
+        preload: [:contribution, contribution: :web_payment]
     )
   end
 
   def find_mass_offering_dates(from_date) do
     Repo.all(
-      from mo in MassOffering,
-        join: c in Contribution,
-        on: c.id == mo.contribution_id,
-        where: fragment("? = ANY (?)", ^from_date, mo.dates),
-        order_by: [mo.mass_language, mo.type_of_mass],
-        preload: [:contribution]
+      from(mo in MassOffering,
+      where: fragment("? = ANY (?)", ^from_date, mo.dates),
+      order_by: [mo.mass_language, mo.type_of_mass],
+      preload: [:contribution, contribution: :web_payment])
     )
+  end
+
+  def reject_verified_is_false(scope) do
+    Enum.reject(scope, fn obj -> 
+      obj.contribution && 
+      obj.contribution.web_payment && 
+      obj.contribution.web_payment.verified == false
+    end)
   end
 
   def filter_mass_intentions(_), do: nil

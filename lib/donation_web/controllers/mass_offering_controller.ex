@@ -15,6 +15,34 @@ defmodule DonationWeb.MassOfferingController do
   alias Donation.Admins
   alias Donation.Revenue.{Contribution, MassOffering}
 
+  # def index(conn, %{"format" => "xlsx", "search" => search}) do
+  #   contributors = Admins.list_mass_offering_by_contributors(search)
+  #   conn
+  #   |> put_resp_content_type("text/xlsx")
+  #   |> put_resp_header("content-disposition", "attachment; filename=list_contributors.xlsx;")
+  #   |> render("list_contributors.xlsx", %{contributors: contributors})
+  # end
+
+  ## GENERATE PDF
+  def index(conn, %{"format" => "pdf", "search" => search}) do
+    contributors = Admins.list_mass_offering_by_contributors(search)
+
+    html =
+      Phoenix.View.render_to_string(DonationWeb.MassOfferingView, "index_pdf.html",
+        layout: {DonationWeb.LayoutView, "pdf.html"},
+        conn: conn,
+        contributors: contributors
+      )
+
+    {:ok, filename} = PdfGenerator.generate(html, page_size: "A4")
+
+    conn
+    |> send_download({:file, filename},
+      disposition: :inline,
+      filename: "Contributors.pdf"
+    )
+  end
+
   def index(conn, %{"search" => search}) do
     contributions = Admins.list_mass_offering_by_contributors(search)
     render(conn, :index, contributions: contributions)
@@ -82,22 +110,4 @@ defmodule DonationWeb.MassOfferingController do
     |> redirect(to: Routes.admin_mass_offering_path(conn, :index))
   end
 
-  # def generate_pdf(conn, %{"id" => id}) do
-  #   receipt = Admins.get_receipt!(id)
-
-  #   html =
-  #     Phoenix.View.render_to_string(DonationWeb.ReceiptView, "generate_pdf.html",
-  #       layout: {DonationWeb.LayoutView, "printable.html"},
-  #       receipt: receipt,
-  #       conn: conn
-  #     )
-
-  #   {:ok, filename} = PdfGenerator.generate(html)
-
-  #   conn
-  #   |> send_download({:file, filename},
-  #     disposition: :inline,
-  #     filename: "offical_receipt_#{receipt.receipt_number}.pdf"
-  #   )
-  # end
 end

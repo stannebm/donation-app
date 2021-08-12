@@ -89,3 +89,12 @@ section.is-card {
   color: #ff8c00;
   font-weight: bolder;
 }
+
+/* PDF: LIST CONTRIBUTORS */
+table.list-contributors {
+  font-size: 13px;
+}
+
+table .border-top {
+  border-top: 3px solid black;
+}

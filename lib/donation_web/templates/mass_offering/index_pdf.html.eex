@@ -1,0 +1,92 @@
+<section class="is-table">
+  <div class="container">
+
+    <div class="card">
+      <div class="card-content">
+        <div class="content">
+
+          <p><b>Listing Mass Offerings by Contributors</b></p>
+
+          <table class="table is-striped is-hoverable list-contributors">
+            <tbody>
+              <tr class="is-selected">
+                <th>Created Date</th>
+                <th>Type</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Amount</th>
+                <th>Payment Method</th>
+                <th>Verified</th>
+              </tr>
+              <%= for contributor <- @contributors do %>
+                <tr class="border-top">
+                  <td width="10%"><%= Timex.format!(contributor.inserted_at, "%d.%m.%Y", :strftime) %></td>
+                  <td width="10%"><%= contributor.type %></td>
+                  <td width="20%" class="break-word"><%= contributor.name %></td>
+                  <td width="20%"><%= contributor.email %></td>
+                  <td width="10%"><%= contributor.amount %></td>
+                  <td width="10%"><%= contributor.payment_method %></td>
+                  <td width="10%"><%= check_verified(contributor) %></td>
+                </tr>
+
+                <tr class="detail">
+                  <td colspan="8">
+
+                    <div class="detail-container">
+                      <div class="content">
+
+                        <%= if contributor.type == "donation" do %>
+
+                          <table class="table is-striped is-hoverable is-fullwidth">
+                            <thead>
+                              <tr>
+                                <th>Intention</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td colspan="8"><%= contributor.donation && contributor.donation.intention %></td>
+                              </tr>
+                            </tbody>
+                          </table>
+
+                        <% else %>
+
+                          <table class="table is-striped is-hoverable is-fullwidth">
+                            <thead>
+                              <tr>
+                                <th width="30%">Name / Name of Departed Soul</th>
+                                <th width="30%">Mass Dates</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <%= for mass_offering <- contributor.mass_offerings do %>
+                                <tr>
+                                  <td><%= mass_offering.intention %></td>
+                                  <td>
+                                    <%= if !is_nil(mass_offering.dates) do %>
+                                      <%= parse_array_dates(mass_offering.dates) %>
+                                    <% end %>
+                                  </td>
+                                </tr>
+                              <% end %>
+                            </tbody>
+                          </table>
+
+                        <% end %>
+
+                      </div>
+                    </div>
+
+                  </td>
+                </tr>
+
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>

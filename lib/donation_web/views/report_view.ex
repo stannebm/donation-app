@@ -37,11 +37,11 @@ defmodule DonationWeb.ReportView do
 
   @header_receipt_and_contribution [
     "Created Date",
-    "Cashier Name",
     "Receipt Number",
     "Donor Name",
     "Contribution for",
-    "Total Amount (RM)"
+    "Total Amount (RM)",
+    "Remark"
   ]
 
   def render("mass_intention.xlsx", %{mass_offerings: mass_offerings}) do
@@ -167,11 +167,11 @@ defmodule DonationWeb.ReportView do
   defp row_receipt_and_contribution(receipt_item) do
     [
       Timex.format!(receipt_item.inserted_at, "%d.%m.%Y", :strftime),
-      receipt_item.receipt.user.name,
       receipt_item.receipt.receipt_number,
       receipt_item.receipt.donor_name,
       receipt_item.type_of_contribution.name,
-      Decimal.to_float(receipt_item.price)
+      Decimal.to_float(receipt_item.price),
+      receipt_item.remark
     ]
   end
 

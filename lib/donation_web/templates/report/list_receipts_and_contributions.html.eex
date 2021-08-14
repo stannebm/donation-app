@@ -73,22 +73,22 @@
               <thead>
                 <tr>
                   <th>Created Date</th>
-                  <th>Cashier Name</th>
                   <th>Receipt Number</th>
                   <th>Donor Name</th>
                   <th>Contribution for</th>
                   <th>Amount (RM)</th>
+                  <th>Remark</th>
                 </tr>
               </thead>
               <tbody>
                 <%= for receipt_item <- @receipt_items do %>
                   <tr>
-                    <td><%= Timex.format!(receipt_item.inserted_at, "%d.%m.%Y", :strftime) %></td>
-                    <td><%= receipt_item.receipt.user.name %></td>
-                    <td><%= receipt_item.receipt.receipt_number %></td>
-                    <td><%= receipt_item.receipt.donor_name %></td>
-                    <td><%= receipt_item.type_of_contribution.name %></td>
-                    <td class="has-text-right"><%= receipt_item.price %></td>
+                    <td width="10%"><%= Timex.format!(receipt_item.inserted_at, "%d.%m.%Y", :strftime) %></td>
+                    <td width="15%"><%= receipt_item.receipt.receipt_number %></td>
+                    <td width="25%"><%= receipt_item.receipt.donor_name %></td>
+                    <td width="15%"><%= receipt_item.type_of_contribution.name %></td>
+                    <td width="10%" class="has-text-right"><%= receipt_item.price %></td>
+                    <td width="15"><%= receipt_item.remark %></td>
                   </tr>
                 <% end %>
               </tbody>

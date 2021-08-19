@@ -43,7 +43,7 @@ init_select_contribution();
 
 // RECEIPT: SHOW/HIDE CHEQUE
 
-function show_cheque(selectPaymentMethod: any) {
+function display_cheque(selectPaymentMethod: any) {
   const paymentMethodName =
     selectPaymentMethod.options[selectPaymentMethod.selectedIndex].text;
   const nodeCheque = document.querySelector<HTMLElement>(
@@ -56,12 +56,27 @@ function show_cheque(selectPaymentMethod: any) {
   }
 }
 
+function display_transaction_date(selectPaymentMethod: any) {
+  const paymentMethodName =
+    selectPaymentMethod.options[selectPaymentMethod.selectedIndex].text;
+  const nodeTransactionDate = document.querySelector<HTMLElement>(
+    ".node-transaction-date",
+  )!;
+  if (paymentMethodName == "Online Transfer/Direct Deposit") {
+    nodeTransactionDate.style.display = "block";
+  } else {
+    nodeTransactionDate.style.display = "none";
+  }
+}
+
 const selectPaymentMethod = document.getElementById(
   "receipt_type_of_payment_method_id",
 );
 if (selectPaymentMethod !== null) {
   selectPaymentMethod.addEventListener("change", () => {
-    show_cheque(selectPaymentMethod);
+    display_cheque(selectPaymentMethod);
+    display_transaction_date(selectPaymentMethod);
   });
-  show_cheque(selectPaymentMethod);
+  display_cheque(selectPaymentMethod);
+  display_transaction_date(selectPaymentMethod);
 }

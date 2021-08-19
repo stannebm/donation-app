@@ -72,7 +72,11 @@ defmodule Donation.Admins do
   """
 
   def list_receipts(params) do
+    search_params = get_in(params, ["search"])
     Receipt
+    |> filter_by_date(search_params["start_date"], search_params["end_date"])
+    |> filter_by_donor_name(search_params["donor_name"])
+    |> filter_by_receipt_number(search_params["receipt_number"])
     |> order_by(desc: :inserted_at)
     |> Repo.paginate(params)
   end
@@ -430,7 +434,7 @@ defmodule Donation.Admins do
   defp filter_by_donor_name(query, ""), do: query
   defp filter_by_donor_name(query, donor_name) do
     from q in query,
-    where: q.donor_name == ^donor_name
+    where: ilike(q.donor_name, ^"%#{donor_name}%")
   end
 
   defp filter_by_join_donor_name(query, nil), do: query

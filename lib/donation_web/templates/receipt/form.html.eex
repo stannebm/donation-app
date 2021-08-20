@@ -136,7 +136,7 @@
                 </div>
               </div>
 
-              <div class="field">
+              <div class="field node-transaction-date">
                 <%= label f, :transaction_date, "Transaction Date", class: "label" %>
                 <div class="control">
                   <%= date_input f, :transaction_date, class: "input" %>

@@ -30,10 +30,45 @@
         <div class="card-content">
           <div class="content">
 
+            <%= form_for @conn, Routes.receipt_path(@conn, :index), [ method: :get, as: :search], fn f -> %>
+              <div class="control">
+                <div class="columns">
+                  <div class="column">
+                    <label class="label">From Date</label>
+                    <%= date_input(f, :start_date, class: "input") %>
+                  </div>
+                  <div class="column">
+                    <label class="label">To Date</label>
+                    <%= date_input(f, :end_date, class: "input") %>
+                  </div>
+                  <div class="column">
+                    <label class="label">Donor Name</label>
+                    <%= text_input f, :donor_name, class: "input" %>
+                  </div>
+                  <div class="column">
+                    <label class="label">Receipt Number</label>
+                    <%= text_input f, :receipt_number, class: "input" %>
+                  </div>
+                  <div class="column">
+                    <label class="label">&nbsp;</label>
+                    <%= submit "Search", class: "button is-info" %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+
             <table class="table is-striped is-hoverable is-fullwidth">
               <thead>
                 <tr>
-                  <th>Date</th>
+                  <th>Created Date</th>
                   <th>Donor name</th>
                   <th>Receipt number</th>
                   <th>Total amount (RM)</th>

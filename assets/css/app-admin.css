@@ -97,7 +97,8 @@ section#mass-intentions-pdf {
 }
 
 #receipt .node-other,
-#receipt .node-payment-method {
+#receipt .node-payment-method,
+#receipt .node-transaction-date {
   display: none;
 }
 

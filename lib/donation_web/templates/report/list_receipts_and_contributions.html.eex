@@ -83,7 +83,7 @@
               <tbody>
                 <%= for receipt_item <- @receipt_items do %>
                   <tr>
-                    <td width="10%"><%= Timex.format!(receipt_item.inserted_at, "%d.%m.%Y", :strftime) %></td>
+                    <td width="10%"><%= Timex.format!(receipt_item.receipt.inserted_at, "%d.%m.%Y", :strftime) %></td>
                     <td width="15%"><%= receipt_item.receipt.receipt_number %></td>
                     <td width="25%"><%= receipt_item.receipt.donor_name %></td>
                     <td width="15%"><%= receipt_item.type_of_contribution.name %></td>

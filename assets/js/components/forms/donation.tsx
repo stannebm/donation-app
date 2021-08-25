@@ -138,7 +138,7 @@ export default function Donation() {
             <FormSelect
               label="Intention"
               options={[
-                "For Minor Basilica St. Anne",
+                "For Minor Basilica of St. Anne",
                 "For the Poor or Sick",
                 "Others",
               ]}
@@ -150,7 +150,7 @@ export default function Donation() {
             />
             {intention === "Others" && (
               <FormInput
-                label="Other Intention"
+                label="Donation for"
                 errors={errors}
                 {...register("other_intention", {
                   required: false,

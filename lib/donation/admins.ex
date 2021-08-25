@@ -341,7 +341,7 @@ defmodule Donation.Admins do
 
   def filter_receipt_and_contribution(search_params) do
     ReceiptItem
-    |> filter_by_date(search_params["start_date"], search_params["end_date"])
+    |> filter_by_join_date(search_params["start_date"], search_params["end_date"])
     |> filter_by_join_cashier_name(search_params["user_id"])
     |> filter_by_join_receipt_number(search_params["receipt_number"])
     |> filter_by_join_donor_name(search_params["donor_name"])
@@ -397,6 +397,27 @@ defmodule Donation.Admins do
         from q in query,
           where: fragment("?::date", q.inserted_at) >= ^sd,
           where: fragment("?::date", q.inserted_at) <= ^ed
+    end
+  end
+
+  defp filter_by_join_date(query, nil, nil), do: query
+  defp filter_by_join_date(query, "", ""), do: query
+  defp filter_by_join_date(query, start_date, end_date) do
+    case {start_date, end_date} do
+      {start_date, ""} -> 
+        sd = Date.from_iso8601!(start_date)
+        ed = Date.from_iso8601!(start_date)
+        from q in query,
+        inner_join: r in assoc(q, :receipt),
+        where: fragment("?::date", r.inserted_at) >= ^sd,
+        where: fragment("?::date", r.inserted_at) <= ^ed
+      {start_date, end_date} ->
+        sd = Date.from_iso8601!(start_date)
+        ed = Date.from_iso8601!(end_date)
+        from q in query,
+        inner_join: r in assoc(q, :receipt),
+        where: fragment("?::date", r.inserted_at) >= ^sd,
+        where: fragment("?::date", r.inserted_at) <= ^ed
     end
   end
 

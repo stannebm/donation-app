@@ -166,7 +166,7 @@ defmodule DonationWeb.ReportView do
 
   defp row_receipt_and_contribution(receipt_item) do
     [
-      Timex.format!(receipt_item.inserted_at, "%d.%m.%Y", :strftime),
+      Timex.format!(receipt_item.receipt.inserted_at, "%d.%m.%Y", :strftime),
       receipt_item.receipt.receipt_number,
       receipt_item.receipt.donor_name,
       receipt_item.type_of_contribution.name,

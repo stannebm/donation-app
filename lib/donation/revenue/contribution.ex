@@ -33,6 +33,7 @@ defmodule Donation.Revenue.Contribution do
       :payment_method
     ])
     |> cast_assoc(:mass_offerings, required: false)
+    |> cast_assoc(:donation, required: false)
     |> validate_required([
       :type,
       :name,

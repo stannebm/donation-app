@@ -75,7 +75,7 @@ defmodule DonationWeb.MassOfferingController do
   end
 
   def show(conn, %{"id" => id, "type" => "donation"}) do
-    contribution = Admins.get_mass_offering_by_contributor!(id)
+    contribution = Admins.get_donation_by_contributor!(id)
     render(conn, "show_donation.html", contribution: contribution)
   end
 
@@ -84,12 +84,26 @@ defmodule DonationWeb.MassOfferingController do
     render(conn, "show.html", contribution: contribution)
   end
 
+  def edit(conn, %{"id" => id, "type" => "donation"}) do
+    contribution = Admins.get_donation_by_contributor!(id)
+    changeset = Admins.change_mass_offering_by_contributor(contribution)
+    render(conn, "edit_donation.html", contribution: contribution, changeset: changeset)
+  end
+
   def edit(conn, %{"id" => id}) do
     contribution = Admins.get_mass_offering_by_contributor!(id)
     language = List.first(contribution.mass_offerings).mass_language || "English"
     changeset = Admins.change_mass_offering_by_contributor(contribution)
-
     render(conn, "edit.html", contribution: contribution, changeset: changeset, language: language)
+  end
+
+  def update(conn, %{"id" => id, "type" => "donation", "contribution" => contribution_params}) do
+    contribution = Admins.get_donation_by_contributor!(id)
+
+    with {:ok, %Contribution{} = contribution} <-
+           Admins.update_mass_offering_by_contributor(contribution, contribution_params) do
+        render(conn, :show_donation, contribution: contribution)
+    end
   end
 
   def update(conn, %{"id" => id, "contribution" => contribution_params}) do
@@ -97,7 +111,7 @@ defmodule DonationWeb.MassOfferingController do
 
     with {:ok, %Contribution{} = contribution} <-
            Admins.update_mass_offering_by_contributor(contribution, contribution_params) do
-      render(conn, :show, contribution: contribution)
+        render(conn, :show, contribution: contribution)
     end
   end
 

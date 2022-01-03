@@ -244,7 +244,13 @@ defmodule Donation.Admins do
   def get_mass_offering_by_contributor!(id) do
     Contribution
     |> Repo.get!(id)
-    |> Repo.preload([:mass_offerings, :donation])
+    |> Repo.preload([:mass_offerings])
+  end
+
+  def get_donation_by_contributor!(id) do
+    Contribution
+    |> Repo.get!(id)
+    |> Repo.preload([:donation])
   end
 
   def create_mass_offering_by_contributor(attrs \\ %{}) do

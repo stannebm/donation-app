@@ -82,7 +82,7 @@
           <span><%= link "Back", to: Routes.admin_mass_offering_path(@conn, :index) %></span>
         </p>
         <p class="card-footer-item">
-          <span><%#= link "Edit", to: Routes.admin_mass_offering_path(@conn, :edit, @contribution) %></span>
+          <span><%= link "Edit", to: Routes.admin_mass_offering_path(@conn, :edit, @contribution, type: "donation") %></span>
         </p>
       </footer>
     

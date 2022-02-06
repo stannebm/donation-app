@@ -83,7 +83,7 @@
               <tbody>
                 <%= for receipt <- @receipts do %>
                   <tr>
-                    <td><%= Timex.format!(receipt.inserted_at, "%d.%m.%Y", :strftime) %></td>
+                    <td><%= to_mytz_format(receipt.inserted_at) %></td>
                     <td><%= receipt.user.name %></td>
                     <td><%= receipt.receipt_number %></td>
                     <td style="word-break:break-all;"><%= receipt.donor_name %></td>

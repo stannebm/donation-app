@@ -12,25 +12,26 @@ defmodule DonationWeb.ReportController do
 
   ## LIST DONATIONS -> CASE 1
   def list_donations(conn, %{"search" => search}) do
-    query = Admins.filter_donations(%{search: search})
+    query = Admins.filter_donations(search)
             |> Admins.reject_verified_is_false()
     render(conn, :list_donations, donations: query)
   end
 
   ## LIST DONATIONS -> CASE 2
   def list_donations(conn, _) do
-    query = Admins.filter_donations(%{search: nil})
+    query = Admins.filter_donations()
             |> Admins.reject_verified_is_false()
     render(conn, :list_donations, donations: query)
   end
 
   ## LIST DONATIONS -> EXPORT EXCEL
   def list_donations_xlsx(conn, %{"search" => search}) do
-    query = Admins.filter_donations(%{search: search})
+    dateformat = Timex.today() |> Timex.format!("%d%m%Y", :strftime)
+    query = Admins.filter_donations(search)
             |> Admins.reject_verified_is_false()
     conn
     |> put_resp_content_type("text/xlsx")
-    |> put_resp_header("content-disposition", "attachment; filename=donations.xlsx;")
+    |> put_resp_header("content-disposition", "attachment; filename=donations_#{dateformat}.xlsx;")
     |> render("donations.xlsx", %{donations: query})
   end
 
@@ -152,10 +153,11 @@ defmodule DonationWeb.ReportController do
   end
 
   def list_receipts_and_payment_methods_xlsx(conn, %{"search" => search}) do
+    dateformat = Timex.today() |> Timex.format!("%d%m%Y", :strftime)
     receipts = Admins.filter_receipt_and_payment_method(search)
     conn
     |> put_resp_content_type("text/xlsx")
-    |> put_resp_header("content-disposition", "attachment; filename=receipts_and_payment_methods.xlsx;")
+    |> put_resp_header("content-disposition", "attachment; filename=receipts_and_payment_methods_#{dateformat}.xlsx;")
     |> render("receipts_and_payment_methods.xlsx", %{receipts: receipts})
   end
 

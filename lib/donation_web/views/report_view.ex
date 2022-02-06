@@ -146,7 +146,7 @@ defmodule DonationWeb.ReportView do
 
   defp row_donation(donation) do
     [
-      Timex.format!(donation.inserted_at, "%d.%m.%Y", :strftime),
+      to_mytz_format(donation.inserted_at),
       donation.contribution.name,
       donation.intention,
       Decimal.to_float(donation.contribution.amount)
@@ -155,7 +155,7 @@ defmodule DonationWeb.ReportView do
 
   defp row_receipt_and_payment_method(receipt) do
     [
-      Timex.format!(receipt.inserted_at, "%d.%m.%Y", :strftime),
+      to_mytz_format(receipt.inserted_at),
       receipt.user.name,
       receipt.receipt_number,
       receipt.donor_name,

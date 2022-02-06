@@ -20,12 +20,20 @@
         <div class="card-content">
           <div class="content">
             <%= form_for @conn, Routes.admin_report_path(@conn, :list_donations), [ method: :get, as: :search], fn f -> %>
-              <div class="field">
-                <label class="label">From Date</label>
-                <div class="control">
-                  <%= date_input f, :from_date, class: "input from-date" %>
+              <div class="columns">
+                <div class="column">
+                  <label class="label">From Date</label>
+                  <%= date_input(f, :start_date, class: "input") %>
+                </div>
+                <div class="column">
+                  <label class="label">To Date</label>
+                  <%= date_input(f, :end_date, class: "input") %>
+                </div>
+                <div class="column">
+                  <label class="label">&nbsp;</label>
                   <%= submit "Search", class: "button is-info" %>
                 </div>
+                <div class="column"></div>
               </div>
             <% end %>
           </div>
@@ -48,7 +56,7 @@
               <tbody>
                 <%= for donation <- @donations do %>
                   <tr>
-                    <td><%= Timex.format!(donation.inserted_at, "%d.%m.%Y", :strftime) %></td>
+                    <td><%= to_mytz_format(donation.inserted_at) %></td>
                     <td><%= donation.contribution.name %></td>
                     <td><%= donation.intention %></td>
                     <td><%= donation.contribution.amount %></td>

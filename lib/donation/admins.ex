@@ -277,30 +277,22 @@ defmodule Donation.Admins do
     REPORTS
   """
 
-  def filter_donations(%{search: nil}) do
+  ## Practice: https://stackoverflow.com/questions/49382461/ecto-query-composition-with-nil-values
+  def filter_donations(search_params) do
+    Donation
+    |> filter_by_date(search_params["start_date"], search_params["end_date"])
+    |> join(:left, [d], c in Contribution, on: c.id == d.contribution_id)
+    |> order_by(desc: :inserted_at)
+    |> Repo.all()
+    |> Repo.preload([:contribution, contribution: :web_payment])
+  end
+
+  def filter_donations() do
     Repo.all(
       from d in Donation,
         join: c in Contribution,
         on: c.id == d.contribution_id,
         order_by: [desc: :inserted_at],
-        preload: [:contribution, contribution: :web_payment]
-    )
-  end
-
-  ## Practice: https://stackoverflow.com/questions/49382461/ecto-query-composition-with-nil-values
-  def filter_donations(%{search: search}) do
-    from_date =
-      if get_in(search, ["from_date"]) != "" do
-        Date.from_iso8601!(get_in(search, ["from_date"]))
-      else
-        Date.utc_today()
-      end
-    Repo.all(
-      from d in Donation,
-        join: c in Contribution,
-        on: c.id == d.contribution_id,
-        where: fragment("?::date", d.inserted_at) >= ^from_date,
-        where: fragment("?::date", d.inserted_at) <= ^from_date,
         preload: [:contribution, contribution: :web_payment]
     )
   end
@@ -391,18 +383,26 @@ defmodule Donation.Admins do
   defp filter_by_date(query, "", ""), do: query
   defp filter_by_date(query, start_date, end_date) do
     case {start_date, end_date} do
+
       {start_date, ""} -> 
-        sd = Date.from_iso8601!(start_date)
-        ed = Date.from_iso8601!(start_date)
+
+        {:ok, sdt, _} = DateTime.from_iso8601("#{start_date}T00:00:00+08:00")
+        {:ok, edt, _} = DateTime.from_iso8601("#{Timex.today()}T23:59:59+08:00")
+
         from q in query,
-          where: fragment("?::date", q.inserted_at) >= ^sd,
-          where: fragment("?::date", q.inserted_at) <= ^ed
+          where: q.inserted_at >= ^sdt,
+          where: q.inserted_at <= ^edt
+
+
       {start_date, end_date} ->
-        sd = Date.from_iso8601!(start_date)
-        ed = Date.from_iso8601!(end_date)
+
+        {:ok, sdt, _} = DateTime.from_iso8601("#{start_date}T00:00:00+08:00")
+        {:ok, edt, _} = DateTime.from_iso8601("#{end_date}T23:59:59+08:00")
+
         from q in query,
-          where: fragment("?::date", q.inserted_at) >= ^sd,
-          where: fragment("?::date", q.inserted_at) <= ^ed
+          where: q.inserted_at >= ^sdt,
+          where: q.inserted_at <= ^edt
+
     end
   end
 

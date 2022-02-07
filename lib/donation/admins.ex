@@ -410,20 +410,27 @@ defmodule Donation.Admins do
   defp filter_by_join_date(query, "", ""), do: query
   defp filter_by_join_date(query, start_date, end_date) do
     case {start_date, end_date} do
+
       {start_date, ""} -> 
-        sd = Date.from_iso8601!(start_date)
-        ed = Date.from_iso8601!(start_date)
+
+        {:ok, sdt, _} = DateTime.from_iso8601("#{start_date}T00:00:00+08:00")
+        {:ok, edt, _} = DateTime.from_iso8601("#{Timex.today()}T23:59:59+08:00")
+
         from q in query,
         inner_join: r in assoc(q, :receipt),
-        where: fragment("?::date", r.inserted_at) >= ^sd,
-        where: fragment("?::date", r.inserted_at) <= ^ed
+        where: r.inserted_at >= ^sdt,
+        where: r.inserted_at <= ^edt
+
       {start_date, end_date} ->
-        sd = Date.from_iso8601!(start_date)
-        ed = Date.from_iso8601!(end_date)
+
+        {:ok, sdt, _} = DateTime.from_iso8601("#{start_date}T00:00:00+08:00")
+        {:ok, edt, _} = DateTime.from_iso8601("#{end_date}T23:59:59+08:00")
+
         from q in query,
         inner_join: r in assoc(q, :receipt),
-        where: fragment("?::date", r.inserted_at) >= ^sd,
-        where: fragment("?::date", r.inserted_at) <= ^ed
+        where: r.inserted_at >= ^sdt,
+        where: r.inserted_at <= ^edt
+
     end
   end
 

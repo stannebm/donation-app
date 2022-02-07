@@ -166,13 +166,21 @@ defmodule DonationWeb.ReportView do
 
   defp row_receipt_and_contribution(receipt_item) do
     [
-      Timex.format!(receipt_item.receipt.inserted_at, "%d.%m.%Y", :strftime),
+      to_mytz_format(receipt_item.receipt.inserted_at),
       receipt_item.receipt.receipt_number,
       receipt_item.receipt.donor_name,
       receipt_item.type_of_contribution.name,
       Decimal.to_float(receipt_item.price),
       receipt_item.remark
     ]
+  end
+
+  # Convert to Malaysia Timezone & format
+  def to_mytz_format(newdatetime) do
+    { _, utc } = DateTime.from_naive(newdatetime, "Etc/UTC")
+    utc
+    |> Timex.Timezone.convert("Asia/Kuala_Lumpur")
+    |> Timex.format!("%d.%m.%Y %H:%M:%S", :strftime)
   end
 
 end

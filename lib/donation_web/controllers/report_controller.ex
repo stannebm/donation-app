@@ -121,10 +121,11 @@ defmodule DonationWeb.ReportController do
   end
 
   def list_receipts_and_contributions_xlsx(conn, %{"search" => search}) do
+    dateformat = Timex.today() |> Timex.format!("%d%m%Y", :strftime)
     receipt_items = Admins.filter_receipt_and_contribution(search)
     conn
     |> put_resp_content_type("text/xlsx")
-    |> put_resp_header("content-disposition", "attachment; filename=receipts_and_contributions.xlsx;")
+    |> put_resp_header("content-disposition", "attachment; filename=receipts_and_contributions_#{dateformat}.xlsx;")
     |> render("receipts_and_contributions.xlsx", %{receipt_items: receipt_items})
   end
 

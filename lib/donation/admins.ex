@@ -346,14 +346,14 @@ defmodule Donation.Admins do
     |> filter_by_contribution_for(search_params["type_of_contribution_id"])
     |> order_by(desc: :inserted_at)
     |> Repo.all()
-    |> Repo.preload([:type_of_contribution, receipt: :user])
+    |> Repo.preload([:type_of_contribution, receipt: [:user, :type_of_payment_method]])
   end
 
   def filter_receipt_and_contribution() do
     ReceiptItem
     |> order_by(desc: :inserted_at)
     |> Repo.all()
-    |> Repo.preload([:type_of_contribution, receipt: :user])
+    |> Repo.preload([:type_of_contribution, receipt: [:user, :type_of_payment_method]])
   end
 
   def filter_receipt_and_payment_method(search_params) do
@@ -407,7 +407,15 @@ defmodule Donation.Admins do
   end
 
   defp filter_by_join_date(query, nil, nil), do: query
-  defp filter_by_join_date(query, "", ""), do: query
+  defp filter_by_join_date(query, "", "") do
+    {:ok, sdt, _} = DateTime.from_iso8601("#{Timex.today()}T00:00:00+08:00")
+    {:ok, edt, _} = DateTime.from_iso8601("#{Timex.today()}T23:59:59+08:00")
+
+    from q in query,
+    inner_join: r in assoc(q, :receipt),
+    where: r.inserted_at >= ^sdt,
+    where: r.inserted_at <= ^edt
+  end
   defp filter_by_join_date(query, start_date, end_date) do
     case {start_date, end_date} do
 

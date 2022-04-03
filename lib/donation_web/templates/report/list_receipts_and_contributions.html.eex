@@ -76,6 +76,7 @@
                   <th>Receipt Number</th>
                   <th>Donor Name</th>
                   <th>Contribution for</th>
+                  <th>Payment Method</th>
                   <th>Amount (RM)</th>
                   <th>Remark</th>
                 </tr>
@@ -87,6 +88,7 @@
                     <td width="15%"><%= receipt_item.receipt.receipt_number %></td>
                     <td width="25%"><%= receipt_item.receipt.donor_name %></td>
                     <td width="15%"><%= receipt_item.type_of_contribution.name %></td>
+                    <td width=""><%= receipt_item.receipt.type_of_payment_method.name %></td>
                     <td width="10%" class="has-text-right"><%= receipt_item.price %></td>
                     <td width="15"><%= receipt_item.remark %></td>
                   </tr>

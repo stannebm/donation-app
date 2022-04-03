@@ -40,6 +40,7 @@ defmodule DonationWeb.ReportView do
     "Receipt Number",
     "Donor Name",
     "Contribution for",
+    "Payment Method",
     "Total Amount (RM)",
     "Remark"
   ]
@@ -170,6 +171,7 @@ defmodule DonationWeb.ReportView do
       receipt_item.receipt.receipt_number,
       receipt_item.receipt.donor_name,
       receipt_item.type_of_contribution.name,
+      receipt_item.receipt.type_of_payment_method.name,
       Decimal.to_float(receipt_item.price),
       receipt_item.remark
     ]

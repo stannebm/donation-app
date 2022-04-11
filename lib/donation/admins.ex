@@ -351,6 +351,7 @@ defmodule Donation.Admins do
 
   def filter_receipt_and_contribution() do
     ReceiptItem
+    |> filter_by_join_date("", "")
     |> order_by(desc: :inserted_at)
     |> Repo.all()
     |> Repo.preload([:type_of_contribution, receipt: [:user, :type_of_payment_method]])
@@ -375,6 +376,12 @@ defmodule Donation.Admins do
       order_by: [u.name],
       preload: [:user, :type_of_payment_method]
     )
+  end
+
+  def sum_of_payment_method(query, payment_method_id) do
+    Enum.filter(query, fn(receipt_item) -> receipt_item.receipt.type_of_payment_method_id == payment_method_id end) 
+    |> Enum.map(&(&1.price))
+    |> Enum.reduce(Decimal.new(0), &Decimal.add/2)
   end
 
   ## PROTECTED FILTER

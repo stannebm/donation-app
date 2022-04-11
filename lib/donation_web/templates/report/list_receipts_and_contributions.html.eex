@@ -66,6 +66,23 @@
         </div>
       </div>
 
+      <%= if @total_payments != %{} do %>
+        <div class="card">
+          <div class="card-content">
+            <div class="columns">
+              <%= Enum.map(@total_payments, fn {payment_method, total} -> %>
+                <div class="column has-text-centered">
+                  <div>
+                    <p class="heading"><%= payment_method %></p>
+                    <p class="title"><%= total %></p>
+                  </div>
+                </div>
+              <% end) %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
       <div class="card">
         <div class="card-content">
           <div class="content">

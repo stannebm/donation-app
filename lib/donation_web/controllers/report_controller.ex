@@ -101,12 +101,15 @@ defmodule DonationWeb.ReportController do
 
   def list_receipts_and_contributions(conn, %{"search" => search}) do
     cashiers = Admins.unique_cashier_in_receipt()
+    type_of_payment_methods = Admins.list_type_of_payment_methods() |> Enum.map(&{&1.name, &1.id})
     type_of_contributions = Admins.list_type_of_contributions() |> Enum.map(&{&1.name, &1.id})
     receipt_items = Admins.filter_receipt_and_contribution(search)
+    total_payments = Enum.map(type_of_payment_methods, fn {k, v} -> { k, Admins.sum_of_payment_method(receipt_items, v) } end)
     render(conn, :list_receipts_and_contributions, 
       cashiers: cashiers,
       receipt_items: receipt_items, 
-      type_of_contributions: type_of_contributions
+      type_of_contributions: type_of_contributions,
+      total_payments: total_payments
     )
   end
 
@@ -117,48 +120,54 @@ defmodule DonationWeb.ReportController do
     render(conn, :list_receipts_and_contributions, 
       cashiers: cashiers,
       receipt_items: receipt_items, 
-      type_of_contributions: type_of_contributions
+      type_of_contributions: type_of_contributions,
+      total_payments: %{}
     )
   end
 
   def list_receipts_and_contributions_xlsx(conn, %{"search" => search}) do
     dateformat = Timex.today() |> Timex.format!("%d%m%Y", :strftime)
+    type_of_payment_methods = Admins.list_type_of_payment_methods() |> Enum.map(&{&1.name, &1.id})
     receipt_items = Admins.filter_receipt_and_contribution(search)
+    total_payments = Enum.map(type_of_payment_methods, fn {k, v} -> { k, Admins.sum_of_payment_method(receipt_items, v) } end)
     conn
     |> put_resp_content_type("text/xlsx")
     |> put_resp_header("content-disposition", "attachment; filename=receipts_and_contributions_#{dateformat}.xlsx;")
-    |> render("receipts_and_contributions.xlsx", %{receipt_items: receipt_items})
+    |> render("receipts_and_contributions.xlsx", %{
+      receipt_items: receipt_items,
+      total_payments: total_payments
+    })
   end
 
-  def list_receipts_and_payment_methods(conn, %{"search" => search}) do
-    cashiers = Admins.unique_cashier_in_receipt()
-    type_of_payment_methods = Admins.list_type_of_payment_methods() |> Enum.map(&{&1.name, &1.id})
-    receipts = Admins.filter_receipt_and_payment_method(search)
-    render(conn, :list_receipts_and_payment_methods, 
-      receipts: receipts, 
-      cashiers: cashiers, 
-      type_of_payment_methods: type_of_payment_methods
-    )
-  end
+  # def list_receipts_and_payment_methods(conn, %{"search" => search}) do
+  #   cashiers = Admins.unique_cashier_in_receipt()
+  #   type_of_payment_methods = Admins.list_type_of_payment_methods() |> Enum.map(&{&1.name, &1.id})
+  #   receipts = Admins.filter_receipt_and_payment_method(search)
+  #   render(conn, :list_receipts_and_payment_methods, 
+  #     receipts: receipts, 
+  #     cashiers: cashiers, 
+  #     type_of_payment_methods: type_of_payment_methods
+  #   )
+  # end
 
-  def list_receipts_and_payment_methods(conn, _) do
-    cashiers = Admins.unique_cashier_in_receipt()
-    type_of_payment_methods = Admins.list_type_of_payment_methods() |> Enum.map(&{&1.name, &1.id})
-    receipts = Admins.filter_receipt_and_payment_method()
-    render(conn, :list_receipts_and_payment_methods, 
-      receipts: receipts, 
-      cashiers: cashiers,
-      type_of_payment_methods: type_of_payment_methods
-    )
-  end
+  # def list_receipts_and_payment_methods(conn, _) do
+  #   cashiers = Admins.unique_cashier_in_receipt()
+  #   type_of_payment_methods = Admins.list_type_of_payment_methods() |> Enum.map(&{&1.name, &1.id})
+  #   receipts = Admins.filter_receipt_and_payment_method()
+  #   render(conn, :list_receipts_and_payment_methods, 
+  #     receipts: receipts, 
+  #     cashiers: cashiers,
+  #     type_of_payment_methods: type_of_payment_methods
+  #   )
+  # end
 
-  def list_receipts_and_payment_methods_xlsx(conn, %{"search" => search}) do
-    dateformat = Timex.today() |> Timex.format!("%d%m%Y", :strftime)
-    receipts = Admins.filter_receipt_and_payment_method(search)
-    conn
-    |> put_resp_content_type("text/xlsx")
-    |> put_resp_header("content-disposition", "attachment; filename=receipts_and_payment_methods_#{dateformat}.xlsx;")
-    |> render("receipts_and_payment_methods.xlsx", %{receipts: receipts})
-  end
+  # def list_receipts_and_payment_methods_xlsx(conn, %{"search" => search}) do
+  #   dateformat = Timex.today() |> Timex.format!("%d%m%Y", :strftime)
+  #   receipts = Admins.filter_receipt_and_payment_method(search)
+  #   conn
+  #   |> put_resp_content_type("text/xlsx")
+  #   |> put_resp_header("content-disposition", "attachment; filename=receipts_and_payment_methods_#{dateformat}.xlsx;")
+  #   |> render("receipts_and_payment_methods.xlsx", %{receipts: receipts})
+  # end
 
 end

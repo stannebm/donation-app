@@ -66,6 +66,23 @@
         </div>
       </div>
 
+      <%= if @total_payments != %{} do %>
+        <div class="card">
+          <div class="card-content">
+            <div class="columns">
+              <%= Enum.map(@total_payments, fn {payment_method, total} -> %>
+                <div class="column has-text-centered">
+                  <div>
+                    <p class="heading"><%= payment_method %></p>
+                    <p class="title"><%= total %></p>
+                  </div>
+                </div>
+              <% end) %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
       <div class="card">
         <div class="card-content">
           <div class="content">
@@ -76,6 +93,7 @@
                   <th>Receipt Number</th>
                   <th>Donor Name</th>
                   <th>Contribution for</th>
+                  <th>Payment Method</th>
                   <th>Amount (RM)</th>
                   <th>Remark</th>
                 </tr>
@@ -87,6 +105,7 @@
                     <td width="15%"><%= receipt_item.receipt.receipt_number %></td>
                     <td width="25%"><%= receipt_item.receipt.donor_name %></td>
                     <td width="15%"><%= receipt_item.type_of_contribution.name %></td>
+                    <td width=""><%= receipt_item.receipt.type_of_payment_method.name %></td>
                     <td width="10%" class="has-text-right"><%= receipt_item.price %></td>
                     <td width="15"><%= receipt_item.remark %></td>
                   </tr>

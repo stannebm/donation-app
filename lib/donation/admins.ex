@@ -346,14 +346,15 @@ defmodule Donation.Admins do
     |> filter_by_contribution_for(search_params["type_of_contribution_id"])
     |> order_by(desc: :inserted_at)
     |> Repo.all()
-    |> Repo.preload([:type_of_contribution, receipt: :user])
+    |> Repo.preload([:type_of_contribution, receipt: [:user, :type_of_payment_method]])
   end
 
   def filter_receipt_and_contribution() do
     ReceiptItem
+    |> filter_by_join_date("", "")
     |> order_by(desc: :inserted_at)
     |> Repo.all()
-    |> Repo.preload([:type_of_contribution, receipt: :user])
+    |> Repo.preload([:type_of_contribution, receipt: [:user, :type_of_payment_method]])
   end
 
   def filter_receipt_and_payment_method(search_params) do
@@ -375,6 +376,12 @@ defmodule Donation.Admins do
       order_by: [u.name],
       preload: [:user, :type_of_payment_method]
     )
+  end
+
+  def sum_of_payment_method(query, payment_method_id) do
+    Enum.filter(query, fn(receipt_item) -> receipt_item.receipt.type_of_payment_method_id == payment_method_id end) 
+    |> Enum.map(&(&1.price))
+    |> Enum.reduce(Decimal.new(0), &Decimal.add/2)
   end
 
   ## PROTECTED FILTER
@@ -407,7 +414,15 @@ defmodule Donation.Admins do
   end
 
   defp filter_by_join_date(query, nil, nil), do: query
-  defp filter_by_join_date(query, "", ""), do: query
+  defp filter_by_join_date(query, "", "") do
+    {:ok, sdt, _} = DateTime.from_iso8601("#{Timex.today()}T00:00:00+08:00")
+    {:ok, edt, _} = DateTime.from_iso8601("#{Timex.today()}T23:59:59+08:00")
+
+    from q in query,
+    inner_join: r in assoc(q, :receipt),
+    where: r.inserted_at >= ^sdt,
+    where: r.inserted_at <= ^edt
+  end
   defp filter_by_join_date(query, start_date, end_date) do
     case {start_date, end_date} do
 

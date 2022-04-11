@@ -60,7 +60,9 @@ defmodule DonationWeb.Router do
 
   scope "/admins", DonationWeb, as: :admin do
     pipe_through [:browser, :authenticate_admin, :layout_admin]
+    get("/dashboard", DashboardController, :dashboard)
     resources("/mass_offerings", MassOfferingController)
+    # get("/mass_offerings/send_email/:contribution_id", MassOfferingController, :send_email)
     ## REPORTS
     get("/reports/list_donations", ReportController, :list_donations)
     get("/reports/list_donations/xlsx", ReportController, :list_donations_xlsx)
@@ -70,8 +72,13 @@ defmodule DonationWeb.Router do
     ## FINANCIAL MANAGEMENT
     get("/reports/list_receipts_and_contributions", ReportController, :list_receipts_and_contributions)
     get("/reports/list_receipts_and_contributions/xlsx", ReportController, :list_receipts_and_contributions_xlsx)
-    get("/reports/list_receipts_and_payment_methods", ReportController, :list_receipts_and_payment_methods)
-    get("/reports/list_receipts_and_payment_methods/xlsx", ReportController, :list_receipts_and_payment_methods_xlsx)
+    # get("/reports/list_receipts_and_payment_methods", ReportController, :list_receipts_and_payment_methods)
+    # get("/reports/list_receipts_and_payment_methods/xlsx", ReportController, :list_receipts_and_payment_methods_xlsx)
+  end
+
+  scope "/admins", DonationWeb, as: :admin do
+    pipe_through([:browser, :authenticate_admin, :layout_admin])
+    get("/mass_offering_mail", EmailController, :mass_offering_mail)
   end
 
   scope "/", DonationWeb do

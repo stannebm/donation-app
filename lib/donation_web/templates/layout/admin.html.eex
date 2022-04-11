@@ -63,7 +63,7 @@
             <p class="menu-label">
               Administration
               <ul class="menu-list">
-                <li><%= link("Members", to: '/admins/users' ) %></li>
+                <li><%= link("Users", to: '/admins/users' ) %></li>
                 <li><%= link("Type of Contributions", to: '/admins/type_of_contributions') %></li>
                 <li><%= link("Type of Payment Methods", to: '/admins/type_of_payment_methods') %></li>
               </ul>
@@ -83,13 +83,14 @@
             <ul class="menu-list">
               <li><%= link("List Mass Offerings", to: Routes.admin_report_path(@conn, :list_mass_offerings)) %></li>
               <li><%= link("List Donations", to: Routes.admin_report_path(@conn, :list_donations)) %></li>
-              <li>
+              <li><%= link("List Receipts", to: Routes.admin_report_path(@conn, :list_receipts_and_contributions)) %></li>
+              <!--<li>
                 <a href="#" class="no-hover">List Receipts</a>
                 <ul>
-                  <li><%= link("by Contributions", to: Routes.admin_report_path(@conn, :list_receipts_and_contributions)) %></li>
-                  <li><%= link("by Payment Methods", to: Routes.admin_report_path(@conn, :list_receipts_and_payment_methods)) %></li>
+                  <li><%#= link("by Contributions", to: Routes.admin_report_path(@conn, :list_receipts_and_contributions)) %></li>
+                  <li><%#= link("by Payment Methods", to: Routes.admin_report_path(@conn, :list_receipts_and_payment_methods)) %></li>
                 </ul>
-              </li>
+              </li>-->
             </ul>
           </p>
 

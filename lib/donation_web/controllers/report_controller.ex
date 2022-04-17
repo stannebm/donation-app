@@ -129,7 +129,9 @@ defmodule DonationWeb.ReportController do
     dateformat = Timex.today() |> Timex.format!("%d%m%Y", :strftime)
     type_of_payment_methods = Admins.list_type_of_payment_methods() |> Enum.map(&{&1.name, &1.id})
     receipt_items = Admins.filter_receipt_and_contribution(search)
-    total_payments = Enum.map(type_of_payment_methods, fn {k, v} -> { k, Admins.sum_of_payment_method(receipt_items, v) } end)
+    total_payments = Enum.map(type_of_payment_methods, fn {k, v} -> { 
+      k, Admins.sum_of_payment_method(receipt_items, v) 
+    } end)
     conn
     |> put_resp_content_type("text/xlsx")
     |> put_resp_header("content-disposition", "attachment; filename=receipts_and_contributions_#{dateformat}.xlsx;")

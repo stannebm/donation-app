@@ -24,14 +24,14 @@ defmodule DonationWeb.ReportView do
 
   ## RECEIPTS AND PAYMENT METHODS
 
-  @header_receipt_and_payment_method [
-    "Created Date",
-    "Cashier Name",
-    "Receipt Number",
-    "Donor Name",
-    "Payment Method",
-    "Total Amount (RM)"
-  ]
+  # @header_receipt_and_payment_method [
+  #   "Created Date",
+  #   "Cashier Name",
+  #   "Receipt Number",
+  #   "Donor Name",
+  #   "Payment Method",
+  #   "Total Amount (RM)"
+  # ]
 
   ## RECEIPTS AND CONTRIBUTIONS
 
@@ -59,15 +59,15 @@ defmodule DonationWeb.ReportView do
     |> elem(1)
   end
 
-  def render("receipts_and_payment_methods.xlsx", %{receipts: receipts}) do
-    report_generator_for_receipts_and_payment_methods(receipts)
-    |> Elixlsx.write_to_memory("receipts_and_payment_methods.xlsx")
-    |> elem(1)
-    |> elem(1)
-  end
+  # def render("receipts_and_payment_methods.xlsx", %{receipts: receipts}) do
+  #   report_generator_for_receipts_and_payment_methods(receipts)
+  #   |> Elixlsx.write_to_memory("receipts_and_payment_methods.xlsx")
+  #   |> elem(1)
+  #   |> elem(1)
+  # end
 
-  def render("receipts_and_contributions.xlsx", %{receipt_items: receipt_items}) do
-    report_generator_for_receipts_and_contributions(receipt_items)
+  def render("receipts_and_contributions.xlsx", %{receipt_items: receipt_items, total_payments: total_payments}) do
+    report_generator_for_receipts(receipt_items, total_payments)
     |> Elixlsx.write_to_memory("receipts_and_contributions.xlsx")
     |> elem(1)
     |> elem(1)
@@ -105,32 +105,43 @@ defmodule DonationWeb.ReportView do
     }
   end
 
-  defp report_generator_for_receipts_and_payment_methods(receipts) do
-    rows =
-      receipts
-      |> Enum.map(&row_receipt_and_payment_method(&1))
+  # defp report_generator_for_receipts_and_payment_methods(receipts) do
+  #   rows =
+  #     receipts
+  #     |> Enum.map(&row_receipt_and_payment_method(&1))
 
-    %Workbook{
-      sheets: [
-        %Sheet{
-          name: "Receipts and Payment Methods",
-          rows: [@header_receipt_and_payment_method] ++ rows
-        }
-      ]
-    }
-  end
+  #   %Workbook{
+  #     sheets: [
+  #       %Sheet{
+  #         name: "Receipts and Payment Methods",
+  #         rows: [@header_receipt_and_payment_method] ++ rows
+  #       }
+  #     ]
+  #   }
+  # end
 
-  defp report_generator_for_receipts_and_contributions(receipt_items) do
+  defp report_generator_for_receipts(receipt_items, total_payments) do
     rows =
       receipt_items
       |> Enum.map(&row_receipt_and_contribution(&1))
 
+    rows_total = 
+      total_payments
+      |> Enum.map(fn {payment_method, total} -> ["#{payment_method}", Decimal.to_float(total)] end)
+
     %Workbook{
       sheets: [
         %Sheet{
-          name: "Receipts and Contributions",
-          rows: [@header_receipt_and_contribution] ++ rows
+          name: "Receipts",
+          rows: [@header_receipt_and_contribution] ++ rows ++ [''] ++ rows_total
         }
+        |> Sheet.set_col_width("A", 30)
+        |> Sheet.set_col_width("B", 20)
+        |> Sheet.set_col_width("C", 20)
+        |> Sheet.set_col_width("D", 20)
+        |> Sheet.set_col_width("E", 20)
+        |> Sheet.set_col_width("F", 20)
+        |> Sheet.set_col_width("G", 50)
       ]
     }
   end
@@ -154,16 +165,16 @@ defmodule DonationWeb.ReportView do
     ]
   end
 
-  defp row_receipt_and_payment_method(receipt) do
-    [
-      to_mytz_format(receipt.inserted_at),
-      receipt.user.name,
-      receipt.receipt_number,
-      receipt.donor_name,
-      receipt.type_of_payment_method.name,
-      Decimal.to_float(receipt.total_amount)
-    ]
-  end
+  # defp row_receipt_and_payment_method(receipt) do
+  #   [
+  #     to_mytz_format(receipt.inserted_at),
+  #     receipt.user.name,
+  #     receipt.receipt_number,
+  #     receipt.donor_name,
+  #     receipt.type_of_payment_method.name,
+  #     Decimal.to_float(receipt.total_amount)
+  #   ]
+  # end
 
   defp row_receipt_and_contribution(receipt_item) do
     [

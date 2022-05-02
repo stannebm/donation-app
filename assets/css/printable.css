@@ -12,6 +12,10 @@ body {
 
 /* HEADER CONTACT INFORMATION */
 
+#noheader-container {
+  height: 120px;
+}
+
 #header-container {
   text-align: center;
   width: 100%;

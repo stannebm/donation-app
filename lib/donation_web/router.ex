@@ -53,6 +53,8 @@ defmodule DonationWeb.Router do
     pipe_through([:browser, :authenticate_admin, :layout_admin])
     resources("/receipts", ReceiptController, except: [:delete])
     get("/receipts/:id/generate_pdf", ReceiptController, :generate_pdf)
+    get("/receipts/:id/noheader_pdf", ReceiptController, :noheader_pdf)
+    get("/sample_header_pdf", ReceiptController, :sample_header_pdf)
     resources("/type_of_contributions", TypeOfContributionController)
     resources("/type_of_payment_methods", TypeOfPaymentMethodController)
     resources("/users", UserController)

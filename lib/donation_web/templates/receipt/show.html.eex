@@ -105,6 +105,9 @@
         <p class="card-footer-item">
           <span><%= link("Generate PDF", to: Routes.receipt_path(@conn, :generate_pdf, @receipt), target: "_blank") %></span>
         </p>
+        <p class="card-footer-item">
+          <span><%= link("No-header PDF", to: Routes.receipt_path(@conn, :noheader_pdf, @receipt), target: "_blank") %></span>
+        </p>
       </footer>
     
     </div>

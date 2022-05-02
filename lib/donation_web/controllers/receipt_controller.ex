@@ -126,4 +126,53 @@ defmodule DonationWeb.ReceiptController do
       filename: "offical_receipt_#{receipt.receipt_number}.pdf"
     )
   end
+
+  def noheader_pdf(conn, %{"id" => id}) do
+    receipt = Admins.get_receipt!(id)
+
+    html =
+      Phoenix.View.render_to_string(DonationWeb.ReceiptView, "generate_pdf.html",
+        layout: {DonationWeb.LayoutView, "receipt_noheader.html"},
+        receipt: receipt,
+        conn: conn
+      )
+
+    {:ok, filename} =
+      PdfGenerator.generate(
+        html,
+        page_size: "A5",
+        shell_params: [
+          "--orientation",
+          "landscape"
+        ]
+      )
+
+    conn
+    |> send_download({:file, filename},
+      disposition: :inline,
+      filename: "offical_receipt_#{receipt.receipt_number}.pdf"
+    )
+  end
+
+  def sample_header_pdf(conn, _) do
+    html =
+      Phoenix.View.render_to_string(DonationWeb.LayoutView, "receipt_nocontent.html", conn: conn)
+
+    {:ok, filename} =
+      PdfGenerator.generate(
+        html,
+        page_size: "A5",
+        shell_params: [
+          "--orientation",
+          "landscape"
+        ]
+      )
+
+    conn
+    |> send_download({:file, filename},
+      disposition: :inline,
+      filename: "offical_receipt (sample).pdf"
+    )
+  end
+
 end

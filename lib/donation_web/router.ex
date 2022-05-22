@@ -71,6 +71,8 @@ defmodule DonationWeb.Router do
     get("/reports/list_mass_offerings", ReportController, :list_mass_offerings)
     get("/reports/list_mass_offerings/pdf", ReportController, :list_mass_offerings_pdf)
     get("/reports/list_mass_offerings/xlsx", ReportController, :list_mass_offerings_xlsx)
+    get("/reports/financial_mass_offerings", ReportController, :list_mass_offerings_financial)
+    get("/reports/financial_mass_offerings/xlsx", ReportController, :list_mass_offerings_financial_xlsx)
     ## FINANCIAL MANAGEMENT
     get("/reports/list_receipts_and_contributions", ReportController, :list_receipts_and_contributions)
     get("/reports/list_receipts_and_contributions/xlsx", ReportController, :list_receipts_and_contributions_xlsx)

@@ -236,6 +236,7 @@ defmodule Donation.Admins do
 
   def list_mass_offering_by_contributors do
     Contribution
+    |> filter_by_date("", "")
     |> order_by(desc: :inserted_at)
     |> Repo.all()
     |> Repo.preload([:mass_offerings, :donation, :web_payment])
@@ -295,6 +296,28 @@ defmodule Donation.Admins do
         order_by: [desc: :inserted_at],
         preload: [:contribution, contribution: :web_payment]
     )
+  end
+
+  def filter_mass_offerings(search_params) do
+    Contribution
+    |> filter_by_date(search_params["start_date"], search_params["end_date"])
+    |> filter_by_name(search_params["name"])
+    |> filter_by_payment_method(search_params["payment_method"])
+    |> filter_by_type("mass_offering")
+    |> filter_by_verified(true)
+    |> order_by(desc: :inserted_at)
+    |> Repo.all()
+    |> Repo.preload([:mass_offerings, :web_payment])
+  end
+
+  def filter_mass_offerings() do
+    Contribution
+    |> filter_by_date("", "")
+    |> filter_by_type("mass_offering")
+    |> filter_by_verified(true)
+    |> order_by(desc: :inserted_at)
+    |> Repo.all()
+    |> Repo.preload([:mass_offerings, :web_payment])
   end
 
   def find_mass_offering_dates(from_date) do
@@ -357,39 +380,33 @@ defmodule Donation.Admins do
     |> Repo.preload([:type_of_contribution, receipt: [:user, :type_of_payment_method]])
   end
 
-  def filter_receipt_and_payment_method(search_params) do
-    Receipt
-    |> filter_by_date(search_params["start_date"], search_params["end_date"])
-    |> filter_by_cashier_name(search_params["user_id"])
-    |> filter_by_receipt_number(search_params["receipt_number"])
-    |> filter_by_donor_name(search_params["donor_name"])
-    |> filter_by_type_of_payment_method(search_params["type_of_payment_method_id"])
-    |> order_by(desc: :inserted_at)
-    |> Repo.all()
-    |> Repo.preload([:user, :type_of_payment_method])
-  end
-
-  def filter_receipt_and_payment_method() do
-    Repo.all(
-      from r in Receipt,
-      join: u in User, on: u.id == r.user_id,
-      order_by: [u.name],
-      preload: [:user, :type_of_payment_method]
-    )
-  end
-
   def sum_of_payment_method(query, payment_method_id) do
     Enum.filter(query, fn(receipt_item) -> receipt_item.receipt.type_of_payment_method_id == payment_method_id end) 
     |> Enum.map(&(&1.price))
     |> Enum.reduce(Decimal.new(0), &Decimal.add/2)
   end
 
+  def sum_of_payment_method_by_mass_offering(query, pm) do
+    IO.inspect(pm)
+    Enum.filter(query, fn(contributor) -> contributor.payment_method == pm end) 
+    |> Enum.map(&(&1.amount))
+    |> Enum.reduce(Decimal.new(0), &Decimal.add/2)
+  end
+
   ## PROTECTED FILTER
 
   defp filter_by_date(query, nil, nil), do: query
-  defp filter_by_date(query, "", ""), do: query
   defp filter_by_date(query, start_date, end_date) do
     case {start_date, end_date} do
+
+      {"", ""} ->
+
+        {:ok, sdt, _} = DateTime.from_iso8601("#{Timex.today()}T00:00:00+08:00")
+        {:ok, edt, _} = DateTime.from_iso8601("#{Timex.today()}T23:59:59+08:00")
+
+        from q in query,
+          where: q.inserted_at >= ^sdt,
+          where: q.inserted_at <= ^edt
 
       {start_date, ""} -> 
 
@@ -414,17 +431,17 @@ defmodule Donation.Admins do
   end
 
   defp filter_by_join_date(query, nil, nil), do: query
-  defp filter_by_join_date(query, "", "") do
-    {:ok, sdt, _} = DateTime.from_iso8601("#{Timex.today()}T00:00:00+08:00")
-    {:ok, edt, _} = DateTime.from_iso8601("#{Timex.today()}T23:59:59+08:00")
-
-    from q in query,
-    inner_join: r in assoc(q, :receipt),
-    where: r.inserted_at >= ^sdt,
-    where: r.inserted_at <= ^edt
-  end
   defp filter_by_join_date(query, start_date, end_date) do
     case {start_date, end_date} do
+
+      {"", ""} -> 
+        {:ok, sdt, _} = DateTime.from_iso8601("#{Timex.today()}T00:00:00+08:00")
+        {:ok, edt, _} = DateTime.from_iso8601("#{Timex.today()}T23:59:59+08:00")
+
+        from q in query,
+        inner_join: r in assoc(q, :receipt),
+        where: r.inserted_at >= ^sdt,
+        where: r.inserted_at <= ^edt
 
       {start_date, ""} -> 
 

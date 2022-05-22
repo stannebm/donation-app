@@ -45,6 +45,13 @@ defmodule DonationWeb.ReportView do
     "Remark"
   ]
 
+  @header_financial_mass_offering [
+    "Created Date",
+    "Name",
+    "Payment Method",
+    "Total Amount (RM)"
+  ]
+
   def render("mass_intention.xlsx", %{mass_offerings: mass_offerings}) do
     report_generator(mass_offerings)
     |> Elixlsx.write_to_memory("mass_intention.xlsx")
@@ -69,6 +76,13 @@ defmodule DonationWeb.ReportView do
   def render("receipts_and_contributions.xlsx", %{receipt_items: receipt_items, total_payments: total_payments}) do
     report_generator_for_receipts(receipt_items, total_payments)
     |> Elixlsx.write_to_memory("receipts_and_contributions.xlsx")
+    |> elem(1)
+    |> elem(1)
+  end
+
+  def render("financial_mass_offerings.xlsx", %{mass_offerings: mass_offerings, total_payments: total_payments}) do
+    report_generator_for_financial_mass_offerings(mass_offerings, total_payments)
+    |> Elixlsx.write_to_memory("financial_mass_offerings.xlsx")
     |> elem(1)
     |> elem(1)
   end
@@ -146,6 +160,29 @@ defmodule DonationWeb.ReportView do
     }
   end
 
+  defp report_generator_for_financial_mass_offerings(mass_offerings, total_payments) do
+    rows =
+      mass_offerings
+      |> Enum.map(&row_financial_mass_offering(&1))
+
+    rows_total = 
+      total_payments
+      |> Enum.map(fn {payment_method, total} -> ["#{payment_method}", Decimal.to_float(total)] end)
+
+    %Workbook{
+      sheets: [
+        %Sheet{
+          name: "Financial Mass Offerings",
+          rows: [@header_financial_mass_offering] ++ rows ++ [''] ++ rows_total
+        }
+        |> Sheet.set_col_width("A", 30)
+        |> Sheet.set_col_width("B", 20)
+        |> Sheet.set_col_width("C", 20)
+        |> Sheet.set_col_width("D", 20)
+      ]
+    }
+  end
+
   defp row(mass_offering) do
     [
       mass_offering.contribution.type,
@@ -188,12 +225,29 @@ defmodule DonationWeb.ReportView do
     ]
   end
 
+  defp row_financial_mass_offering(mass_offering) do
+    [
+      to_mytz_format(mass_offering.inserted_at),
+      mass_offering.name,
+      mass_offering.payment_method,
+      Decimal.to_float(mass_offering.amount)
+    ]
+  end
+
   # Convert to Malaysia Timezone & format
   def to_mytz_format(newdatetime) do
     { _, utc } = DateTime.from_naive(newdatetime, "Etc/UTC")
     utc
     |> Timex.Timezone.convert("Asia/Kuala_Lumpur")
     |> Timex.format!("%d.%m.%Y %H:%M:%S", :strftime)
+  end
+
+  def verified?(contribution) do
+    if contribution.web_payment && contribution.web_payment.verified do
+      "Success"
+    else
+      "Failed"
+    end
   end
 
 end

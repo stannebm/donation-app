@@ -298,6 +298,28 @@ defmodule Donation.Admins do
     )
   end
 
+  def filter_financial_donations(search_params) do
+    Contribution
+    |> filter_by_date(search_params["start_date"], search_params["end_date"])
+    |> filter_by_name(search_params["name"])
+    |> filter_by_payment_method(search_params["payment_method"])
+    |> filter_by_type("donation")
+    |> filter_by_verified(true)
+    |> order_by(desc: :inserted_at)
+    |> Repo.all()
+    |> Repo.preload([:donation, :web_payment])
+  end
+
+  def filter_financial_donations() do
+    Contribution
+    |> filter_by_date("", "")
+    |> filter_by_type("donation")
+    |> filter_by_verified(true)
+    |> order_by(desc: :inserted_at)
+    |> Repo.all()
+    |> Repo.preload([:donation, :web_payment])
+  end
+
   def filter_mass_offerings(search_params) do
     Contribution
     |> filter_by_date(search_params["start_date"], search_params["end_date"])
@@ -387,7 +409,12 @@ defmodule Donation.Admins do
   end
 
   def sum_of_payment_method_by_mass_offering(query, pm) do
-    IO.inspect(pm)
+    Enum.filter(query, fn(contributor) -> contributor.payment_method == pm end) 
+    |> Enum.map(&(&1.amount))
+    |> Enum.reduce(Decimal.new(0), &Decimal.add/2)
+  end
+
+  def sum_of_payment_method_by_donation(query, pm) do
     Enum.filter(query, fn(contributor) -> contributor.payment_method == pm end) 
     |> Enum.map(&(&1.amount))
     |> Enum.reduce(Decimal.new(0), &Decimal.add/2)

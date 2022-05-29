@@ -1,0 +1,104 @@
+<section class="is-table">
+  <div class="container">
+
+    <div class="card">
+
+      <header class="card-header">
+        <p class="card-header-title">
+          Financial Reports: Listing of Donations
+        </p>
+
+        <div class="card-header-icon">
+          <%= if @conn.params != %{} do %>
+            <%= link("XLSX", to: Routes.admin_report_path(@conn, :list_donations_financial_xlsx, @conn.params), target: "_blank", class: "button is-small is-primary is-outlined") %>
+          <% end %>
+        </div>
+      </header>
+
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+
+            <%= form_for @conn, Routes.admin_report_path(@conn, :list_donations_financial), [ method: :get, as: :search], fn f -> %>
+              <div class="control">
+                <div class="columns">
+                  <div class="column">
+                    <label class="label">From Date</label>
+                    <%= date_input(f, :start_date, class: "input") %>
+                  </div>
+                  <div class="column">
+                    <label class="label">To Date</label>
+                    <%= date_input(f, :end_date, class: "input") %>
+                  </div>
+                  <div class="column">
+                    <label class="label">Name</label>
+                    <%= text_input f, :name, class: "input" %>
+                  </div>
+                  <div class="column">
+                    <label class="label">Payment Method</label>
+                    <div class="select is-fullwidth">
+                      <%= select f, :payment_method, ["fpx", "cybersource"], prompt: "Select Payment Method" %>
+                    </div>
+                  </div>
+                  <div class="column">
+                    <label class="label">&nbsp;</label>
+                    <%= submit "Search", class: "button is-info" %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+
+          </div>
+        </div>
+      </div>
+
+      <%= if @total_payments != %{} do %>
+        <div class="card">
+          <div class="card-content">
+            <div class="columns">
+              <%= Enum.map(@total_payments, fn {payment_method, total} -> %>
+                <div class="column has-text-centered">
+                  <div>
+                    <p class="heading"><%= payment_method %></p>
+                    <p class="title"><%= total %></p>
+                  </div>
+                </div>
+              <% end) %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+            <table class="table is-striped is-hoverable is-fullwidth">
+              <thead>
+                <tr>
+                  <th>Created Date</th>
+                  <th>Name</th>
+                  <th>Payment Method</th>
+                  <th>Amount</th>
+                  <th>Intention</th>
+                </tr>
+              </thead>
+              <tbody>
+                <%= for donation <- @donations do %>
+                  <tr>
+                    <td width="20%"><%= to_mytz_format(donation.inserted_at) %></td>
+                    <td width="30%" class="break-word"><%= donation.name %></td>
+                    <td width="10%"><%= donation.payment_method %></td>
+                    <td width="10%" class="has-text-right"><%= donation.amount %></td>
+                    <td width="30%"><%= donation.donation.intention %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>

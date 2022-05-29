@@ -52,6 +52,14 @@ defmodule DonationWeb.ReportView do
     "Total Amount (RM)"
   ]
 
+  @header_financial_donation [
+    "Created Date",
+    "Name",
+    "Payment Method",
+    "Total Amount (RM)",
+    "Intention"
+  ]
+
   def render("mass_intention.xlsx", %{mass_offerings: mass_offerings}) do
     report_generator(mass_offerings)
     |> Elixlsx.write_to_memory("mass_intention.xlsx")
@@ -83,6 +91,13 @@ defmodule DonationWeb.ReportView do
   def render("financial_mass_offerings.xlsx", %{mass_offerings: mass_offerings, total_payments: total_payments}) do
     report_generator_for_financial_mass_offerings(mass_offerings, total_payments)
     |> Elixlsx.write_to_memory("financial_mass_offerings.xlsx")
+    |> elem(1)
+    |> elem(1)
+  end
+
+  def render("financial_donations.xlsx", %{donations: donations, total_payments: total_payments}) do
+    report_generator_for_financial_donations(donations, total_payments)
+    |> Elixlsx.write_to_memory("financial_donations.xlsx")
     |> elem(1)
     |> elem(1)
   end
@@ -183,6 +198,30 @@ defmodule DonationWeb.ReportView do
     }
   end
 
+  defp report_generator_for_financial_donations(donations, total_payments) do
+    rows =
+      donations
+      |> Enum.map(&row_financial_donations(&1))
+
+    rows_total = 
+      total_payments
+      |> Enum.map(fn {payment_method, total} -> ["#{payment_method}", Decimal.to_float(total)] end)
+
+    %Workbook{
+      sheets: [
+        %Sheet{
+          name: "Financial Donations",
+          rows: [@header_financial_donation] ++ rows ++ [''] ++ rows_total
+        }
+        |> Sheet.set_col_width("A", 30)
+        |> Sheet.set_col_width("B", 20)
+        |> Sheet.set_col_width("C", 20)
+        |> Sheet.set_col_width("D", 20)
+        |> Sheet.set_col_width("E", 30)
+      ]
+    }
+  end
+
   defp row(mass_offering) do
     [
       mass_offering.contribution.type,
@@ -231,6 +270,16 @@ defmodule DonationWeb.ReportView do
       mass_offering.name,
       mass_offering.payment_method,
       Decimal.to_float(mass_offering.amount)
+    ]
+  end
+
+  defp row_financial_donations(donation) do
+    [
+      to_mytz_format(donation.inserted_at),
+      donation.name,
+      donation.payment_method,
+      Decimal.to_float(donation.amount),
+      donation.donation.intention
     ]
   end
 

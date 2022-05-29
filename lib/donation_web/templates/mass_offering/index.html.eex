@@ -25,7 +25,6 @@
         <div class="card-header-icon">
           <%= if @conn.params != %{} do %>
             <%= link("PDF", to: Routes.admin_mass_offering_path(@conn, :index, Map.put(@conn.params, :format, "pdf")), target: "_blank", class: "button is-small is-primary is-outlined") %>
-            <%#= link("XLSX", to: Routes.admin_mass_offering_path(@conn, :index, Map.put(@conn.params, :format, "xlsx")), target: "_blank", class: "button is-small is-primary is-outlined") %>
           <% end %>
         </div>
 

@@ -177,6 +177,42 @@ defmodule DonationWeb.ReportController do
     })
   end
 
+  def list_donations_financial(conn, %{"search" => search}) do
+    donations = Admins.filter_financial_donations(search)
+    type_payment_methods = %{"cybersource" => 0, "fpx" => 0}
+    total_payments = Enum.map(type_payment_methods, fn {k, v} -> { 
+      k, Admins.sum_of_payment_method_by_donation(donations, k) 
+    } end)
+    render(conn, :list_donations_financial,
+      donations: donations,
+      total_payments: total_payments
+    )
+  end
+
+  def list_donations_financial(conn, _params) do
+    donations = Admins.filter_financial_donations()
+    render(conn, :list_donations_financial, 
+      donations: donations,
+      total_payments: %{}
+    )
+  end
+
+  def list_donations_financial_xlsx(conn, %{"search" => search}) do
+    dateformat = Timex.today() |> Timex.format!("%d%m%Y", :strftime)
+    donations = Admins.filter_financial_donations(search)
+    type_payment_methods = %{"cybersource" => 0, "fpx" => 0}
+    total_payments = Enum.map(type_payment_methods, fn {k, v} -> { 
+      k, Admins.sum_of_payment_method_by_donation(donations, k) 
+    } end)
+    conn
+    |> put_resp_content_type("text/xlsx")
+    |> put_resp_header("content-disposition", "attachment; filename=financial_donations_#{dateformat}.xlsx;")
+    |> render("financial_donations.xlsx", %{
+      donations: donations,
+      total_payments: total_payments
+    })
+  end
+
   # def list_receipts_and_payment_methods(conn, %{"search" => search}) do
   #   cashiers = Admins.unique_cashier_in_receipt()
   #   type_of_payment_methods = Admins.list_type_of_payment_methods() |> Enum.map(&{&1.name, &1.id})

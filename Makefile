@@ -3,6 +3,9 @@
 # ----------------------------------------------------------------------------
 
 default: build-assets
+	docker --context stanne compose up -d --build
+
+legacy-default: build-assets
 	docker-compose up -d --build
 
 build-assets:
@@ -12,6 +15,11 @@ build-assets:
 # run migration
 migrate:
 	docker-compose exec phoenix bin/donation eval "Donation.Release.migrate"
+
+remote-context:
+	docker context create \
+    --docker host=ssh://sammy@188.166.248.78 \
+    stanne
 
 
 # ----------------------------------------------------------------------------

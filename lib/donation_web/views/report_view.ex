@@ -54,6 +54,7 @@ defmodule DonationWeb.ReportView do
 
   @header_financial_donation [
     "Created Date",
+    "Type",
     "Name",
     "Payment Method",
     "Total Amount (RM)",
@@ -98,6 +99,13 @@ defmodule DonationWeb.ReportView do
   def render("financial_donations.xlsx", %{donations: donations, total_payments: total_payments}) do
     report_generator_for_financial_donations(donations, total_payments)
     |> Elixlsx.write_to_memory("financial_donations.xlsx")
+    |> elem(1)
+    |> elem(1)
+  end
+
+  def render("financial_payments.xlsx", %{payments: payments, total_payments: total_payments}) do
+    report_generator_for_financial_payments(payments, total_payments)
+    |> Elixlsx.write_to_memory("financial_payments.xlsx")
     |> elem(1)
     |> elem(1)
   end
@@ -222,6 +230,31 @@ defmodule DonationWeb.ReportView do
     }
   end
 
+  defp report_generator_for_financial_payments(payments, total_payments) do
+    rows =
+      payments
+      |> Enum.map(&row_financial_payments(&1))
+
+    rows_total = 
+      total_payments
+      |> Enum.map(fn {payment_method, total} -> ["#{payment_method}", Decimal.to_float(total)] end)
+
+    %Workbook{
+      sheets: [
+        %Sheet{
+          name: "Financial Payments",
+          rows: [@header_financial_donation] ++ rows ++ [''] ++ rows_total
+        }
+        |> Sheet.set_col_width("A", 30)
+        |> Sheet.set_col_width("B", 20)
+        |> Sheet.set_col_width("C", 40)
+        |> Sheet.set_col_width("D", 20)
+        |> Sheet.set_col_width("E", 20)
+        |> Sheet.set_col_width("F", 45)
+      ]
+    }
+  end
+
   defp row(mass_offering) do
     [
       mass_offering.contribution.type,
@@ -280,6 +313,17 @@ defmodule DonationWeb.ReportView do
       donation.payment_method,
       Decimal.to_float(donation.amount),
       donation.donation.intention
+    ]
+  end
+
+  defp row_financial_payments(payment) do
+    [
+      to_mytz_format(payment.inserted_at),
+      payment.type,
+      payment.name,
+      payment.payment_method,
+      Decimal.to_float(payment.amount),
+      payment.donation && payment.donation.intention
     ]
   end
 

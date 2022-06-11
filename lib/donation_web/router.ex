@@ -80,6 +80,8 @@ defmodule DonationWeb.Router do
     get("/reports/list_receipts_and_contributions/xlsx", ReportController, :list_receipts_and_contributions_xlsx)
     # get("/reports/list_receipts_and_payment_methods", ReportController, :list_receipts_and_payment_methods)
     # get("/reports/list_receipts_and_payment_methods/xlsx", ReportController, :list_receipts_and_payment_methods_xlsx)
+    get("/reports/payments", ReportController, :list_payments)
+    get("/reports/payments/xlsx", ReportController, :list_payments_xlsx)
   end
 
   scope "/admins", DonationWeb, as: :admin do

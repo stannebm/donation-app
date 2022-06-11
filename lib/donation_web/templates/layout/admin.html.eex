@@ -82,10 +82,9 @@
             Reports
             <ul class="menu-list">
               <li><%= link("List Mass Offerings", to: Routes.admin_report_path(@conn, :list_mass_offerings)) %></li>
-              <li><%= link("List Mass Offerings (Financial)", to: Routes.admin_report_path(@conn, :list_mass_offerings_financial)) %></li>
               <li><%= link("List Donations", to: Routes.admin_report_path(@conn, :list_donations)) %></li>
-              <li><%= link("List Donations (Financial)", to: Routes.admin_report_path(@conn, :list_donations_financial)) %></li>
               <li><%= link("List Receipts", to: Routes.admin_report_path(@conn, :list_receipts_and_contributions)) %></li>
+              <li><%= link("List Payments", to: Routes.admin_report_path(@conn, :list_payments)) %></li>
               <!--<li>
                 <a href="#" class="no-hover">List Receipts</a>
                 <ul>

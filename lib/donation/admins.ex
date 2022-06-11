@@ -298,6 +298,27 @@ defmodule Donation.Admins do
     )
   end
 
+  def filter_payments(search_params) do
+    Contribution
+    |> filter_by_date(search_params["start_date"], search_params["end_date"])
+    |> filter_by_name(search_params["name"])
+    |> filter_by_payment_method(search_params["payment_method"])
+    |> filter_by_type(search_params["type"])
+    |> filter_by_verified(true)
+    |> order_by(desc: :inserted_at)
+    |> Repo.all()
+    |> Repo.preload([:mass_offerings, :donation, :web_payment])
+  end
+
+  def filter_payments() do
+    Contribution
+    |> filter_by_date("", "")
+    |> filter_by_verified(true)
+    |> order_by(desc: :inserted_at)
+    |> Repo.all()
+    |> Repo.preload([:mass_offerings, :donation, :web_payment])
+  end
+
   def filter_financial_donations(search_params) do
     Contribution
     |> filter_by_date(search_params["start_date"], search_params["end_date"])

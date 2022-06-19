@@ -71,6 +71,15 @@ defmodule Donation.Admins do
   Admins: RECEIPT
   """
 
+  def list_receipts(%{"search" => %{"start_date" => "", "end_date" => ""}} = params) do
+    search_params = get_in(params, ["search"])
+    Receipt
+    |> filter_by_donor_name(search_params["donor_name"])
+    |> filter_by_receipt_number(search_params["receipt_number"])
+    |> order_by(desc: :inserted_at)
+    |> Repo.paginate(params)
+  end
+
   def list_receipts(params) do
     search_params = get_in(params, ["search"])
     Receipt
@@ -514,12 +523,12 @@ defmodule Donation.Admins do
     end
   end
 
-  defp filter_by_cashier_name(query, nil), do: query
-  defp filter_by_cashier_name(query, ""), do: query
-  defp filter_by_cashier_name(query, user_id) do
-    from q in query,
-    where: q.user_id == ^user_id
-  end
+  # defp filter_by_cashier_name(query, nil), do: query
+  # defp filter_by_cashier_name(query, ""), do: query
+  # defp filter_by_cashier_name(query, user_id) do
+  #   from q in query,
+  #   where: q.user_id == ^user_id
+  # end
 
   defp filter_by_join_cashier_name(query, nil), do: query
   defp filter_by_join_cashier_name(query, ""), do: query
@@ -559,12 +568,12 @@ defmodule Donation.Admins do
     where: r.donor_name == ^donor_name
   end
 
-  defp filter_by_type_of_payment_method(query, nil), do: query
-  defp filter_by_type_of_payment_method(query, ""), do: query
-  defp filter_by_type_of_payment_method(query, type_of_payment_method_id) do
-    from q in query,
-    where: q.type_of_payment_method_id == ^type_of_payment_method_id
-  end
+  # defp filter_by_type_of_payment_method(query, nil), do: query
+  # defp filter_by_type_of_payment_method(query, ""), do: query
+  # defp filter_by_type_of_payment_method(query, type_of_payment_method_id) do
+  #   from q in query,
+  #   where: q.type_of_payment_method_id == ^type_of_payment_method_id
+  # end
 
   defp filter_by_type(query, nil), do: query
   defp filter_by_type(query, ""), do: query

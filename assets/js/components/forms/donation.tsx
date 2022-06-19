@@ -139,7 +139,7 @@ export default function Donation() {
               label="Intention"
               options={[
                 "For Minor Basilica of St. Anne",
-                "For the Poor or Sick",
+                // "For the Poor or Sick",
                 "Others",
               ]}
               bg="white"

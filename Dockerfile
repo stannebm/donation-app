@@ -33,6 +33,7 @@ RUN mix do compile, release
 
 # prepare release image
 FROM sagittaros/wkhtmltopdf-alpine:latest AS app
+RUN apk add wqy-zenhei --update-cache --repository http://nl.alpinelinux.org/alpine/edge/testing --allow-untrusted
 
 WORKDIR /app
 
